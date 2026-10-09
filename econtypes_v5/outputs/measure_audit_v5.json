@@ -1,0 +1,12 @@
+{
+ "cmd": ".venv/bin/python scripts/audit_v5.py",
+ "returncode": 0,
+ "wall_seconds": 3.42,
+ "peak_rss_mib": 413.3,
+ "cpu_user_s": 3.0,
+ "host": {
+  "cpus": 4,
+  "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39",
+  "python": "3.13.16"
+ }
+}

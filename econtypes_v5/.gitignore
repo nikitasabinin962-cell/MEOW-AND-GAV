@@ -1,0 +1,14 @@
+# большие и воспроизводимые артефакты — не в git
+data/*.sqlite
+data/*.sqlite-wal
+data/*.sqlite-shm
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+outputs/run_*/
+outputs/latest_quick/
+external/atmo_audit/sample/*.csv
+# секреты
+.env
+*.key

@@ -1,0 +1,12 @@
+{
+ "cmd": ".venv/bin/python scripts/package_db.py",
+ "returncode": 0,
+ "wall_seconds": 42.97,
+ "peak_rss_mib": 24.1,
+ "cpu_user_s": 33.0,
+ "host": {
+  "cpus": 4,
+  "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39",
+  "python": "3.13.16"
+ }
+}

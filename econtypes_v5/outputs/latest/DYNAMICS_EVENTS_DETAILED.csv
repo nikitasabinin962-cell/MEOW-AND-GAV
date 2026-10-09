@@ -1,0 +1,74 @@
+run_id,level,mode,beta,from_period,to_period,event,from_cluster,to_cluster,size,jaccard
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q1,2023Q2,split,3,"[3, 4]",9,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q1,2023Q2,merge,"[3, 4]",4,17,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q1,2023Q2,continuation,0,0,8,0.6153846153846154
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q1,2023Q2,continuation,1,1,15,0.7894736842105263
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q1,2023Q2,continuation,2,2,8,0.6153846153846154
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q2,2023Q3,split,1,"[1, 3]",17,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q2,2023Q3,merge,"[1, 3]",3,13,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q2,2023Q3,continuation,0,0,8,0.7272727272727273
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q2,2023Q3,continuation,2,2,7,0.5833333333333334
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q2,2023Q3,continuation,4,4,12,0.5
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q3,2023Q4,split,0,"[0, 2]",10,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q3,2023Q4,split,4,"[0, 4]",19,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q3,2023Q4,merge,"[0, 4]",0,10,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q3,2023Q4,merge,"[0, 2]",2,12,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q3,2023Q4,continuation,1,1,9,0.6
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q3,2023Q4,continuation,3,3,12,0.75
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q4,2024Q1,continuation,0,0,7,0.5833333333333334
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q4,2024Q1,continuation,1,1,8,0.5333333333333333
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q4,2024Q1,continuation,2,2,11,0.6875
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q4,2024Q1,continuation,3,3,11,0.7333333333333333
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2023Q4,2024Q1,continuation,4,4,7,0.35
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q1,2024Q2,split,2,"[1, 2]",16,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q1,2024Q2,merge,"[1, 2]",1,14,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q1,2024Q2,continuation,0,0,8,0.6666666666666666
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q1,2024Q2,continuation,3,3,9,0.8181818181818182
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q1,2024Q2,continuation,4,4,7,0.4117647058823529
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q2,2024Q3,split,2,"[1, 2]",16,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q2,2024Q3,merge,"[1, 2]",2,15,
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q2,2024Q3,continuation,0,0,8,0.6153846153846154
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q2,2024Q3,continuation,3,3,8,0.8888888888888888
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q2,2024Q3,continuation,4,4,10,0.5263157894736842
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q3,2024Q4,continuation,0,0,9,0.6923076923076923
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q3,2024Q4,continuation,1,1,8,0.6666666666666666
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q3,2024Q4,continuation,2,2,13,0.8666666666666667
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q3,2024Q4,continuation,3,3,8,0.7272727272727273
+v5-20261009T142841Z-d833d0,detailed,monitoring,0.5,2024Q3,2024Q4,continuation,4,4,13,0.5909090909090909
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q1,2023Q2,continuation,0,0,11,0.9166666666666666
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q1,2023Q2,continuation,1,1,11,0.6470588235294118
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q1,2023Q2,continuation,2,2,16,0.8
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q1,2023Q2,continuation,3,3,7,0.875
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q1,2023Q2,continuation,4,4,9,0.6923076923076923
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q2,2023Q3,continuation,0,0,12,0.8571428571428571
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q2,2023Q3,continuation,1,1,9,0.6
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q2,2023Q3,continuation,2,2,16,0.8
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q2,2023Q3,continuation,3,3,7,0.7777777777777778
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q2,2023Q3,continuation,4,4,9,0.6923076923076923
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q3,2023Q4,split,4,"[0, 4]",11,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q3,2023Q4,merge,"[0, 4]",0,16,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q3,2023Q4,continuation,1,1,9,0.5625
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q3,2023Q4,continuation,2,2,13,0.8125
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q3,2023Q4,continuation,3,3,8,0.6153846153846154
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q4,2024Q1,split,1,"[0, 1]",13,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q4,2024Q1,split,3,"[3, 4]",12,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q4,2024Q1,merge,"[0, 1]",0,20,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q4,2024Q1,merge,"[3, 4]",4,11,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2023Q4,2024Q1,continuation,2,2,11,0.8461538461538461
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q1,2024Q2,continuation,0,0,19,0.8260869565217391
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q1,2024Q2,continuation,1,1,10,0.6666666666666666
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q1,2024Q2,continuation,2,2,9,0.8181818181818182
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q1,2024Q2,continuation,3,3,6,0.75
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q1,2024Q2,continuation,4,4,9,0.75
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q2,2024Q3,split,4,"[3, 4]",10,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q2,2024Q3,merge,"[3, 4]",3,11,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q2,2024Q3,continuation,0,0,13,0.5652173913043478
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q2,2024Q3,continuation,1,1,11,0.5789473684210527
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q2,2024Q3,continuation,2,2,9,0.9
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q3,2024Q4,split,3,"[3, 4]",11,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q3,2024Q4,split,4,"[3, 4]",10,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q3,2024Q4,merge,"[3, 4]",3,15,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q3,2024Q4,merge,"[3, 4]",4,10,
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q3,2024Q4,continuation,0,0,11,0.7857142857142857
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q3,2024Q4,continuation,1,1,10,0.5
+v5-20261009T142841Z-d833d0,detailed,retrospective,0.5,2024Q3,2024Q4,continuation,2,2,10,0.7692307692307693

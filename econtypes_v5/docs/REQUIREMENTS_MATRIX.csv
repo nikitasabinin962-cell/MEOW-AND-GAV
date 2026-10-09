@@ -1,0 +1,38 @@
+requirement,module,output_file,verifying_check,report_section,run_id
+1 Методология 15%,econtypes5/*; docs/METHODOLOGY_v5.md,docs/METHODOLOGY_v5.md,outputs/pytest_log.txt; PROJECT_CHECKS_v5.json,REPORT §3,v5-20261009T142841Z-d833d0
+1 Сеть и атрибуты 15%,"features.py, networks.py, graphs.py, timeseries.py",outputs/latest/FORMULA_FEATURES_MO_PERIOD.parquet; GRAPH_DIAGNOSTICS.csv,test_math_modules.py; LEAKAGE_TEST.json,REPORT §3,v5-20261009T142841Z-d833d0
+1 Математическая динамика 15%,"pipeline.stage_dynamics, dynamics.py",outputs/latest/LABELS_MO_PERIOD.parquet; DYNAMICS_*.csv,LEAKAGE_TEST.json (исполненный),REPORT §7,v5-20261009T142841Z-d833d0
+1 ICVI SW CH S_Dbw AVI AVU MQ 15%,"icvi.py, experiments.py",outputs/latest/ICVI_SWEEP.csv; K_SELECTION.csv,tests/test_icvi.py (независимые реализации),"REPORT §3 (табл. 1), §6",v5-20261009T142841Z-d833d0
+"1 Интерпретация, воспроизводимость 30%",pipeline.stage_passports/external_validation/correlations; scripts/run_all.sh,outputs/latest/TYPE_PASSPORTS*.csv; EXTERNAL_VALIDATION.csv; RUN_MANIFEST.json,EXTERNAL_VALIDATION (пространственные p); clean rerun,"REPORT §4, §8, §12",v5-20261009T142841Z-d833d0
+1 Визуализация 10%,../-/src/v5/js/80-v5.js; build.py --version v5,../-/econtypes_v5.html,../-/docs/v5-checks.json (Playwright),../-/README.md (раздел v5); STRESS_TEST_REPORT,v5-20261009T142841Z-d833d0
+"3.1 AVU опубликованный, ↓",icvi.avi_avu,outputs/latest/ICVI_SWEEP.csv,"test_three_isolated_cliques, test_complete_graph_analytic","REPORT §1, §10; CHANGELOG",v5-20261009T142841Z-d833d0
+"3.2 MQ трактовка, γ","icvi.newman_modularity, mancoridis_mq",outputs/latest/ICVI_SWEEP.csv,test_modularity_matches_naive_and_networkx,METHODOLOGY §4,v5-20261009T142841Z-d833d0
+3.3 S_Dbw сверка,icvi.s_dbw,outputs/latest/ICVI_SWEEP.csv,"test_sdbw_matches_naive, test_sdbw_undefined_conventions",METHODOLOGY §4,v5-20261009T142841Z-d833d0
+3.4 Окна без будущего,"timeseries.restrict, features (режимы), networks.struct_layers_new",outputs/latest/LEAKAGE_TEST.json,stage_leakage_test (PASS/FAIL),REPORT §7,v5-20261009T142841Z-d833d0
+3.5 Точная W vs проекция,"networks.display_projection, stage_store",run_matrix_edges; GRAPH_DIAGNOSTICS.csv,v5-checks: network-note-exact-vs-display,REPORT §3,v5-20261009T142841Z-d833d0
+"3.6 p=(b+1)/(B+1), holdout","stats.mc_p, stage_holdout",outputs/latest/HOLDOUT_VALIDATION.csv,test_mc_p_never_zero; потолок «в выборке» в HOLDOUT_VALIDATION,REPORT §9,v5-20261009T142841Z-d833d0
+3.7 DTW/log0/kNN,"timeseries, graphs._check_k",—,"test_constant_series_no_nan_layers, test_residuals_zero_spending_not_log, test_knn_k_bounds",STRESS_TEST_REPORT,v5-20261009T142841Z-d833d0
+3.8 ИНН ≠ ОКТМО,"geography.py, ingest.build_geography","org_geo_resolved, tax_office_map",LOO accuracy в data_quality_checks,"REPORT §2, DATA_GAPS №5",v5-20261009T142841Z-d833d0
+3.9 Имена по профилям,pipeline.stage_passports,outputs/latest/TYPE_PASSPORTS*.csv,test_type_naming_respects_sign_of_rates,"REPORT §4, METHODOLOGY §9.2",v5-20261009T142841Z-d833d0
+3.10 Переименование прокси,CHANGELOG.md,—,—,CHANGELOG,v5-20261009T142841Z-d833d0
+4.1 Реестр источников,ingest.register_sources,docs/SOURCE_REGISTRY.csv; source_registry,SHA-256 сверка в ingest,DATA_DICTIONARY,v5-20261009T142841Z-d833d0
+4.2 Входы СберИндекса,—,—,—,DATA_GAPS №1–3,v5-20261009T142841Z-d833d0
+"4.3 Слои L0–L3, run_id",db.py (миграции),data/econtypes_v5.sqlite,integrity/FK в data_quality_checks,DATA_DICTIONARY,v5-20261009T142841Z-d833d0
+"4.4 Копейки, валюты, identity","ingest.load_contracts, io_robust",contract,contracts_kopecks_reconcile_decimal; test_money_*,STRESS_TEST_REPORT,v5-20261009T142841Z-d833d0
+"4.5 SQLite + Parquet, идемпотентность, пересверка","db.export_parquet, ingest.independent_contract_recount",outputs/db_parquet/,contracts_independent_recount_csv_vs_v5; idempotency,STRESS_TEST_REPORT,v5-20261009T142841Z-d833d0
+5.1–5.2 СБИС/ЕИС identity 357156/2459,ingest.run_checks,data_quality_checks,identity_basis_reconcile_upstream_357156_2459,STRESS_TEST_REPORT,v5-20261009T142841Z-d833d0
+5.3–5.6 ATMO,external/atmo_audit/,ATMO44_b6z6lq_PART_AUDIT.csv; ATMO44_SAMPLE_CONTENT_AUDIT.json,аудит метаданных 340/341 частей; выборка 2 частей,DATA_GAPS №9–10,v5-20261009T142841Z-d833d0
+5.8–5.9 МСП,ingest.load_msp,"msp_firm, msp_index_firm",join 173892/103660/82063 (PASS),STRESS_TEST_REPORT,v5-20261009T142841Z-d833d0
+"5.10 HTTP 429/5xx, resume",io_robust.Fetcher/paginate,—,tests/test_data_edge_cases.py (локальный сервер),STRESS_TEST_REPORT,v5-20261009T142841Z-d833d0
+5.11 ЕИС только через Opera,—,—,сайт ЕИС не открывался,HANDOFF_STATE,v5-20261009T142841Z-d833d0
+6 Росстат,rosstat.py,external/rosstat_drive/,контроли Σ МО vs республика; тождества,DATA_GAPS,v5-20261009T142841Z-d833d0
+7 Признаки и рёбра,"features.py, networks.py",outputs/latest/FORMULA_FEATURES_MO_PERIOD.parquet,test_math_modules.py,METHODOLOGY §2–3,v5-20261009T142841Z-d833d0
+8 Динамика и неопределённость,"pipeline.stage_dynamics, stage_uncertainty",outputs/latest/UNCERTAINTY_SUMMARY.csv; COASSIGNMENT.parquet,LEAKAGE_TEST.json,REPORT §7,v5-20261009T142841Z-d833d0
+9 Интерпретация и визуализация,stage_passports; 80-v5.js,outputs/latest/TYPE_PASSPORTS*.csv; ../-/econtypes_v5.html,v5-checks.json,"REPORT §4, §5",v5-20261009T142841Z-d833d0
+10 Стресс-тесты и нагрузка,"tests/, scripts/scale_benchmark.py",docs/STRESS_TEST_REPORT.md; outputs/SCALE_BENCHMARK.json,фактические PASS/FAIL/NOT_RUN,STRESS_TEST_REPORT,v5-20261009T142841Z-d833d0
+Дополнение: FORMULA_IMPLEMENTATION_MATRIX,scripts/make_matrices.py,docs/FORMULA_IMPLEMENTATION_MATRIX.csv,—,REPORT §3,v5-20261009T142841Z-d833d0
+Дополнение: корреляции,"stats.py, stage_correlations",outputs/latest/CORRELATIONS_MO_PERIOD.parquet,test_spearman_perm_matches_scipy_permutation_test,REPORT §8,v5-20261009T142841Z-d833d0
+Комплект: Word/PDF отчёт,scripts/make_report.py,docs/REPORT_v5.docx; docs/REPORT_v5.pdf; docs/REPORT_v5.md,числа читаются из outputs/latest,—,v5-20261009T142841Z-d833d0
+"Комплект: README с одной командой, CHANGELOG, HANDOFF_STATE, CLAUDE.md",scripts/run_all.sh,README.md; CHANGELOG.md; HANDOFF_STATE.md; CLAUDE.md,clean rerun run_all.sh,REPORT §12,v5-20261009T142841Z-d833d0
+Комплект: метки МО × период,"pipeline.stage_dynamics, stage_store",outputs/latest/LABELS_STATIC.csv; LABELS_MO_PERIOD*.parquet,—,"REPORT §4, §7",v5-20261009T142841Z-d833d0
+Дополнение: сравнительная кластеризация,"experiments.py, stage_comparison/ablation",outputs/latest/CLUSTER_COMPARISON.csv; ABLATION_SENSITIVITY.csv,—,REPORT §6,v5-20261009T142841Z-d833d0

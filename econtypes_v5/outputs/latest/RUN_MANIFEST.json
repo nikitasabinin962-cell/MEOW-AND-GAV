@@ -1,0 +1,159 @@
+{
+ "run_id": "v5-20261009T142841Z-d833d0",
+ "config_hash": "d833d01329f4019a",
+ "code_hash": "eb402d7943388054",
+ "data_hash": "24f5b250a5cc5492",
+ "seed": 20261009,
+ "quick": false,
+ "final": {
+  "config": "C4_v5features_v5graph",
+  "method": "spectral",
+  "k": 3
+ },
+ "macro": {
+  "k": 3
+ },
+ "detailed": {
+  "config": "C4_v5features_v5graph",
+  "method": "spectral",
+  "k": 5
+ },
+ "type_names": {
+  "0": "Тип 1: отставание роста трат; сильная естественная убыль",
+  "1": "Тип 2: высокие безналичные траты на жителя; выше доля общепита",
+  "2": "Тип 3: молодое население; много детей"
+ },
+ "type_names_detailed": {
+  "0": "Тип 1: отставание роста трат; сильная естественная убыль",
+  "1": "Тип 2: высокие безналичные траты на жителя; меньший миграционный отток",
+  "2": "Тип 3: опережающий рост трат; высокие безналичные траты на жителя",
+  "3": "Тип 4: молодое население; много детей",
+  "4": "Тип 5: поставщики внутри РБ; выше доля транспорта в тратах"
+ },
+ "leakage_test": {
+  "monitoring": {
+   "features_identical": true,
+   "W_identical": true,
+   "labels_identical": true
+  },
+  "retrospective": {
+   "features_identical": false,
+   "W_identical": false,
+   "labels_identical": true
+  },
+  "status": "PASS",
+  "retrospective_changes_detected": true
+ },
+ "mezhgorye": {
+  "mo": "ГО Межгорье",
+  "status": "assigned_on_partial_blocks_without_sberindex",
+  "blocks_used": [
+   "proc_budget",
+   "proc_geo",
+   "proc_corp"
+  ],
+  "nearest_type": 1,
+  "distances": [
+   3.429,
+   2.063,
+   2.915
+  ],
+  "note": "Траты СберИндекса для ЗАТО отсутствуют (в v4 были KNN-импутированы); муниципальные таблицы Росстата ЗАТО не включают."
+ },
+ "store": {
+  "integrity": {
+   "integrity": "ok",
+   "foreign_key_violations": 0,
+   "fk_sample": []
+  },
+  "parquet": {
+   "mo": {
+    "rows": 63,
+    "bytes": 8638,
+    "sha256": "3114a8b171e8ba6482ff9086e06f2b8bf3db17345f41676f0ef0d384ab374bbd"
+   },
+   "source_registry": {
+    "rows": 31,
+    "bytes": 23753,
+    "sha256": "96e4a45778d244d4db9d084589a235ef3c393bba21913f8c6ba04c23c7a08c06"
+   },
+   "fact_mo": {
+    "rows": 7190,
+    "bytes": 47765,
+    "sha256": "d9bf3bb44fd096e34fc4f9b9affe251d76d2f20e316ebbdf428a725cce0ac427"
+   },
+   "fact_region_control": {
+    "rows": 55,
+    "bytes": 4265,
+    "sha256": "3ca256756fbf69437f25056f13b2304f7fb676a890c50c402d0d2cd752a87f36"
+   },
+   "tax_office_map": {
+    "rows": 69,
+    "bytes": 4688,
+    "sha256": "95df64d497a7732b3ddbc2beb5ba7c1749fadb2ed294a18ec184b2b790122661"
+   },
+   "org_geo_resolved": {
+    "rows": 21744,
+    "bytes": 173208,
+    "sha256": "210e82403b29b89d26f9eec35ceb7a6813172bb1a9fefca36387b804163baf8f"
+   },
+   "attribute_mo_period": {
+    "rows": 27216,
+    "bytes": 124247,
+    "sha256": "16d77539c4da4396262fa434726ad4c07bf0e48a1b762fa446efc049c4423b5f"
+   },
+   "run": {
+    "rows": 1,
+    "bytes": 5613,
+    "sha256": "eeac0fc1ce6443676b0b823020e526504030507ec37a4f1a42f19a4467d2fea1"
+   },
+   "run_labels": {
+    "rows": 8776,
+    "bytes": 6157,
+    "sha256": "a2bfc72130118a93a3de8b31bb8c6d463c6b4d539f911679f092179ed0239689"
+   },
+   "run_icvi": {
+    "rows": 1440,
+    "bytes": 17705,
+    "sha256": "a935a247ba97ab6ca597982a2448c209e1c6b17863194633ea62f92c17dc64ca"
+   },
+   "run_matrix_edges": {
+    "rows": 10487,
+    "bytes": 102553,
+    "sha256": "404d823a11c2047ffe5383e372bafd893fedf96f2e1d4517601c590dd425b8c6"
+   },
+   "run_coassign": {
+    "rows": 7564,
+    "bytes": 19247,
+    "sha256": "70b3f37921bab2180e5fc768de06b905dae45edc45f60a19cac309bd37c9b00d"
+   },
+   "data_quality_checks": {
+    "rows": 10,
+    "bytes": 5120,
+    "sha256": "e139ec2bf6fc19ea6acbbc060ef62df83b209bebcb3e783d2692535083751853"
+   }
+  }
+ },
+ "timings": {
+  "load": 7.2,
+  "panel": 26.2,
+  "graphs": 28.2,
+  "sweeps": 447.5,
+  "comparison": 448.3,
+  "ablation": 449.7,
+  "uncertainty": 651.8,
+  "dynamics": 707.3,
+  "leakage_test": 746.2,
+  "passports_validation": 907.3,
+  "correlations": 1004.6,
+  "holdout": 1011.0,
+  "store": 1015.2
+ },
+ "peak_rss_mib": 752.1,
+ "N": 62,
+ "T_months": 24,
+ "T_quarters": 8,
+ "E_exact_C4": 1079,
+ "diagnostics_warnings": [],
+ "n_warnings": 0
+}

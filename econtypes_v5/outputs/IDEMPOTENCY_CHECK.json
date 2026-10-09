@@ -1,0 +1,55 @@
+{
+ "status": "PASS",
+ "tables": {
+  "source_registry": {
+   "rows_first": 31,
+   "rows_second": 31,
+   "identical": true
+  },
+  "mo": {
+   "rows_first": 63,
+   "rows_second": 63,
+   "identical": true
+  },
+  "fact_mo": {
+   "rows_first": 7190,
+   "rows_second": 7190,
+   "identical": true
+  },
+  "fact_region_control": {
+   "rows_first": 55,
+   "rows_second": 55,
+   "identical": true
+  },
+  "contract": {
+   "rows_first": 359615,
+   "rows_second": 359615,
+   "identical": true
+  },
+  "tax_office_map": {
+   "rows_first": 69,
+   "rows_second": 69,
+   "identical": true
+  },
+  "org_geo_resolved": {
+   "rows_first": 21744,
+   "rows_second": 21744,
+   "identical": true
+  },
+  "org_geo_evidence": {
+   "rows_first": 22979,
+   "rows_second": 22979,
+   "identical": true
+  },
+  "msp_firm": {
+   "rows_first": 150234,
+   "rows_second": 150234,
+   "identical": true
+  },
+  "msp_index_firm": {
+   "rows_first": 157996,
+   "rows_second": 157996,
+   "identical": true
+  }
+ }
+}

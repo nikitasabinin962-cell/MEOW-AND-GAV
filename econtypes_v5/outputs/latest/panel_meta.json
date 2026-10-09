@@ -1,0 +1,250 @@
+{
+ "sber_structure": {
+  "labels": [
+   "ilr1: [Продовольствие] vs Здоровье",
+   "ilr2: [Продовольствие ,Здоровье] vs Общественное питание",
+   "ilr3: [Продовольствие ,Здоровье ,Общественное питание] vs Маркетплейсы",
+   "ilr4: [Продовольствие ,Здоровье ,Общественное питание ,Маркетплейсы] vs Транспорт",
+   "ilr5: [Продовольствие ,Здоровье ,Общественное питание ,Маркетплейсы ,Транспорт] vs прочее"
+  ],
+  "diagnostics": {
+   "n": 63,
+   "parts": [
+    "Продовольствие",
+    "Здоровье",
+    "Общественное питание",
+    "Маркетплейсы",
+    "Транспорт",
+    "прочее"
+   ],
+   "max_abs_sum_minus_1": 4.440892098500626e-16,
+   "rows_observed": 62,
+   "structural_zero_parts": [],
+   "sample_zero_cells": 0,
+   "dropped_structural": [],
+   "replaced_zero_cells": 0,
+   "delta": 0.0001
+  }
+ },
+ "age_structure": {
+  "labels": [
+   "ilr1: [0–14] vs 15–64",
+   "ilr2: [0–14 ,15–64] vs 65+"
+  ]
+ },
+ "('retrospective', '2023Q1')": {
+  "window": "2023Q1…2023Q1",
+  "warm_up": true,
+  "population_ref": "2023-01-01",
+  "demography": {
+   "pop_growth": "2023-01-01→2024-01-01",
+   "natinc_rate": "2023",
+   "migr_rate": "2023"
+  }
+ },
+ "('retrospective', '2023Q2')": {
+  "window": "2023Q1…2023Q2",
+  "warm_up": true,
+  "population_ref": "2023-01-01",
+  "demography": {
+   "pop_growth": "2023-01-01→2024-01-01",
+   "natinc_rate": "2023",
+   "migr_rate": "2023"
+  }
+ },
+ "('retrospective', '2023Q3')": {
+  "window": "2023Q1…2023Q3",
+  "warm_up": true,
+  "population_ref": "2023-01-01",
+  "demography": {
+   "pop_growth": "2023-01-01→2024-01-01",
+   "natinc_rate": "2023",
+   "migr_rate": "2023"
+  }
+ },
+ "('retrospective', '2023Q4')": {
+  "window": "2023Q1…2023Q4",
+  "warm_up": false,
+  "population_ref": "2023-01-01",
+  "demography": {
+   "pop_growth": "2023-01-01→2024-01-01",
+   "natinc_rate": "2023",
+   "migr_rate": "2023"
+  }
+ },
+ "('retrospective', '2024Q1')": {
+  "window": "2023Q2…2024Q1",
+  "warm_up": false,
+  "population_ref": "2024-01-01",
+  "demography": {
+   "pop_growth": "2024-01-01→2025-01-01",
+   "natinc_rate": "2024",
+   "migr_rate": "2024"
+  }
+ },
+ "('retrospective', '2024Q2')": {
+  "window": "2023Q3…2024Q2",
+  "warm_up": false,
+  "population_ref": "2024-01-01",
+  "demography": {
+   "pop_growth": "2024-01-01→2025-01-01",
+   "natinc_rate": "2024",
+   "migr_rate": "2024"
+  }
+ },
+ "('retrospective', '2024Q3')": {
+  "window": "2023Q4…2024Q3",
+  "warm_up": false,
+  "population_ref": "2024-01-01",
+  "demography": {
+   "pop_growth": "2024-01-01→2025-01-01",
+   "natinc_rate": "2024",
+   "migr_rate": "2024"
+  }
+ },
+ "('retrospective', '2024Q4')": {
+  "window": "2024Q1…2024Q4",
+  "warm_up": false,
+  "population_ref": "2024-01-01",
+  "demography": {
+   "pop_growth": "2024-01-01→2025-01-01",
+   "natinc_rate": "2024",
+   "migr_rate": "2024"
+  }
+ },
+ "('retrospective', 'static')": {
+  "window": "2023Q1…2024Q4",
+  "warm_up": false,
+  "population_ref": "2024-01-01",
+  "demography": {
+   "pop_growth": "2024-01-01→2025-01-01",
+   "natinc_rate": "2024",
+   "migr_rate": "2024"
+  }
+ },
+ "('monitoring', '2023Q1')": {
+  "window": "2023Q1…2023Q1",
+  "warm_up": true,
+  "population_ref": "2022-01-01",
+  "demography": {
+   "pop_growth": "unavailable",
+   "natinc_rate": "unavailable",
+   "migr_rate": "2021"
+  }
+ },
+ "('monitoring', '2023Q2')": {
+  "window": "2023Q1…2023Q2",
+  "warm_up": true,
+  "population_ref": "2023-01-01",
+  "demography": {
+   "pop_growth": "2022-01-01→2023-01-01",
+   "natinc_rate": "unavailable",
+   "migr_rate": "2022"
+  }
+ },
+ "('monitoring', '2023Q3')": {
+  "window": "2023Q1…2023Q3",
+  "warm_up": true,
+  "population_ref": "2023-01-01",
+  "demography": {
+   "pop_growth": "2022-01-01→2023-01-01",
+   "natinc_rate": "unavailable",
+   "migr_rate": "2022"
+  }
+ },
+ "('monitoring', '2023Q4')": {
+  "window": "2023Q1…2023Q4",
+  "warm_up": false,
+  "population_ref": "2023-01-01",
+  "demography": {
+   "pop_growth": "2022-01-01→2023-01-01",
+   "natinc_rate": "unavailable",
+   "migr_rate": "2022"
+  }
+ },
+ "('monitoring', '2024Q1')": {
+  "window": "2023Q2…2024Q1",
+  "warm_up": false,
+  "population_ref": "2023-01-01",
+  "demography": {
+   "pop_growth": "2022-01-01→2023-01-01",
+   "natinc_rate": "2023",
+   "migr_rate": "2022"
+  }
+ },
+ "('monitoring', '2024Q2')": {
+  "window": "2023Q3…2024Q2",
+  "warm_up": false,
+  "population_ref": "2024-01-01",
+  "demography": {
+   "pop_growth": "2023-01-01→2024-01-01",
+   "natinc_rate": "2023",
+   "migr_rate": "2023"
+  }
+ },
+ "('monitoring', '2024Q3')": {
+  "window": "2023Q4…2024Q3",
+  "warm_up": false,
+  "population_ref": "2024-01-01",
+  "demography": {
+   "pop_growth": "2023-01-01→2024-01-01",
+   "natinc_rate": "2023",
+   "migr_rate": "2023"
+  }
+ },
+ "('monitoring', '2024Q4')": {
+  "window": "2024Q1…2024Q4",
+  "warm_up": false,
+  "population_ref": "2024-01-01",
+  "demography": {
+   "pop_growth": "2023-01-01→2024-01-01",
+   "natinc_rate": "2023",
+   "migr_rate": "2023"
+  }
+ },
+ "('monitoring', 'static')": {
+  "window": "2023Q1…2024Q4",
+  "warm_up": false,
+  "population_ref": "2024-01-01",
+  "demography": {
+   "pop_growth": "2023-01-01→2024-01-01",
+   "natinc_rate": "2023",
+   "migr_rate": "2023"
+  }
+ },
+ "msp_lq": {
+  "kappa": 50,
+  "heldout_loglik": {
+   "0": -130557.92311979955,
+   "1": -130556.3697758504,
+   "2": -130554.87962509232,
+   "5": -130550.7690717449,
+   "10": -130545.01459532633,
+   "20": -130536.98035742159,
+   "50": -130532.19618569744,
+   "100": -130558.75267091172,
+   "200": -130655.80432921686,
+   "500": -130956.61520179178,
+   "1000": -131303.45999786304
+  },
+  "pi": {
+   "agri": 0.0457,
+   "business_services": 0.2468,
+   "construction": 0.1068,
+   "consumer_services": 0.0955,
+   "industry": 0.0775,
+   "social": 0.0298,
+   "trade": 0.3199,
+   "transport": 0.078
+  },
+  "firms": 146082
+ },
+ "assumed_availability": {
+  "population_jan1": "Y-06-30",
+  "edn_year": "(Y+1)-03-31",
+  "migration_year": "(Y+1)-04-30",
+  "census_2021": "2023-12-31",
+  "sber_month": "конец месяца",
+  "contract": "дата заключения"
+ }
+}

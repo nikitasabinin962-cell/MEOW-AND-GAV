@@ -1,0 +1,93 @@
+{
+ "ATMO_B_44_2025-2026_20261008134310_b6z6lq_2025-09_p01403-01425_part00229.csv": {
+  "rows": 334,
+  "cols": 55,
+  "pages": 23,
+  "page_min": 1403,
+  "page_max": 1425,
+  "rows_per_page": {
+   "15": 22,
+   "4": 1
+  },
+  "dup_api_id": 0,
+  "dup_exact_rows": 0,
+  "sample_month": [
+   "2025-09"
+  ],
+  "api_published_month": {
+   "2025-09": 91
+  },
+  "contract_date_month": {
+   "NaN": 247,
+   "2025-09": 87
+  },
+  "normalized_contract_date_empty": 334,
+  "normalized_subject_equals_status": 330,
+  "purchase_prefix": {
+   "ВМЗ": 228,
+   "ИМЗ": 91,
+   "КМЗ": 15
+  },
+  "status": {
+   "contract:active": 173,
+   "contract:fulfilled": 148,
+   "contract:terminated": 9,
+   "contract:failed": 4
+  },
+  "order_type": {
+   "Закупка до 600 000 руб. (п.4 ч.1 ст.93 44-ФЗ)": 231,
+   "Закупка до 600 000 руб. (п.5 ч.1 ст.93 44-ФЗ)": 103
+  },
+  "price_rub_sum": 27908617.31,
+  "signatures_checked": {
+   "НЕТ": 334
+  },
+  "inn_columns": []
+ },
+ "ATMO_B_44_2025-2026_20261008134310_b6z6lq_2026-10_p00401-00442_part00005.csv": {
+  "rows": 626,
+  "cols": 59,
+  "pages": 42,
+  "page_min": 401,
+  "page_max": 442,
+  "rows_per_page": {
+   "15": 41,
+   "11": 1
+  },
+  "dup_api_id": 0,
+  "dup_exact_rows": 0,
+  "sample_month": [
+   "2026-10"
+  ],
+  "api_published_month": {
+   "2026-10": 97
+  },
+  "contract_date_month": {
+   "NaN": 531,
+   "2026-10": 95
+  },
+  "normalized_contract_date_empty": 626,
+  "normalized_subject_equals_status": 624,
+  "purchase_prefix": {
+   "ВМЗ": 512,
+   "ИМЗ": 96,
+   "КМЗ": 17,
+   "НМЗ": 1
+  },
+  "status": {
+   "contract:active": 598,
+   "contract:fulfilled": 25,
+   "contract:failed": 2,
+   "contract:terminated": 1
+  },
+  "order_type": {
+   "Закупка до 600 000 руб. (п.4 ч.1 ст.93 44-ФЗ)": 487,
+   "Закупка до 600 000 руб. (п.5 ч.1 ст.93 44-ФЗ)": 139
+  },
+  "price_rub_sum": 45525717.39,
+  "signatures_checked": {
+   "НЕТ": 626
+  },
+  "inn_columns": []
+ }
+}

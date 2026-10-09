@@ -1,0 +1,134 @@
+{
+ "rosstat": {
+  "edn": {
+   "missing_mo": [
+    "ГО Межгорье"
+   ],
+   "rows": 744
+  },
+  "migr_2018_2023": {
+   "missing_mo": [
+    "ГО Межгорье"
+   ],
+   "rows": 372
+  },
+  "migr_2024": {
+   "missing_mo": [
+    "ГО Межгорье"
+   ],
+   "rows": 124
+  },
+  "livelihood": {
+   "missing_mo": [
+    "ГО Межгорье"
+   ],
+   "rows": 682
+  },
+  "age": {
+   "missing_mo": [
+    "ГО Межгорье"
+   ],
+   "rows": 1178
+  },
+  "education": {
+   "missing_mo": [
+    "ГО Межгорье"
+   ],
+   "rows": 310
+  }
+ },
+ "sber": {
+  "monthly_rows": 1512,
+  "features": 32,
+  "imputed_sber": [
+   "ГО Межгорье"
+  ]
+ },
+ "contracts": {
+  "rows": 359615,
+  "kopeck_mismatch": 0
+ },
+ "msp": {
+  "firms": 150234,
+  "with_candidate": 150233,
+  "no_section": 4116,
+  "missing_headcount": 111477,
+  "index_firms": 157996
+ },
+ "geography": {
+  "customers": 5138,
+  "named_explicit": 2038,
+  "loo_kpp": {
+   "code": "kpp4",
+   "evaluated": 2034,
+   "assigned": 2034,
+   "abstained": 0,
+   "correct": 2018,
+   "accuracy": 0.992133726647001,
+   "coverage": 1.0
+  },
+  "loo_inn": {
+   "code": "inn4",
+   "evaluated": 2034,
+   "assigned": 2001,
+   "abstained": 33,
+   "correct": 1981,
+   "accuracy": 0.9900049975012494,
+   "coverage": 0.9837758112094396
+  },
+  "disabled_district_centers": [
+   "МР Абзелиловский",
+   "МР Кугарчинский"
+  ],
+  "name_conflicts": 4,
+  "customer_quality": {
+   "name_and_tax_office_agree": 2396,
+   "name_tax_office_conflict": 19,
+   "outside_region": 3,
+   "tax_office_hypothesis": 2720
+  },
+  "supplier_quality": {
+   "outside_region": 9056,
+   "msp_registry_address_2026": 5581,
+   "tax_office_hypothesis": 1206,
+   "region_02_mo_unresolved": 603,
+   "msp_address_vs_tax_office_conflict": 160
+  },
+  "tax_codes_usable": 69,
+  "tax_codes_total": 69
+ },
+ "checks": {
+  "population": true,
+  "edn_identity": 0.0,
+  "contracts": {
+   "files": 8,
+   "csv": {
+    "rows": 359615,
+    "ids": 359615,
+    "rub_known": "1263174213398.89",
+    "distinct_supplier_inn": 16337,
+    "missing_supplier_inn": 82063,
+    "distinct_customer_inn": 5110
+   },
+   "v5": {
+    "rows": 359615,
+    "ids": 359615,
+    "rub_known_kopecks": 126317421339889,
+    "distinct_supplier_inn": 16337,
+    "missing_supplier_inn": 82063,
+    "distinct_customer_inn": 5110
+   },
+   "msp_join": {
+    "supplier_inn_unavailable": 82063,
+    "found_in_snapshot": 173892,
+    "not_found_in_snapshot": 103660
+   }
+  }
+ },
+ "integrity": {
+  "integrity": "ok",
+  "foreign_key_violations": 0,
+  "fk_sample": []
+ },
+ "seconds": 160.8
+}

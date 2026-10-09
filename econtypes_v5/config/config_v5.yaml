@@ -1,0 +1,55 @@
+# econtypes v5 — все параметры расчёта. Хеш файла входит в run_id.
+version: "5.0.0"
+region: Республика Башкортостан
+scope_statement: >-
+  Региональный кейс: 63 МО Республики Башкортостан (основная типология — 62 МО с наблюдаемым блоком
+  СберИндекса; ЗАТО Межгорье — отдельно). Национальный результат не заявляется: полные входы
+  СберИндекса по всем МО в доступных каталогах не найдены, национальный запуск не выполнялся.
+
+database: data/econtypes_v5.sqlite
+seed: 20261009
+
+features:
+  customer_geography: inclusive      # inclusive (имя + код налогового органа, LOO 99%) | strict (только имя)
+  blocks_new: [sber_level, sber_structure, proc_budget, proc_geo, proc_corp, demography, age_structure]
+  block_weights: {}                  # пусто = равные веса блоков
+  exclude_nodes_main: ["ГО Межгорье"]   # нет наблюдаемого блока СберИндекса и муниципальной демографии Росстата
+
+network:
+  knn: 8
+  k_scale: 7                 # self-tuning: σ_i = расстояние до 7-го соседа
+  knn_mode: union
+  alpha_attr: 0.5
+  layer_weights: {comovement: 0.35, lead_lag: 0.10, dtw: 0.15, procurement_flow: 0.40}   # веса v4 сохранены для сопоставимости
+  min_obs: 6
+  max_lag: 3
+  dtw_window: 2
+  flow_min_rub: 1000000
+
+clustering:
+  k_range: [2, 3, 4, 5, 6, 7, 8, 9, 10]
+  methods_graph: [spectral, leiden]
+  methods_attr: [kmeans, ward]
+  min_cluster_size: 3
+  null_B: 99
+  bootstrap_B: 100
+  bootstrap_frac: 0.8
+  stability_floor: 0.5        # решения с медианой бутстреп-ARI ниже не выбираются как итоговые
+  k_detail_min: 5            # детальный уровень: то же правило выбора среди K ≥ 5
+
+dynamics:
+  window_quarters: 4
+  beta_grid: [0.0, 0.3, 0.5, 0.7, 0.9]
+  beta_main: 0.5
+  event_theta: 0.3
+
+uncertainty:
+  node_B: 200
+  temporal_block_B: 100
+  temporal_block_len: 3
+  rebuild_B: 100
+
+correlations:
+  B_perm: 9999
+  B_spatial: 999
+  ci_B: 2000

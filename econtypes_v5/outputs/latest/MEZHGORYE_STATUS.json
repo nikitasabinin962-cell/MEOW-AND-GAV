@@ -1,0 +1,16 @@
+{
+ "mo": "ГО Межгорье",
+ "status": "assigned_on_partial_blocks_without_sberindex",
+ "blocks_used": [
+  "proc_budget",
+  "proc_geo",
+  "proc_corp"
+ ],
+ "nearest_type": 1,
+ "distances": [
+  3.429,
+  2.063,
+  2.915
+ ],
+ "note": "Траты СберИндекса для ЗАТО отсутствуют (в v4 были KNN-импутированы); муниципальные таблицы Росстата ЗАТО не включают."
+}
