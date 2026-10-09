@@ -18,6 +18,8 @@ echo "== 2/9 тесты (pytest)"
 $P -m pytest -q tests | tee outputs/pytest_log.txt
 echo "== 3/9 полный расчёт"
 $P scripts/measure.py outputs/pipeline_full_measure.json $P -m econtypes5.pipeline $QUICK | tee outputs/pipeline_full_log.txt
+echo "== 3b/9 связи со сдвигом: значимость и устойчивость (тот же run_id, W и типы не меняются)"
+$P scripts/lag_tests.py
 echo "== 4/9 повтор проверок аудитора на v5"
 $P scripts/audit_v5.py
 echo "== 5/9 нагрузка на синтетике (N=63/500/2016)"

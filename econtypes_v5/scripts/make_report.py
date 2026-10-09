@@ -365,6 +365,13 @@ def stress_rows(man: dict) -> list[dict]:
                 f"{REL}/HOLDOUT_VALIDATION.csv", f"точность {f2(r.accuracy)} против нуля {f2(r.null_mean)} (q95 {f2(r.null_q95)}), p = {f2(r.p_value, 4)}, B = {r.B}")
     else:
         add("расчёт", "проверка вне периода (2025–2026)", "NOT_RUN", "HOLDOUT_VALIDATION.csv отсутствует")
+    lg = rj(LAT / "LAG_EDGE_SUMMARY.json")
+    if lg is not None and lg.get("run_id") == man["run_id"]:
+        add("расчёт", "связи со сдвигом: значимость (фазовые суррогаты, BH/BY) и jackknife", "INFO", f"{REL}/LAG_EDGE_SUMMARY.json",
+            f"пар {lg['ordered_pairs_tested']}, значимы BH {lg['sig_bh_005']}, BY {lg['sig_by_005']}; стрелок значимых и устойчивых {lg['arrows_sig_stable']} из {lg['arrows_total']}; "
+            f"совпадение со слоем прогона {lg['agrees_with_run_function']}")
+    else:
+        add("расчёт", "связи со сдвигом: значимость и устойчивость", "NOT_RUN", "LAG_EDGE_SUMMARY.json отсутствует или от другого прогона")
 
     # 5. нагрузка
     sb = rj(OUT / "SCALE_BENCHMARK.json")
@@ -631,13 +638,29 @@ def build_report(man: dict) -> Doc:
         D.p("Корреляции между МО и во времени внутри МО могут иметь разный знак; выводы о динамике делаются только по внутренней части.")
     if ho is not None:
         D.h(2, "9. Проверка вне периода обучения")
-        D.table(pd.DataFrame({"уровень": ho.level, "год": ho.year, "МО": ho.n, "точность": ho.accuracy.map(f2), "нуль (среднее)": ho.null_mean.map(f2),
-                              "нуль q95": ho.null_q95.map(f2), "p": ho.p_value.map(lambda x: f2(x, 4))}),
+        cols = {"уровень": ho.level, "год": ho.year, "МО": ho.n, "точность": ho.accuracy.map(f2)}
+        if "majority_baseline" in ho:
+            cols.update({"доля частого типа": ho.majority_baseline.map(f2), "balanced accuracy": ho.balanced_accuracy.map(f2),
+                         "ARI": ho.ari.map(f2), "NMI": ho.nmi.map(f2), "контрактов 44-ФЗ": ho.n_contracts_44.map(fint)})
+        cols.update({"нуль (среднее)": ho.null_mean.map(f2), "p": ho.p_value.map(lambda x: f2(x, 4))})
+        D.table(pd.DataFrame(cols),
                 "Таблица 8. Узнаётся ли тип 2023–2024 по блокам госзаказа 44-ФЗ 2025 и 2026 (YTD): ближайший центроид; первая строка уровня — та же процедура "
                 "на обучающем периоде (потолок); нуль — перестановка предсказанных меток.")
         D.p("Это проверка воспроизводимости разметки по одному блоку, а не независимое подтверждение экономической истинности типов. "
             "Блок 223-ФЗ исключён: в 2025 г. в выгрузке лишь 1 340 записей 223-ФЗ против 35 631 в 2023 г. (разрыв покрытия источника, `docs/DATA_GAPS.md`, п. 25). "
             "Общий сдвиг уровня закупок (инфляция) стандартизацией 2023–2024 не устраняется.")
+
+    lg = rj(LAT / "LAG_EDGE_SUMMARY.json")
+    if lg is not None and lg.get("run_id") == man["run_id"]:
+        D.h(3, "Связи со сдвигом по времени: значимость и устойчивость")
+        D.p(f"Проверены {fint(lg['ordered_pairs_tested'])} упорядоченных пар МО ({lg['nodes_tested']} МО, {lg['increments']} месячных приращений, сдвиг 1–{lg['max_lag']} мес.). "
+            f"Нуль: фазовая рандомизация ряда-последователя, B = {fint(lg['B'])}; поправка BH и BY. "
+            f"Значимы после BH: {fint(lg['sig_bh_005'])}, после BY: {fint(lg['sig_by_005'])}. "
+            f"Из {fint(lg['arrows_total'])} пар, где правило ставит стрелку, значимых и устойчивых по jackknife: {fint(lg['arrows_sig_stable'])}. "
+            f"Не проверялись МО {', '.join(map(str, lg['nodes_not_tested'])) or 'нет'}: {lg['not_tested_reason']}.")
+        D.p("Вывод: связи со сдвигом на этом окне не отличаются от шума, стрелки направления не подтверждены. Слой остаётся в W с тем же весом "
+            "(абляция: исключение слоя lead_lag не меняет макротипы), а в интерпретации используется только как разведочный. Причинность не утверждается. "
+            "Подробно: `outputs/latest/LAG_EDGE_TESTS.csv` и `LAG_EDGE_SUMMARY.json`.")
 
     # --- исправления
     D.h(2, "10. Исправления относительно v4")
