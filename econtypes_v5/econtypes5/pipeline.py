@@ -17,7 +17,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import adjusted_rand_score
+from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
 
 from . import clustering as CL
 from . import db as DB
@@ -739,7 +739,8 @@ def stage_holdout(R: Run, d: F.Data, S0: dict) -> pd.DataFrame:
     # блок 223-ФЗ исключён: в 2025 г. в выгрузке 1 340 записей против 35 631 в 2023 г. — разрыв покрытия источника, не экономики
     cols = F.BLOCKS["proc_budget"] + F.BLOCKS["proc_geo"]
     nodes = S0["nodes"]
-    cyear = d.contracts.assign(year=d.contracts.quarter.str[:4]).groupby(["year", "law"]).size()
+    # число контрактов 44-ФЗ — ровно по тем кварталам, что вошли в блок (2026: январь–сентябрь, без октября)
+    n44 = lambda qs: int(((d.contracts.law == "44-ФЗ") & d.contracts.quarter.isin(qs)).sum())
 
     def block(quarters, pop):
         pr = F.procurement(d, quarters, pop, F.CUSTOMER_GEO_INCLUSIVE)
@@ -749,7 +750,7 @@ def stage_holdout(R: Run, d: F.Data, S0: dict) -> pd.DataFrame:
     med, iqr = base.median(), (base.quantile(.75) - base.quantile(.25)).replace(0, np.nan) / 1.349
     z = lambda df: ((df - med) / iqr).clip(-4, 4)
     Zb = z(base).to_numpy()
-    rows, preds = [], []
+    rows, preds, conf = [], [], []
     rng = np.random.default_rng(R.seed)
     for lvl, lab in (("macro", R.final["labels"]), ("detailed", R.detailed["labels"])):
         ks = np.unique(lab)
@@ -763,17 +764,25 @@ def stage_holdout(R: Run, d: F.Data, S0: dict) -> pd.DataFrame:
             pred = ks[np.argmin(((Zy[ok][:, None, :] - cent[None]) ** 2).sum(-1), axis=1)]
             ref = lab[ok]
             acc = float((pred == ref).mean())
+            # accuracy одна мало что говорит: рядом доля самого частого типа и balanced accuracy
+            maj = float(np.bincount(ref).max() / len(ref))
+            bal = float(np.mean([(pred[ref == k] == k).mean() for k in np.unique(ref)]))
+            for r_, p_ in zip(*np.unique(np.c_[ref, pred], axis=0, return_counts=True)):
+                conf.append(dict(level=lvl, year=year, reference=int(r_[0]), predicted=int(r_[1]), n=int(p_)))
             B = 9999
             null = np.array([(rng.permutation(pred) == ref).mean() for _ in range(B)])
             b = int((null >= acc - 1e-12).sum())
-            rows.append(dict(level=lvl, year=year, n=int(ok.sum()), accuracy=acc, null_mean=float(null.mean()),
+            rows.append(dict(level=lvl, year=year, n=int(ok.sum()), accuracy=acc, majority_baseline=maj, balanced_accuracy=bal,
+                             ari=float(adjusted_rand_score(ref, pred)), nmi=float(normalized_mutual_info_score(ref, pred)),
+                             null_mean=float(null.mean()),
                              null_q95=float(np.quantile(null, .95)), p_value=S.mc_p(b, B), B=B, seed=R.seed,
-                             features=";".join(cols), n_contracts_44=int(sum(cyear.get((y, "44-ФЗ"), 0) for y in re.findall(r"\d{4}", year))),
+                             features=";".join(cols), n_contracts_44=n44(qs), quarters=f"{qs[0]}–{qs[-1]}",
                              null="перестановка предсказанных меток при фиксированных референтных",
                              period_note={"2026": "январь–сентябрь (YTD), не полный год", "2025": "полный год"}.get(year, "обучающий период: потолок точности")))
             preds += [dict(level=lvl, year=year, mo=S0["names"][i], reference=int(r_), predicted=int(p_))
                       for i, r_, p_ in zip(np.flatnonzero(ok), ref, pred)]
     R.save(pd.DataFrame(preds), "HOLDOUT_PREDICTIONS")
+    R.save(pd.DataFrame(conf), "HOLDOUT_CONFUSION")
     return R.save(pd.DataFrame(rows), "HOLDOUT_VALIDATION")
 
 

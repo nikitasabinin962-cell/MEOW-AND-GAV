@@ -113,7 +113,9 @@ def struct_layers_new(d: F.Data, nodes: list[int], months: list[str], quarters: 
     lay["comovement"], i1 = TS.comovement(R, cfg["min_obs"])
     lay["lead_lag"], lead, i2 = TS.lead_lag(R, cfg["max_lag"], cfg["min_obs"])
     lay["dtw"], i3 = TS.dtw_similarity(R, cfg["dtw_window"], cfg["min_obs"])
-    info.update(comovement=i1["undefined_pairs"], dtw=i3["status"], node_status={**i1["node_status"], **i3["node_status"]})
+    info.update(comovement=i1["undefined_pairs"], dtw=i3["status"], dtw_gap_pairs=i3["gap_pairs"],
+                lag_pairs_without_direction=i2["pairs_without_direction"],
+                node_status={**i1["node_status"], **i3["node_status"]})
     lay["procurement_flow"], finfo = flow_layer(d, nodes, quarters, cfg["flow_min_rub"], geo)
     info["flow"] = finfo
     info["lead"] = lead
