@@ -1,0 +1,34 @@
+{
+  "database": "econtypes_research_20261009.sqlite",
+  "sqlite_bytes": 538398720,
+  "sqlite_sha256": "9a4758254578d007e536c8520a4b0965aba4433ceeee6ce5c4b2ca306eab1a5e",
+  "gzip_bytes": 83174058,
+  "files": [
+    {
+      "file": "econtypes_research_20261009.sqlite.gz",
+      "bytes": 83174058,
+      "sha256": "286adb520c83e16c58b22248533566f5d53236e3a76b5dbf9565b85e2c54fe2e"
+    }
+  ],
+  "integrity_check": "ok",
+  "restore_sha256_check": "PASS",
+  "table_counts": {
+    "atmo_contract_observations": 1045,
+    "baseline_cluster_labels": 567,
+    "baseline_feature_aggregates": 2016,
+    "baseline_graph_edges": 2800,
+    "baseline_monthly_spending": 1512,
+    "data_quality_checks": 6,
+    "dataset_metadata": 8,
+    "msp_municipality_candidates": 150234,
+    "msp_snapshot_rows": 150234,
+    "msp_supplier_index_snapshot": 157996,
+    "municipalities": 63,
+    "population": 252,
+    "processed_contracts": 359615,
+    "procurement_notice_exports": 10000,
+    "sources": 18
+  },
+  "source": "Original research database from b728705; not the v5 result database",
+  "recalculated": false
+}

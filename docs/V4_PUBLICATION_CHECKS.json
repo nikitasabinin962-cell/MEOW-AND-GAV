@@ -1,0 +1,50 @@
+{
+  "checked_at": "2026-10-09T20:03:26.557134+00:00",
+  "version": "4.0.0",
+  "source_commit": "b728705dd0b1ce7f104d3e82021fd3826b7ea655",
+  "full_recalculation_performed": false,
+  "checks": [
+    {
+      "name": "original_HTML_byte_identity",
+      "status": "PASS",
+      "sha256": "20515ab2b27dca5e75583c5fb0fe35a1cfc5452b90a5e189b55bd9f0d5e14e43"
+    },
+    {
+      "name": "source_builder_and_D_hash",
+      "status": "PASS",
+      "data_sha1": "d849169e16d7d2c42c1f210426b1490b6832b76a"
+    },
+    {
+      "name": "v4_inventory_and_no_v5_tab",
+      "status": "PASS",
+      "municipalities": 63,
+      "types": 7,
+      "metrics": 13,
+      "features": 32,
+      "tabs": 7
+    },
+    {
+      "name": "research_database_integrity",
+      "status": "PASS",
+      "result": "ok"
+    },
+    {
+      "name": "archive_restore_and_SHA256",
+      "status": "PASS",
+      "sqlite_sha256": "9a4758254578d007e536c8520a4b0965aba4433ceeee6ce5c4b2ca306eab1a5e"
+    },
+    {
+      "name": "restore_helper_repeatability",
+      "status": "PASS",
+      "second_run": "Existing identical file accepted without rewrite"
+    },
+    {
+      "name": "new_browser_smoke_check",
+      "status": "BLOCKED",
+      "reason": "Managed Chromium URL policy denies file:// navigation; net::ERR_BLOCKED_BY_ADMINISTRATOR",
+      "executed_views": 0
+    }
+  ],
+  "historical_browser_report": "reproduction/source/docs/checks.json: 33/33 on 2026-10-08; not rerun in this publication",
+  "limitations": "Original v4 methodology retained; see AUDIT.md. This publication does not apply v5 corrections."
+}

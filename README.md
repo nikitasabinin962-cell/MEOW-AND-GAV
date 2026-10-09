@@ -39,6 +39,7 @@ Python, Node.js и сервер для просмотра не нужны. Би�
 | Приложение PDF | [appendix.pdf](reproduction/calculation_source/docs/appendix.pdf) |
 | Описание интерфейса v4 | [REPORT_V4.md](reproduction/source/docs/REPORT_V4.md) |
 | Исходные материалы | [reproduction/materials/](reproduction/materials/) |
+| Полная исследовательская база без Git LFS | [data/research-db/](data/research-db/) |
 | Источники и контрольные суммы | [SOURCE_MANIFEST.json](SOURCE_MANIFEST.json) |
 | Схема исследовательской базы | [SCHEMA.sql](SCHEMA.sql) |
 | Происхождение опубликованной панели | [V4_PROVENANCE.json](V4_PROVENANCE.json) |
@@ -55,6 +56,10 @@ python reproduction/source/build.py --out index.html --check
 этом не пересчитывается. Для расчётного кода предусмотрена отдельная
 [инструкция](reproduction/calculation_source/README.md).
 
+Полная исследовательская база включена обычным gzip-архивом размером около
+83 МБ. Для восстановления с проверкой SHA-256 выполните
+`python data/research-db/restore.py`. Для открытия панели это не требуется.
+
 ## Версия и проверки
 
 Это **исходная версия v4**, сохранённая из коммита
@@ -68,7 +73,8 @@ python reproduction/source/build.py --out index.html --check
 Проверка открытия и интерфейса не означает устранения этих ограничений.
 
 Существовавшие ранее отчёты о тестах имеют собственные даты. Результат
-проверки этой публикации будет добавлен в `docs/V4_PUBLICATION_CHECKS.json`.
+проверки этой публикации приведён в
+[docs/V4_PUBLICATION_CHECKS.json](docs/V4_PUBLICATION_CHECKS.json).
 
 Лицензии библиотек и шрифтов сохранены в `reproduction/source/src/vendor/licenses/`.
 Лицензия расчётного кода и сведения об условиях использования данных — в
