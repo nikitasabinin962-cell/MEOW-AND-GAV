@@ -53,6 +53,6 @@ bash scripts/run_all.sh            # ≈ 15 мин на 4 vCPU; --quick — ≈ 
 
 Сырых parquet СберИндекса нет — используются архивные производные v4; привязка организаций к МО — по названию и коду налогового органа (LOO-точность измерена), не ОКТМО; снимок МСП 2026 — не исторический. Сеть контейнера не пускала к rosstat.gov.ru, sberindex.ru, nalog.gov.ru, zakupki.gov.ru; ЕИС по правилу пользователя открывается только через Opera Browser Connector (в сессии его не было). Подробно — `docs/DATA_GAPS.md` и раздел «Ограничения» отчёта.
 
-## База v5 в репозитории
+## Полная база для скачивания
 
-`data/econtypes_v5.sqlite.gz` (обычный файл git, ≈70 МБ) — база после финального прогона `v5-20261009T121014Z-d833d0` (слои L0–L3 и результаты прогона); контрольные суммы — `data/SHA256SUMS`. Распаковка: `gunzip -k data/econtypes_v5.sqlite.gz`. Её можно и не скачивать: `bash scripts/run_all.sh` пересобирает базу из `../econtypes_research_20261009.sqlite`.
+`data/econtypes_v5.sqlite.gz` — полный снимок базы после прогона, указанного в `data/DB_MANIFEST.json` (run_id, размер, SHA-256, число строк в каждой таблице, ссылка без входа в GitHub). Проверка и распаковка — в конце `docs/DATA_DICTIONARY.md`. Пересоздать снимок: `.venv/bin/python scripts/package_db.py` (входит в `run_all.sh`). Можно и не скачивать: `bash scripts/run_all.sh` пересобирает базу из `../econtypes_research_20261009.sqlite` (Git LFS).

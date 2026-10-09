@@ -55,9 +55,10 @@
  "period": "контракты 01.01.2023–06.10.2026; типология 2023–2024; проверка вне периода 2025 и 2026 (январь–сентябрь)",
  "scope": "63 МО Республики Башкортостан, типология 62 МО (ЗАТО Межгорье отдельно)",
  "local_path": "data/econtypes_v5.sqlite.gz",
- "url": null,
- "dictionary_url": null,
+ "url": "https://raw.githubusercontent.com/nikitasabinin962-cell/MEOW-AND-GAV/989685df276a1a3f1db4a002d650d767bdae0950/econtypes_v5/data/econtypes_v5.sqlite.gz",
+ "dictionary_url": "https://github.com/nikitasabinin962-cell/MEOW-AND-GAV/blob/989685df276a1a3f1db4a002d650d767bdae0950/econtypes_v5/docs/DATA_DICTIONARY.md",
  "restore": "gunzip -k econtypes_v5.sqlite.gz  # затем sqlite3 econtypes_v5.sqlite 'PRAGMA integrity_check'",
  "not_included": "Сырые parquet СберИндекса (в среде отсутствуют), страницы ЕИС, исходные архивы Drive больше 10 МБ; см. docs/DATA_GAPS.md",
- "created_at": "2026-10-09T14:50:15+00:00"
+ "created_at": "2026-10-09T14:50:15+00:00",
+ "published_commit": "989685df276a1a3f1db4a002d650d767bdae0950"
 }

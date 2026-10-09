@@ -1,0 +1,17 @@
+Продолжение econtypes v5 (конкурс СберИндекса, задача 1). Общаться по-русски, коротко.
+
+Где: публичный nikitasabinin962-cell/MEOW-AND-GAV, папка econtypes_v5/, ветка claude/compassionate-carson-i2yna8. Дашборд: приватный nikitasabinin962-cell/-, та же ветка. Рядом: /home/user/MEOW-AND-GAV и /home/user/-.
+
+Актуально: прогон v5-20261009T142841Z-d833d0 (outputs/latest/RUN_MANIFEST.json), база data/econtypes_v5.sqlite.gz + data/DB_MANIFEST.json, дашборд econtypes_v5.html с D5 того же run_id. Что проверено: econtypes_v5/FINAL_CHECKS.md. Состояние: econtypes_v5/HANDOFF_STATE.md.
+
+Сделано: DTW без сжатия календаря, лаговые стрелки только при однозначном максимуме, окно 2026 январь–сентябрь, holdout с baseline/balanced accuracy/ARI/NMI, полный пересчет, снимок базы с проверкой восстановления, открытая ссылка на скачивание, кнопка в дашборде, подписи по формулам, офлайн-проверка.
+
+Осталось:
+1. Устойчивость и FDR для лаговых связей (сейчас «разведочно»).
+2. Перенос результатов v5 в вкладки 1–7 вместо архива v4, если решат делать одну версию; схемы v4 (7 типов, 13 индексов) с моделью v5 не совпадают.
+3. Проверка на Windows и на реальном GPU, 2D-резерв карты.
+4. Сырые parquet СберИндекса и ЕИС (ЕИС только через Opera Browser Connector, массово не скачивать без указания).
+
+Первый шаг: cd /home/user/MEOW-AND-GAV/econtypes_v5 && bash -c 'python3 -m venv .venv && .venv/bin/pip install -q -r requirements.lock && .venv/bin/python -m pytest -q tests'
+
+Лимиты: быстрый запуск до 180 с, полный до 1500 с, память до 2048 МиБ, не больше двух workers, тяжелые задачи не параллелить. Формулы, K и веса в JavaScript не менять: интерфейс только показывает экспорт. Дизайн дашборда сохранять. Историю git не переписывать, PR и конкурсную форму без указания не делать.

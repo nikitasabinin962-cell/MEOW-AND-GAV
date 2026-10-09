@@ -2,7 +2,7 @@
 
 Прогон: `v5-20261009T142841Z-d833d0` (config `d833d01329f4019a`, code `eb402d7943388054`, data `24f5b250a5cc5492`, seed 20261009). Отчёт собирается автоматически `scripts/make_report.py` из файлов проверок; статус берётся из файла, а не вписывается.
 
-Итого: **FAIL** 1, **INFO** 5, **NOT_RUN** 7, **PASS** 56.
+Итого: **INFO** 5, **NOT_RUN** 7, **PASS** 57.
 
 Статусы: PASS — проверка исполнена и прошла; FAIL — исполнена и не прошла; INFO — измерение без порога; NOT_RUN — не исполнялась (причина указана).
 
@@ -68,9 +68,9 @@
 
 | проверка | статус | основание | детали |
 |---|---|---|---|
-| синтетика N=63: граф+spectral+Leiden+ICVI | **PASS** | outputs/SCALE_BENCHMARK.json | граф 0.001 с, spectral 0.003 с, Leiden 0.348 с, ICVI 0.007 с, пик 268.2 МиБ; DTW всех пар ≈ 0.2 с |
-| синтетика N=500: граф+spectral+Leiden+ICVI | **PASS** | outputs/SCALE_BENCHMARK.json | граф 0.026 с, spectral 0.027 с, Leiden 0.028 с, ICVI 0.024 с, пик 283.5 МиБ; DTW всех пар ≈ 11.5 с |
-| синтетика N=2016: граф+spectral+Leiden+ICVI | **PASS** | outputs/SCALE_BENCHMARK.json | граф 0.88 с, spectral 0.481 с, Leiden 0.172 с, ICVI 0.245 с, пик 471.2 МиБ; DTW всех пар ≈ 183.8 с |
+| синтетика N=63: граф+spectral+Leiden+ICVI | **PASS** | outputs/SCALE_BENCHMARK.json | граф 0.001 с, spectral 0.005 с, Leiden 0.503 с, ICVI 0.01 с, пик 217.1 МиБ; DTW всех пар ≈ 0.5 с |
+| синтетика N=500: граф+spectral+Leiden+ICVI | **PASS** | outputs/SCALE_BENCHMARK.json | граф 0.033 с, spectral 0.086 с, Leiden 0.033 с, ICVI 0.066 с, пик 232.5 МиБ; DTW всех пар ≈ 26.3 с |
+| синтетика N=2016: граф+spectral+Leiden+ICVI | **PASS** | outputs/SCALE_BENCHMARK.json | граф 1.277 с, spectral 0.927 с, Leiden 0.167 с, ICVI 0.304 с, пик 420.1 МиБ; DTW всех пар ≈ 469.2 с |
 
 ## дашборд
 
@@ -79,14 +79,14 @@
 | v5.default-tab-is-v5 | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) |  |
 | v5.map-63-polygons | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"nPaths": 63} |
 | v5.banner-has-run-id | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | 
-    econtypes v5 — пересчёт после исправлений. run_id v5-20261009T121014Z-d833d0. Макроуровень: leiden, K = 3; детальный уровень: spectral, K = 9 (оба выбраны  |
+    econtypes v5 — пересчёт после исправлений. run_id v5-20261009T142841Z-d833d0. Макроуровень: spectral, K = 3; детальный уровень: spectral, K = 5 (оба выбран |
 | v5.meta-v4-date-labelled | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) |  |
-| v5.header-kpis-are-v5 | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | 3 / 9типов v5: макро / детальный0,94бутстреп ARI (узлы)0,94бутстреп ARI (месяцы)PASSтест будущей информации1082рёбер точной W |
+| v5.header-kpis-are-v5 | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | 3 / 5типов v5: макро / детальный0,89бутстреп ARI (узлы)0,82бутстреп ARI (месяцы)PASSтест будущей информации1079рёбер точной W |
 | v5.time-controls-visible | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) |  |
-| v5.scrubber-p95-ms<300 | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"p95": 63, "times": [25, 36, 40, 40, 41, 46, 48, 63]} |
+| v5.scrubber-p95-ms<300 | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"p95": 86, "times": [40, 49, 50, 55, 57, 61, 65, 86]} |
 | v5.scrubber-updates-label | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | 2024Q4 |
 | v5.scrubber-keyboard | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) |  |
-| v5.level-switch-detailed-legend | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"nLeg": 9, "nLeg2": 9} |
+| v5.level-switch-detailed-legend | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"nLeg": 5, "nLeg2": 5} |
 | v5.select-mo-syncs-profile-map-net | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"h": "ГО Агидель", "onPath": 1, "onEdge": 5} |
 | v5.profile-shows-provenance | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"prov": 22} |
 | v5.sankey-rendered | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) |  |
@@ -94,10 +94,10 @@
 | v5.icvi-table-rows | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) |  |
 | v5.coverage-table-63 | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) |  |
 | v5.network-note-exact-vs-display | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) |  |
-| v5.load-ms<8000 | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"loadMs": 1163} |
+| v5.load-ms<8000 | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"loadMs": 1565} |
 | v5.mobile-no-horizontal-scroll | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"overflow": 0} |
 | v5.no-console-errors | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | [] |
-| дашборд собран из этого же прогона (run_id в шапке) | **FAIL** | -/docs/v5-checks.json | v5-20261009T142841Z-d833d0 |
+| дашборд собран из этого же прогона (run_id в шапке) | **PASS** | -/docs/v5-checks.json | v5-20261009T142841Z-d833d0 |
 
 ## не выполнено
 
