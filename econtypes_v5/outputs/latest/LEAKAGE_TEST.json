@@ -1,0 +1,14 @@
+{
+ "monitoring": {
+  "features_identical": true,
+  "W_identical": true,
+  "labels_identical": true
+ },
+ "retrospective": {
+  "features_identical": false,
+  "W_identical": false,
+  "labels_identical": true
+ },
+ "status": "PASS",
+ "retrospective_changes_detected": true
+}

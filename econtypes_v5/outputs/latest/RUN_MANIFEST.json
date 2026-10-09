@@ -1,0 +1,163 @@
+{
+ "run_id": "v5-20261009T121014Z-d833d0",
+ "config_hash": "d833d01329f4019a",
+ "code_hash": "510ac7874ec53d3e",
+ "data_hash": "24f5b250a5cc5492",
+ "seed": 20261009,
+ "quick": false,
+ "final": {
+  "config": "C4_v5features_v5graph",
+  "method": "leiden",
+  "k": 3
+ },
+ "macro": {
+  "k": 3
+ },
+ "detailed": {
+  "config": "C4_v5features_v5graph",
+  "method": "spectral",
+  "k": 9
+ },
+ "type_names": {
+  "0": "Тип 1: отставание роста трат; сильная естественная убыль",
+  "1": "Тип 2: выше доля общепита; высокие безналичные траты на жителя",
+  "2": "Тип 3: много детей; выше доля транспорта в тратах"
+ },
+ "type_names_detailed": {
+  "0": "Тип 1: высокие безналичные траты на жителя; меньший миграционный отток",
+  "1": "Тип 2: почти нет закупок госкомпаний (223-ФЗ); отставание роста трат",
+  "2": "Тип 3: сильная естественная убыль; мало детей",
+  "3": "Тип 4: поставщики из других МО РБ; продукты важнее здоровья в тратах",
+  "4": "Тип 5: опережающий рост трат; высокие безналичные траты на жителя",
+  "5": "Тип 6: молодое население; много детей",
+  "6": "Тип 7: поставщики внутри РБ; высокий госзаказ на жителя",
+  "7": "Тип 8: выше доля прочих трат; много детей",
+  "8": "Тип 9: концентрированные поставщики; отставание роста трат"
+ },
+ "leakage_test": {
+  "monitoring": {
+   "features_identical": true,
+   "W_identical": true,
+   "labels_identical": true
+  },
+  "retrospective": {
+   "features_identical": false,
+   "W_identical": false,
+   "labels_identical": true
+  },
+  "status": "PASS",
+  "retrospective_changes_detected": true
+ },
+ "mezhgorye": {
+  "mo": "ГО Межгорье",
+  "status": "assigned_on_partial_blocks_without_sberindex",
+  "blocks_used": [
+   "proc_budget",
+   "proc_geo",
+   "proc_corp"
+  ],
+  "nearest_type": 1,
+  "distances": [
+   3.429,
+   2.076,
+   2.928
+  ],
+  "note": "Траты СберИндекса для ЗАТО отсутствуют (в v4 были KNN-импутированы); муниципальные таблицы Росстата ЗАТО не включают."
+ },
+ "store": {
+  "integrity": {
+   "integrity": "ok",
+   "foreign_key_violations": 0,
+   "fk_sample": []
+  },
+  "parquet": {
+   "mo": {
+    "rows": 63,
+    "bytes": 8638,
+    "sha256": "3114a8b171e8ba6482ff9086e06f2b8bf3db17345f41676f0ef0d384ab374bbd"
+   },
+   "source_registry": {
+    "rows": 31,
+    "bytes": 23749,
+    "sha256": "27a457ff1ff05c6bc0f55fd45df00457ec7b20adef3d5af801ad19df60179bb2"
+   },
+   "fact_mo": {
+    "rows": 7190,
+    "bytes": 47765,
+    "sha256": "d9bf3bb44fd096e34fc4f9b9affe251d76d2f20e316ebbdf428a725cce0ac427"
+   },
+   "fact_region_control": {
+    "rows": 55,
+    "bytes": 4265,
+    "sha256": "3ca256756fbf69437f25056f13b2304f7fb676a890c50c402d0d2cd752a87f36"
+   },
+   "tax_office_map": {
+    "rows": 69,
+    "bytes": 4688,
+    "sha256": "95df64d497a7732b3ddbc2beb5ba7c1749fadb2ed294a18ec184b2b790122661"
+   },
+   "org_geo_resolved": {
+    "rows": 21744,
+    "bytes": 173208,
+    "sha256": "210e82403b29b89d26f9eec35ceb7a6813172bb1a9fefca36387b804163baf8f"
+   },
+   "attribute_mo_period": {
+    "rows": 27216,
+    "bytes": 124247,
+    "sha256": "16d77539c4da4396262fa434726ad4c07bf0e48a1b762fa446efc049c4423b5f"
+   },
+   "run": {
+    "rows": 1,
+    "bytes": 5603,
+    "sha256": "8f9e507f05078e44c5b51dc406f7ea1447bdc2e7ec168ebb1b72017ccaf1a8f6"
+   },
+   "run_labels": {
+    "rows": 8776,
+    "bytes": 6456,
+    "sha256": "315e4bbbf89ece10b9c4fe7595a8e724112d3d44f03af86224cc6778914b5dbb"
+   },
+   "run_icvi": {
+    "rows": 1440,
+    "bytes": 17715,
+    "sha256": "066c260fea5a571900108e09acd80987bd5dd185afd25dd2ae09e7f4242ced01"
+   },
+   "run_matrix_edges": {
+    "rows": 10552,
+    "bytes": 103011,
+    "sha256": "49dd00f8619c66a5f467807a4d4ac3ec94744269483dffc35222d051ec549e6d"
+   },
+   "run_coassign": {
+    "rows": 7564,
+    "bytes": 19000,
+    "sha256": "4e36dc2701acbb0b6946b61810c18bf2b204a35f7188dd482542499982ec5ecf"
+   },
+   "data_quality_checks": {
+    "rows": 10,
+    "bytes": 5121,
+    "sha256": "5d3c4e0a3564cb17f13bd279f89576a27249f4e3dc0cdb1090c76e03732d0e3e"
+   }
+  }
+ },
+ "timings": {
+  "load": 5.7,
+  "panel": 20.5,
+  "graphs": 24.6,
+  "sweeps": 313.6,
+  "comparison": 314.2,
+  "ablation": 317.8,
+  "uncertainty": 446.4,
+  "dynamics": 484.3,
+  "leakage_test": 509.7,
+  "passports_validation": 646.9,
+  "correlations": 721.5,
+  "holdout": 727.8,
+  "store": 731.1
+ },
+ "peak_rss_mib": 812.8,
+ "N": 62,
+ "T_months": 24,
+ "T_quarters": 8,
+ "E_exact_C4": 1082,
+ "diagnostics_warnings": [],
+ "n_warnings": 0
+}

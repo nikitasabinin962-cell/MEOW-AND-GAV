@@ -1,0 +1,42 @@
+run_id,level,mode,beta,from_period,to_period,event,from_cluster,to_cluster,size,jaccard
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2023Q1,2023Q2,split,1,"[0, 1]",39,
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2023Q1,2023Q2,merge,"[0, 2]",2,23,
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2023Q2,2023Q3,split,2,"[0, 2]",23,
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2023Q2,2023Q3,merge,"[0, 2]",0,25,
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2023Q2,2023Q3,continuation,1,1,21,1.0
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2023Q3,2023Q4,split,0,"[0, 2]",25,
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2023Q3,2023Q4,merge,"[0, 2]",2,29,
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2023Q3,2023Q4,continuation,1,1,20,0.9090909090909091
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2023Q4,2024Q1,continuation,0,0,12,0.8571428571428571
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2023Q4,2024Q1,continuation,1,1,21,1.0
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2023Q4,2024Q1,continuation,2,2,26,0.9285714285714286
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2024Q1,2024Q2,continuation,0,0,13,0.9285714285714286
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2024Q1,2024Q2,continuation,1,1,21,0.9545454545454546
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2024Q1,2024Q2,continuation,2,2,25,0.9259259259259259
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2024Q2,2024Q3,continuation,0,0,13,0.6842105263157895
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2024Q2,2024Q3,continuation,1,1,22,1.0
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2024Q2,2024Q3,continuation,2,2,20,0.7692307692307693
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2024Q3,2024Q4,continuation,0,0,20,0.9523809523809523
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2024Q3,2024Q4,continuation,1,1,22,1.0
+v5-20261009T121014Z-d833d0,macro,monitoring,0.5,2024Q3,2024Q4,continuation,2,2,19,0.95
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q1,2023Q2,merge,"[0, 2]",0,33,
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q1,2023Q2,birth,,2,7,
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q1,2023Q2,continuation,1,1,18,0.75
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q2,2023Q3,continuation,0,0,29,0.8787878787878788
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q2,2023Q3,continuation,1,1,20,0.8695652173913043
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q2,2023Q3,continuation,2,2,7,0.5833333333333334
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q3,2023Q4,continuation,0,0,29,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q3,2023Q4,continuation,1,1,21,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q3,2023Q4,continuation,2,2,12,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q4,2024Q1,continuation,0,0,28,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q4,2024Q1,continuation,1,1,21,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2023Q4,2024Q1,continuation,2,2,12,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2024Q1,2024Q2,continuation,0,0,28,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2024Q1,2024Q2,continuation,1,1,21,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2024Q1,2024Q2,continuation,2,2,12,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2024Q2,2024Q3,continuation,0,0,21,0.75
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2024Q2,2024Q3,continuation,1,1,21,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2024Q2,2024Q3,continuation,2,2,12,0.631578947368421
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2024Q3,2024Q4,continuation,0,0,21,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2024Q3,2024Q4,continuation,1,1,21,1.0
+v5-20261009T121014Z-d833d0,macro,retrospective,0.5,2024Q3,2024Q4,continuation,2,2,20,1.0

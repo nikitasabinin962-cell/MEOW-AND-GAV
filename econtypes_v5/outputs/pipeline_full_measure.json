@@ -1,0 +1,12 @@
+{
+ "cmd": ".venv/bin/python -m econtypes5.pipeline",
+ "returncode": 0,
+ "wall_seconds": 732.72,
+ "peak_rss_mib": 812.8,
+ "cpu_user_s": 1245.7,
+ "host": {
+  "cpus": 4,
+  "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39",
+  "python": "3.13.16"
+ }
+}

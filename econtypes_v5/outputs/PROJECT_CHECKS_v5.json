@@ -1,0 +1,150 @@
+{
+ "checked_at": "2026-10-09",
+ "package": "econtypes5",
+ "checks": [
+  {
+   "test": "baseline_dimensions_and_finite_v5",
+   "status": "PASS",
+   "detail": {
+    "N": 62,
+    "features": 18,
+    "nonfinite_cells": 0,
+    "exact_edges": 1082,
+    "components": 1,
+    "K": 3
+   },
+   "seconds": 0.094
+  },
+  {
+   "test": "v4_matrix_reproduces_auditor_AVU_MQ_SDbw",
+   "status": "PASS",
+   "detail": {
+    "edges": 1065,
+    "AVU_published": 0.5358312305082137,
+    "AVI": 0.3720891681970672,
+    "old_v4_metric": 0.8017049075869529,
+    "MQ_newman_W": 0.24413833452756928,
+    "MQ_newman_display_310": 0.37253257958820524,
+    "S_Dbw": 0.7181470393223294,
+    "Scat": 0.7181470393223294,
+    "zero_density_terms": 42
+   },
+   "seconds": 0.1061
+  },
+  {
+   "test": "v4_labels_rescored_on_v5_C1_matrix_independent",
+   "status": "PASS",
+   "detail": {
+    "AVU_published_independent": 0.5357349869378856,
+    "AVU_pipeline": 0.5357349869378856,
+    "old_v4_metric_intra_inter": 0.798992456449919,
+    "MQ_C1space": 0.2403399197158515,
+    "SW_C1space": 0.0499303371424873
+   },
+   "seconds": 0.0254
+  },
+  {
+   "test": "AVU_formula_and_optimization_direction",
+   "status": "PASS",
+   "detail": {
+    "v5": 0.5692456315848,
+    "reference": 0.5692456315848,
+    "direction": "min"
+   },
+   "seconds": 0.0008
+  },
+  {
+   "test": "AVU_disconnected_three_cliques",
+   "status": "PASS",
+   "detail": {
+    "AVU": 0.0,
+    "AVI": 1.0,
+    "old_ratio_metric": 1.0
+   },
+   "seconds": 0.0004
+  },
+  {
+   "test": "finite_permutation_pvalues_are_positive",
+   "status": "PASS",
+   "detail": {
+    "mc_p(0,999)": 0.001,
+    "holdout_min_p": 0.0001
+   },
+   "seconds": 0.0014
+  },
+  {
+   "test": "DTW_all_constant_series",
+   "status": "PASS",
+   "detail": "degenerate_no_positive_distance",
+   "seconds": 0.002
+  },
+  {
+   "test": "zero_monthly_expenditure",
+   "status": "PASS",
+   "detail": "log(0) не вычисляется: NaN + статус 'nonpositive_values'",
+   "seconds": 0.0016
+  },
+  {
+   "test": "kNN_k_above_N",
+   "status": "PASS",
+   "detail": "k = 6 больше N−1 = 4: у узла нет столько соседей (N = 5)",
+   "seconds": 0.0
+  },
+  {
+   "test": "historical_layers_do_not_use_future_EXECUTED",
+   "status": "PASS",
+   "detail": {
+    "monitoring": {
+     "features_identical": true,
+     "W_identical": true,
+     "labels_identical": true
+    },
+    "retrospective": {
+     "features_identical": false,
+     "W_identical": false,
+     "labels_identical": true
+    },
+    "status": "PASS",
+    "retrospective_changes_detected": true
+   },
+   "seconds": 0.0001
+  },
+  {
+   "test": "actual_self_tuning_kNN_N_2016",
+   "status": "PASS",
+   "detail": {
+    "N": 2016,
+    "seconds": 0.921,
+    "edges": 12918
+   },
+   "seconds": 0.9337
+  },
+  {
+   "test": "label_permutation_invariance",
+   "status": "PASS",
+   "detail": "ok",
+   "seconds": 0.0049
+  },
+  {
+   "test": "ICVI_K_equals_N_rejected_with_status",
+   "status": "PASS",
+   "detail": {
+    "SW": "undefined_K_ge_N",
+    "CH": "undefined_K_ge_N",
+    "DB": "undefined_K_ge_N",
+    "S_Dbw": "ok",
+    "S_Dbw_floor1": "ok",
+    "AVI": "ok",
+    "AVU": "ok",
+    "MQ_newman": "ok",
+    "MQ_mancoridis": "ok",
+    "intra_inter_density_ratio": "authorial_v4_metric"
+   },
+   "seconds": 0.0014
+  }
+ ],
+ "pass_": 13,
+ "fail": 0,
+ "warnings_captured": [],
+ "peak_rss_kib": 467632
+}

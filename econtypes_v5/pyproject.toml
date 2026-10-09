@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "econtypes5"
+version = "5.0.0"
+description = "econtypes v5: исправленные ICVI, проверенная база, атрибутированная динамическая сеть МО"
+requires-python = ">=3.11"
+
+[tool.setuptools]
+packages = ["econtypes5"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
