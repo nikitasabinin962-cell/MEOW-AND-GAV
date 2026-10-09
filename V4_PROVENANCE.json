@@ -1,0 +1,13 @@
+{
+  "version": "4.0.0",
+  "source_repository": "nikitasabinin962-cell/MEOW-AND-GAV",
+  "source_commit": "b728705dd0b1ce7f104d3e82021fd3826b7ea655",
+  "original_path": "reproduction/source/econtypes.html",
+  "index_html_sha256": "20515ab2b27dca5e75583c5fb0fe35a1cfc5452b90a5e189b55bd9f0d5e14e43",
+  "data_sha1": "d849169e16d7d2c42c1f210426b1490b6832b76a",
+  "municipalities": 63,
+  "types": 7,
+  "metrics": 13,
+  "features": 32,
+  "full_recalculation_performed": false
+}
