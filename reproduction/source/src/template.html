@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Экономическая карта Башкортостана</title>
+<meta name="color-scheme" content="light dark">
+<script>
+/* тема до первой отрисовки: сохранённый выбор или системная */
+try { var _t = localStorage.getItem('econtypes-theme'); if (_t === 'light' || _t === 'dark') document.documentElement.setAttribute('data-theme', _t); } catch (e) {}
+</script>
+<style>
+/*__FONTS__*/
+</style>
+<style>
+/*__LEAFLET_CSS__*/
+</style>
+<style>
+/*__APP_CSS__*/
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="top">
+  <div class="brand">
+    <div class="eyebrow"><span id="regionLine"></span></div>
+    <h1 id="ttl">Экономическая карта</h1>
+    <div class="meta" id="metaLine"></div>
+  </div>
+  <div class="topright">
+    <div class="kpis" id="kpis"></div>
+    <div class="seg" id="themeSeg" role="group" aria-label="Тема оформления">
+      <button type="button" data-theme-set="auto">Как в системе</button>
+      <button type="button" data-theme-set="light">Светлая</button>
+      <button type="button" data-theme-set="dark">Тёмная</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Разделы">
+  <button role="tab" id="tab-out" data-t="out" aria-controls="t-out" aria-selected="true">Выводы и рекомендации</button>
+  <button role="tab" id="tab-map" data-t="map" aria-controls="t-map" aria-selected="false" tabindex="-1">Карта и сеть</button>
+  <button role="tab" id="tab-cmp" data-t="cmp" aria-controls="t-cmp" aria-selected="false" tabindex="-1">Сравнение районов<span class="tabbadge" id="cmpBadge" hidden>0</span></button>
+  <button role="tab" id="tab-corr" data-t="corr" aria-controls="t-corr" aria-selected="false" tabindex="-1">Корреляции</button>
+  <button role="tab" id="tab-types" data-t="types" aria-controls="t-types" aria-selected="false" tabindex="-1">Типы МО</button>
+  <button role="tab" id="tab-quality" data-t="quality" aria-controls="t-quality" aria-selected="false" tabindex="-1">Качество модели</button>
+  <button role="tab" id="tab-how" data-t="how" aria-controls="t-how" aria-selected="false" tabindex="-1">Как это работает</button>
+</nav>
+
+<!-- 1. ВЫВОДЫ -->
+<section id="t-out" role="tabpanel" aria-labelledby="tab-out"></section>
+
+<!-- 2. КАРТА -->
+<section id="t-map" role="tabpanel" aria-labelledby="tab-map" hidden></section>
+
+<!-- 3. СРАВНЕНИЕ -->
+<section id="t-cmp" role="tabpanel" aria-labelledby="tab-cmp" hidden></section>
+
+<!-- 4. КОРРЕЛЯЦИИ -->
+<section id="t-corr" role="tabpanel" aria-labelledby="tab-corr" hidden></section>
+
+<!-- 5. ТИПЫ -->
+<section id="t-types" role="tabpanel" aria-labelledby="tab-types" hidden></section>
+
+<!-- 6. КАЧЕСТВО -->
+<section id="t-quality" role="tabpanel" aria-labelledby="tab-quality" hidden></section>
+
+<!-- 7. КАК ЭТО РАБОТАЕТ -->
+<section id="t-how" role="tabpanel" aria-labelledby="tab-how" hidden></section>
+
+<footer class="foot" id="foot"></footer>
+</div>
+<div id="tt" hidden role="tooltip"></div>
+
+<!--__VENDOR_JS__-->
+<script>
+const GEO = __GEO__;
+const D = __D__;
+/*__APP_JS__*/
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "filter": {
+    "orderDateStart": "2023-01-01",
+    "orderDateFinish": "2026-10-08"
+  },
+  "source": "АТМО 223-ФЗ / Договор заключён",
+  "pageCount": 61,
+  "saved": 910,
+  "overlaps": 2,
+  "files": 1,
+  "signaturesVerified": false,
+  "explanation": "Статус заключён по карточкам АТМО; криптографическая проверка подписей не проводилась."
+}

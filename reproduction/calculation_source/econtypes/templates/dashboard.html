@@ -1,0 +1,970 @@
+<title>Экономическая карта Башкортостана</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/*__LEAFLET_CSS__*/
+</style>
+<style>
+/* Аналитический интерфейс: типографика, выравнивание, тонкие линейки, плотные таблицы, постоянная палитра типов */
+:root{
+  --canvas:#F3F5F2; --surface:#FCFDFC; --surface-2:#ECEFEB;
+  --ink:#17201C; --ink2:#46504B; --muted:#76807B; --line:#D6DCD8; --grid:#E7EBE8;
+  --accent:#245F54; --accent-hover:#194B42; --accent-soft:#DCE9E5;
+  --risk:#B6423C; --good:#32725A; --warning:#A6742D; --neutral-status:#686F6B;
+  --bad:var(--risk); --warn:var(--warning);
+  --bg:var(--canvas); --sea:#E9EDEA; --land:#EEF1ED; --edge:#40504A; --axis:#C8CECA; --gridline:#E8ECE9;
+  /* постоянная палитра 7 экономических типов */
+  --c0:#4F7FAE; --c1:#819B68; --c2:#4C9183; --c3:#7565A6; --c4:#D1A037; --c5:#BD7891; --c6:#D47243;
+  /* корреляции: расходящаяся шкала вокруг нуля */
+  --rn2:#315F7A; --rn1:#7FA4B8; --r0:#F1F3F1; --rp1:#D89B88; --rp2:#A94E42;
+  /* количественные слои карты: последовательная шкала */
+  --ramp0:#EEF2EF; --ramp1:#1F5A4E; --rampbad0:#F5ECE9; --rampbad1:#8E3631;
+  --f-body:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-display:var(--f-body);
+  --f-mono:"JetBrains Mono","SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --canvas:#121614; --surface:#181D1A; --surface-2:#1F2522;
+  --ink:#E8ECE9; --ink2:#B6BFBA; --muted:#88928D; --line:#2E3632; --grid:#252C28;
+  --accent:#6FB3A3; --accent-hover:#8CC6B8; --accent-soft:#1E302B;
+  --risk:#E07A72; --good:#6FB892; --warning:#D6A55A; --neutral-status:#9AA19D;
+  --bg:var(--canvas); --sea:#161B18; --land:#1B201D; --edge:#C9D4CE; --axis:#3A433E; --gridline:#232A26;
+  --c0:#6F9BC8; --c1:#9AB281; --c2:#64AA9B; --c3:#9284C2; --c4:#DDB252; --c5:#CF91A8; --c6:#E08A5E;
+  --rn2:#5D8FAD; --rn1:#3E5F72; --r0:#1F2522; --rp1:#7A4A40; --rp2:#C46A5C;
+  --ramp0:#1D2421; --ramp1:#8FD0BF; --rampbad0:#2A1F1D; --rampbad1:#F09A90; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --canvas:#121614; --surface:#181D1A; --surface-2:#1F2522;
+  --ink:#E8ECE9; --ink2:#B6BFBA; --muted:#88928D; --line:#2E3632; --grid:#252C28;
+  --accent:#6FB3A3; --accent-hover:#8CC6B8; --accent-soft:#1E302B;
+  --risk:#E07A72; --good:#6FB892; --warning:#D6A55A; --neutral-status:#9AA19D;
+  --bg:var(--canvas); --sea:#161B18; --land:#1B201D; --edge:#C9D4CE; --axis:#3A433E; --gridline:#232A26;
+  --c0:#6F9BC8; --c1:#9AB281; --c2:#64AA9B; --c3:#9284C2; --c4:#DDB252; --c5:#CF91A8; --c6:#E08A5E;
+  --rn2:#5D8FAD; --rn1:#3E5F72; --r0:#1F2522; --rp1:#7A4A40; --rp2:#C46A5C;
+  --ramp0:#1D2421; --ramp1:#8FD0BF; --rampbad0:#2A1F1D; --rampbad1:#F09A90; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--canvas);color:var(--ink);font:14.5px/1.5 var(--f-body);margin:0;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}a:hover{color:var(--accent-hover)}
+.wrap{padding-inline:24px;padding-block:16px 40px;max-width:1560px;margin:0 auto;display:flex;flex-direction:column;gap:0}
+@media (max-width:640px){.wrap{padding-inline:16px}}
+
+/* шапка: компактная, KPI — число + подпись */
+header{display:flex;flex-wrap:wrap;gap:12px 32px;align-items:flex-end;justify-content:space-between;padding-bottom:14px}
+h1{font:600 clamp(20px,2.2vw,26px)/1.2 var(--f-body);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--ink2);font-size:12.5px;margin-top:3px}
+.hdrlinks a{text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+.kpis{display:flex;flex-wrap:wrap;gap:0}
+.kpi{display:flex;flex-direction:column;padding:0 18px;border-left:1px solid var(--line)}
+.kpi:first-child{padding-left:0;border-left:0}
+.kpi b{font:600 18px/1.2 var(--f-mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.kpi span{font-size:11.5px;color:var(--muted);margin-top:2px}
+
+/* навигация: тонкая полоса, 7 разделов, липкая */
+nav#tabs{position:sticky;top:0;z-index:1200;background:var(--canvas);display:flex;gap:0;overflow-x:auto;scrollbar-width:thin;border-bottom:1px solid var(--line);margin-bottom:22px}
+nav#tabs button{flex:none;font:500 13.5px var(--f-body);background:none;border:0;color:var(--ink2);padding:11px 14px 9px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s}
+nav#tabs button:first-child{padding-left:0}
+nav#tabs button:hover{color:var(--ink)}
+nav#tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav#tabs button:nth-child(3)::after{content:"";display:inline-block;width:1px;height:14px;background:var(--line);margin-left:14px;vertical-align:-2px}
+nav#tabs button:nth-child(3){padding-right:0}
+nav#tabs button:nth-child(4){padding-left:14px}
+button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* элементы управления */
+.controls{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:8px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.controls label{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--ink2)}
+select,input[type=search],input[type=number]{max-width:calc(100vw - 120px);height:28px;font:13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:3px;padding:3px 7px;min-width:0}
+select:hover,input[type=search]:hover{border-color:var(--muted)}
+input[type=range]{accent-color:var(--accent);height:4px}
+input[type=checkbox]{accent-color:var(--accent)}
+
+/* карта */
+.maprow{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:0;height:max(560px,70vh);border:1px solid var(--line);border-top:0}
+#map{background:var(--sea);min-height:420px}
+.leaflet-container{background:var(--sea);font-family:var(--f-body)}
+#panel{background:var(--surface);border-left:1px solid var(--line);overflow:auto;padding:16px 18px;min-width:0;display:flex;flex-direction:column;gap:12px}
+@media (max-width:980px){.maprow{grid-template-columns:1fr;height:auto}#map{height:60vh}#panel{border-left:0;border-top:1px solid var(--line);max-height:none}}
+h2{font:600 18px/1.3 var(--f-body);margin:0;letter-spacing:-.005em}
+h3{font:600 12.5px/1.3 var(--f-body);margin:6px 0 0;color:var(--ink2);padding-bottom:4px;border-bottom:1px solid var(--grid)}
+.eyebrow{font:600 11px var(--f-body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+
+/* действия, категории, типы */
+.chip{display:inline-flex;align-items:center;gap:6px;padding:2px 0;border:0;background:none;color:var(--accent);font:inherit;font-size:12.5px;cursor:pointer;text-align:left;border-radius:0;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--accent) 30%,transparent);text-underline-offset:3px}
+.chip:hover{color:var(--accent-hover);text-decoration-color:currentColor}
+.chips{display:flex;flex-wrap:wrap;gap:3px 14px}
+.btn{font:500 12.5px var(--f-body);padding:4px 10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:3px;cursor:pointer}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:var(--accent-hover)}
+.sw{width:10px;height:10px;border-radius:2px;display:inline-block;flex:none}
+.metaline{display:flex;flex-wrap:wrap;gap:4px 0;font-size:12.5px;color:var(--ink2)}
+.metaline>span{display:inline-flex;align-items:center;gap:6px}
+.metaline>span+span::before{content:"";width:1px;height:12px;background:var(--line);margin:0 10px}
+
+/* полосы и числа */
+.bars{display:grid;grid-template-columns:minmax(0,1fr) 120px 36px;gap:4px 10px;align-items:center;font-size:12.5px}
+.bar{height:6px;background:var(--grid);position:relative;overflow:hidden;border-radius:1px}
+.bar i{position:absolute;left:0;top:0;bottom:0}
+.num{font:12.5px var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
+
+/* рекомендации: тонкая смысловая линейка + маркер */
+.rec{border-left:3px solid var(--warning);padding:2px 0 2px 12px;display:flex;flex-direction:column;gap:2px}
+.rec b{font-size:13.5px;font-weight:600}.rec small{color:var(--muted);font-size:12px}
+.rec.risk{border-left-color:var(--risk)}.rec.opp{border-left-color:var(--good)}.rec.info{border-left-color:var(--warning)}
+ul.plain{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:2px}
+
+/* легенда и подписи карты */
+.legend{background:color-mix(in srgb,var(--surface) 94%,transparent);color:var(--ink);padding:8px 10px;border-radius:3px;border:1px solid var(--line);font-size:12px;max-width:270px;line-height:1.4}
+.legend b{font-weight:600}
+.legend .row{display:flex;gap:7px;align-items:center;cursor:pointer;padding:1px 0}
+.legend .row:hover{color:var(--accent)}
+.grad{height:8px;border-radius:1px;margin:5px 0 2px}
+.lbl{background:transparent;border:0;box-shadow:none;color:var(--ink);font:500 11px var(--f-body);text-shadow:0 0 2px var(--sea),0 0 3px var(--sea),0 0 4px var(--sea);padding:0;white-space:nowrap}
+.lbl::before{display:none}
+#map.z-lo .lbl{display:none}#map.z-mid .lbl.mr{display:none}
+.leaflet-tooltip.tip{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:3px;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.leaflet-tooltip.tip::before{display:none}
+.leaflet-control-attribution{background:color-mix(in srgb,var(--surface) 90%,transparent)!important;color:var(--muted)!important}
+.leaflet-bar{border:1px solid var(--line)!important;border-radius:3px!important;box-shadow:none!important}
+.leaflet-bar a{background:var(--surface);color:var(--ink);border-color:var(--line)}
+section[hidden]{display:none}
+
+/* 1. выводы */
+.verdict{border-left:3px solid var(--accent);background:var(--surface);padding:12px 20px 4px;max-width:100ch}
+.verdict p{font-size:15px;line-height:1.6;margin:0 0 10px}
+.intro{max-width:100ch}.lede{font-size:14px;line-height:1.55;margin:10px 0 4px}
+h2.sec{font:600 18px/1.3 var(--f-body);margin:32px 0 10px;padding-top:12px;border-top:1px solid var(--line)}
+.verdict h2.sec{border-top:0;padding-top:0;margin:4px 0 8px}
+.finds{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));column-gap:40px;counter-reset:f;border-top:1px solid var(--grid)}
+.finds li{display:grid;grid-template-columns:30px minmax(0,1fr);align-content:start;gap:2px 8px;padding:10px 0 12px;border-bottom:1px solid var(--grid);counter-increment:f}
+.finds li::before{content:counter(f, decimal-leading-zero);font:600 12.5px/1.5 var(--f-mono);color:var(--muted);grid-row:span 2}
+.finds li b{font-size:14px;font-weight:600}
+.finds li span{color:var(--ink2);font-size:13px}
+.topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:0 32px}
+.topic{border-top:3px solid var(--warning);padding:9px 0 14px;display:flex;flex-direction:column;gap:6px}
+.topic.risk{border-top-color:var(--risk)}.topic.opp{border-top-color:var(--good)}
+.topic header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:0}
+.topic header b{font-size:14px;font-weight:600}.topic header .num{color:var(--muted)}
+.topic small{color:var(--ink2);font-size:12.5px}
+.topic .chips{gap:2px 12px}
+.molist{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.molist details{border-bottom:1px solid var(--line);background:none}
+.molist details[open]{background:var(--surface)}
+.molist summary{cursor:pointer;padding:9px 8px;display:grid;grid-template-columns:minmax(150px,230px) minmax(0,1fr);gap:4px 20px;align-items:start;list-style:none}
+.molist summary:hover{background:var(--surface)}
+.molist summary::-webkit-details-marker{display:none}
+.molist summary .nm{font-weight:600;display:flex;gap:7px;align-items:center}
+.molist summary .main{color:var(--ink2);font-size:13px}
+.molist .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.tag{font-size:11.5px;padding:1px 6px;border-radius:3px;background:var(--surface-2);color:var(--ink2);border-left:2px solid var(--neutral-status)}
+.tag.risk{border-left-color:var(--risk);color:var(--ink)}.tag.opp{border-left-color:var(--good);color:var(--ink)}
+.molist .body{padding:4px 8px 16px;display:flex;flex-direction:column;gap:9px;max-width:110ch}
+@media (max-width:640px){.molist summary{grid-template-columns:1fr}}
+
+/* индексы с раскрытием расчёта */
+.ix{border-bottom:1px solid var(--grid)}.ix summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 120px 36px;gap:10px;align-items:center;font-size:12.5px;padding:3px 0}
+.ix summary::-webkit-details-marker{display:none}.ix summary span:first-child{text-decoration:underline dotted;text-decoration-color:var(--muted);text-underline-offset:3px}
+.ix .calc{font-size:12px;color:var(--ink2);padding:4px 0 8px;display:flex;flex-direction:column;gap:3px}
+.ix .calc code{white-space:normal}
+
+/* сравнение: матрица, липкая первая колонка */
+.cmp{border-collapse:separate;border-spacing:0;font-size:12.5px}
+.cmp th,.cmp td{padding:5px 10px;border-bottom:1px solid var(--grid);white-space:nowrap;background:var(--canvas)}
+.cmp tr>*:first-child{position:sticky;left:0;z-index:1;background:var(--canvas);border-right:1px solid var(--line);white-space:normal;min-width:220px}
+.cmp tr:first-child th{position:sticky;top:0;z-index:2;background:var(--canvas);border-bottom:1px solid var(--line)}
+.cmp tr:hover td{background:var(--surface)}
+.cmp.sm{font-size:11.5px;width:100%}.cmp.sm th,.cmp.sm td{padding:3px 5px;background:none}.cmp.sm tr>*:first-child{position:static;min-width:0;border-right:0}
+.cmp td.hi{box-shadow:inset 3px 0 0 var(--good);background:color-mix(in srgb,var(--good) 9%,var(--canvas))}
+.cmp td.lo{box-shadow:inset 3px 0 0 var(--risk);background:color-mix(in srgb,var(--risk) 8%,var(--canvas))}
+.cmp.sm td.hi,.cmp.sm td.lo{background:none}
+.cmp th.grp{font-weight:600;color:var(--ink2);background:var(--surface-2)!important;text-align:left}
+.ln{display:inline-block;width:18px;height:0;border-top:2px solid var(--ink);vertical-align:middle;margin-right:6px}
+.cond{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin:8px 0 12px}
+.badge{display:inline-block;min-width:18px;padding:0 5px;border-radius:3px;background:var(--accent-soft);color:var(--accent);font:600 11px var(--f-mono);text-align:center;margin-left:6px;vertical-align:1px}
+.unc{display:flex;flex-direction:column;gap:5px;font-size:12.5px}
+
+/* общие блоки: секции на полотне, без карточек */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:28px 40px}
+.box{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;font-size:12.5px;width:100%}
+th,td{padding:5px 8px;border-bottom:1px solid var(--grid);text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:500;font-size:12px;border-bottom-color:var(--line)}
+tbody tr:hover td,table tr:hover td{background:color-mix(in srgb,var(--surface) 70%,transparent)}
+td.n,th.n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.best td{background:var(--accent-soft)!important}
+.best td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+.muted{color:var(--muted)}
+.prose{max-width:90ch;display:flex;flex-direction:column;gap:10px}
+.prose p{margin:0}
+.hint{font-size:12.5px;color:var(--muted)}
+.note{font-size:12px;color:var(--muted);margin:2px 0 0}
+#tt{position:fixed;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:3px;padding:7px 9px;font-size:12px;line-height:1.45;z-index:2000;max-width:320px;box-shadow:0 2px 10px rgba(0,0,0,.10)}
+svg text{fill:var(--ink2);font-family:var(--f-body)}
+code{font:12px var(--f-mono);background:var(--surface-2);padding:1px 4px;border-radius:2px}
+
+/* 4. корреляции: рабочая область */
+.corr-head{display:flex;flex-wrap:wrap;gap:10px 32px;align-items:flex-end;justify-content:space-between;margin-bottom:12px}
+.corr-head .prose{max-width:80ch}
+.clegend{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink2)}
+.clegend .scale{display:flex;align-items:center;gap:8px}
+.clegend .ramp{width:180px;height:10px;background:linear-gradient(90deg,var(--rn2),var(--rn1),var(--r0),var(--rp1),var(--rp2));border:1px solid var(--line)}
+.clegend .pale{display:inline-block;width:12px;height:12px;background:var(--rp2);opacity:.22;vertical-align:-2px;margin-right:4px}
+.corr-work{display:grid;grid-template-columns:minmax(0,60fr) minmax(320px,40fr);gap:32px;align-items:start;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:1100px){.corr-work{grid-template-columns:1fr}}
+#heat{overflow:auto;max-height:82vh;border:1px solid var(--grid)}
+#heat svg text.rl,#heat svg text.cl{font-size:11px;fill:var(--ink2)}
+#heat svg text.hl{fill:var(--ink);font-weight:600}
+#heat rect.cell{cursor:pointer}
+.pair{position:sticky;top:52px;display:flex;flex-direction:column;gap:8px}
+.pair .ttl{font:600 16px/1.35 var(--f-body)}
+.pair .ttl span{display:block}
+.pair .stat{display:flex;gap:14px;align-items:baseline;font-size:12.5px;color:var(--ink2)}
+.pair .stat b{font:600 18px var(--f-mono);color:var(--ink)}
+.sig{font-size:11.5px;padding:1px 6px;border-radius:3px;background:var(--surface-2);color:var(--ink2)}
+.sig.yes{background:var(--accent-soft);color:var(--accent)}
+.tlegend{display:flex;flex-wrap:wrap;gap:3px 12px;font-size:11.5px;color:var(--ink2)}
+.tlegend span{display:inline-flex;gap:5px;align-items:center}
+.lagbox{border-top:1px solid var(--grid);padding-top:10px;margin-top:6px;display:flex;flex-direction:column;gap:6px}
+.lagbox h3{border:0;padding:0;margin:0;color:var(--ink);font-size:13.5px}
+.toprel{margin-top:30px;border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+#topcorr tr[data-a]{cursor:pointer}
+#topcorr td.rho{font-weight:600}
+.pmark{color:var(--accent);font-size:10px;vertical-align:1px;margin-left:3px}
+
+/* 5. типы: структурированные профили */
+.types{display:flex;flex-direction:column}
+.tprof{display:grid;grid-template-columns:minmax(220px,1fr) minmax(0,1.25fr) minmax(0,1fr);gap:16px 36px;padding:16px 0 18px 16px;border-top:1px solid var(--line);position:relative}
+.tprof::before{content:"";position:absolute;left:0;top:16px;bottom:18px;width:4px;background:var(--tc)}
+.tprof h2{font-size:16px}
+.tprof .cnt{font:12px var(--f-mono);color:var(--muted)}
+@media (max-width:1100px){.tprof{grid-template-columns:1fr}}
+
+/* 7. методика */
+.steps{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.step{display:grid;grid-template-columns:190px 230px minmax(0,1fr);gap:4px 20px;padding:9px 0;border-bottom:1px solid var(--grid);font-size:13px}
+.step em{font:500 12px var(--f-mono);color:var(--accent);font-style:normal}
+.step b{font-weight:600}
+.step span{color:var(--ink2)}
+@media (max-width:820px){.step{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div><h1 id="ttl">Экономическая карта</h1><div class="sub" id="subttl"></div><div class="sub hdrlinks"><a href="https://elena30r.github.io/econtypes/">О проекте</a> · <a href="https://elena30r.github.io/econtypes/report.pdf">Отчёт (PDF)</a> · <a href="https://github.com/Elena30R/econtypes">Код</a></div></div>
+  <div class="kpis" id="kpis"></div>
+</header>
+<nav role="tablist" id="tabs">
+  <button role="tab" data-t="out" aria-selected="true">Выводы и рекомендации</button>
+  <button role="tab" data-t="map" aria-selected="false">Карта и сеть</button>
+  <button role="tab" data-t="cmp" aria-selected="false">Сравнение районов<span class="badge" id="cmpBadge" hidden>0</span></button>
+  <button role="tab" data-t="corr" aria-selected="false">Корреляции</button>
+  <button role="tab" data-t="types" aria-selected="false">Типы МО</button>
+  <button role="tab" data-t="quality" aria-selected="false">Качество модели</button>
+  <button role="tab" data-t="how" aria-selected="false">Как это работает</button>
+</nav>
+
+<section id="t-out">
+  <div class="verdict"><h2 class="sec" style="margin-top:4px">Итог: что следует из данных</h2><div id="summary"></div></div>
+  <div class="intro">
+    <p class="lede" style="font-size:14px;color:var(--ink2)">Зачем это: понять, какие экономики у 63 муниципалитетов Башкортостана, как они связаны друг с другом и что делать в каждом районе. Ниже — главные выводы по региону, список районов по проблемам и выводы по каждому району. Карта, связи и проверка модели — на следующих вкладках.</p>
+  </div>
+  <h2 class="sec">Главное по региону: 8 фактов</h2>
+  <ol class="finds" id="finds"></ol>
+  <h2 class="sec">Где нужны меры</h2>
+  <p class="hint">Районы сгруппированы по проблемам, которые программа нашла в данных. Нажмите на район, чтобы открыть его на карте.</p>
+  <div class="topics" id="topics"></div>
+  <h2 class="sec">Выводы по каждому району</h2>
+  <div class="controls" style="margin-block:6px 10px">
+    <label for="preset">Условия <select id="preset"></select></label>
+    <label for="moFilter">Найти <input type="search" id="moFilter" placeholder="название района или города"></label>
+    <label for="typeFilter">Тип <select id="typeFilter"></select></label>
+    <label for="topicFilter">Проблема <select id="topicFilter"></select></label>
+    <span class="hint" id="moCount"></span>
+  </div>
+  <div id="condBox"></div>
+  <div class="molist" id="moRows"></div>
+</section>
+
+<section id="t-map" hidden>
+  <div class="controls">
+    <label for="colorBy">Раскраска <select id="colorBy"></select></label>
+    <label for="qSlider" id="qWrap" hidden>Квартал <input type="range" id="qSlider" min="0" max="7" value="7"><span id="qLbl" class="num"></span></label>
+    <label for="edgeLayer">Рёбра <select id="edgeLayer"></select></label>
+    <label for="edgeThr">Сила ≥ <input type="range" id="edgeThr" min="0" max="95" value="50"><span id="thrLbl" class="num"></span></label>
+    <label for="onlySel"><input type="checkbox" id="onlySel"> только связи выбранного МО</label>
+    <label for="osm"><input type="checkbox" id="osm"> подложка OSM</label>
+    <label for="uncChk" title="пограничные районы: силуэт < 0, устойчивость < 0,5 или вероятность типа < 0,5"><input type="checkbox" id="uncChk" checked> пограничные — пунктиром</label>
+    <span id="groupInfo" class="hint"></span>
+    <label for="search">Найти <input type="search" id="search" list="molist" placeholder="Уфа, Белорецкий…"></label>
+    <datalist id="molist"></datalist>
+  </div>
+  <div class="maprow" style="margin-top:10px">
+    <div id="map"></div>
+    <aside id="panel" aria-live="polite"></aside>
+  </div>
+</section>
+
+<section id="t-cmp" hidden>
+  <div class="controls" style="margin-block:8px">
+    <label for="cmpAdd">Добавить район <select id="cmpAdd"></select></label>
+    <button class="btn" id="cmpClear">очистить</button>
+    <span class="hint">До 5 районов. Добавлять можно и из карточки района на карте («+ к сравнению»).</span>
+  </div>
+  <div id="cmpBody"></div>
+</section>
+
+<section id="t-corr" hidden>
+  <div class="corr-head">
+    <div class="prose"><h2>Матрица ранговых корреляций</h2>
+      <div class="hint">ρ Спирмена по 63 МО. Бледные клетки — связь незначима после поправки Бенджамини–Хохберга (q ≥ 0,05). Нажмите на клетку — справа появится диаграмма рассеяния.</div></div>
+    <div class="clegend" aria-label="легенда шкалы корреляций">
+      <div class="scale"><span class="num">−1</span><span class="ramp"></span><span class="num">+1</span></div>
+      <div>отрицательная связь · 0 · положительная связь</div>
+      <div><span class="pale"></span>бледная клетка = q ≥ 0,05 после Бенджамини–Хохберга</div>
+    </div>
+  </div>
+  <div class="corr-work">
+    <div id="heat"></div>
+    <div class="pair">
+      <div class="eyebrow">Выбранная связь</div>
+      <div class="ttl" id="scTitle">Диаграмма рассеяния</div>
+      <div class="stat" id="scStat"></div>
+      <div id="scatter"></div>
+      <div class="lagbox"><h3>Опережение: госзаказ → траты населения</h3>
+        <div class="hint">Медианная по МО корреляция месячных приростов госзаказа и безналичных трат при сдвиге. Лаг &gt; 0 — госзаказ впереди.</div>
+        <div id="lagc"></div></div>
+    </div>
+  </div>
+  <div class="toprel"><h2>Сильнейшие значимые связи</h2>
+    <div class="hint">Исключены пары, где индекс построен из того же признака. «При контроле» — частная корреляция после удаления эффекта размера (население) и урбанизации; * — связь сохраняется.</div>
+    <div class="scroll"><table id="topcorr"></table></div></div>
+</section>
+
+<section id="t-types" hidden><div class="types" id="typeCards"></div></section>
+<section id="t-quality" hidden><div class="grid2" id="qual"></div></section>
+<section id="t-how" hidden><div id="how" style="display:flex;flex-direction:column;gap:16px"></div></section>
+</div>
+<div id="tt" hidden></div>
+
+<script>
+/*__LEAFLET_JS__*/
+</script>
+<script>
+const D = /*__DATA__*/null;
+const $ = s => document.querySelector(s);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const N = D.nodes, n = N.length;
+const TYPEIDX = {'Западные промышленные районы':0,'Северная аграрная периферия':1,'Горный юго-восток, связанный с соседними регионами':2,
+  'Бюджетная сельская периферия с молодым населением':3,'Пригородный пояс Уфы':4,'Стареющие аграрные районы центра и юго-запада':5,'Города и промышленные центры':6};
+const COL = i => css('--c' + ((TYPEIDX[(D.names || {})[i]] ?? i) % 7));
+const MACROCOL = [ '--c6', '--c3', '--c2' ];
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtN = (v, d=0) => v == null ? 'н/д' : Number(v).toLocaleString('ru-RU', {maximumFractionDigits:d, minimumFractionDigits:d});
+function fmtF(k, v){ if (v == null) return 'н/д'; const u = (D.feats[k]||['',''])[1];
+  if (u === '%') return fmtN(v*100, 1) + '%'; return fmtN(v, Math.abs(v) >= 100 ? 0 : 2) + (u ? ' ' + u : ''); }
+const featLabel = k => k.startsWith('m_') ? D.metrics[k.slice(2)].label : (D.feats[k] ? D.feats[k][0] : k);
+function hex2rgb(h){ h = h.replace('#',''); if (h.length===3) h = h.split('').map(c=>c+c).join(''); return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)); }
+function ramp(t, a, b){ const A = hex2rgb(css(a)), B = hex2rgb(css(b)); t = Math.max(0, Math.min(1, t));
+  return 'rgb(' + A.map((x,i)=>Math.round(x+(B[i]-x)*t)).join(',') + ')'; }
+const tt = $('#tt');
+function showTip(e, html){ tt.innerHTML = html; tt.hidden = false; const x = Math.min(e.clientX + 12, innerWidth - 310); tt.style.left = x + 'px'; tt.style.top = (e.clientY + 12) + 'px'; }
+const hideTip = () => tt.hidden = true;
+
+/* ---------- шапка ---------- */
+$('#ttl').textContent = D.title;
+$('#subttl').textContent = `${D.region} · ${n} муниципалитетов · данные ${D.period} · пересчитано ${D.generated}` + (D.authors ? ` · авторы: ${D.authors}` : '');
+const Q = D.quality;
+const kp = [[D.k, 'типов МО'], [fmtN(Q.boot,2), 'устойчивость ARI'], [D.ml ? fmtN(D.ml.acc*100) + '%' : '—', 'ML-точность типа'],
+  [Q.val ? Object.entries(Q.val.holdout).map(([y,h]) => fmtN(h.accuracy*100) + '%').join(' / ') : '—', 'узнаваемость 2025/26'],
+  [D.corr ? D.corr.top.length + '+' : '—', 'значимых связей']];
+$('#kpis').innerHTML = kp.map(([v,l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('');
+
+/* ---------- вкладки ---------- */
+document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+  document.querySelectorAll('section[id^="t-"]').forEach(s => s.hidden = s.id !== 't-' + b.dataset.t);
+  if (b.dataset.t === 'cmp') renderCmp();
+  if (b.dataset.t === 'map') setTimeout(() => { map.invalidateSize(); if (!mapFitted) { map.fitBounds(geoLayer.getBounds(), {padding: [10, 10]}); mapFitted = true; } }, 60);
+});
+
+/* ---------- карта ---------- */
+let mapFitted = false;
+const map = L.map('map', {zoomSnap: 0.25, preferCanvas: false, attributionControl: true});
+map.attributionControl.setPrefix('');
+map.createPane('edges'); map.getPane('edges').style.zIndex = 450;
+map.createPane('nodes'); map.getPane('nodes').style.zIndex = 460;
+const edgeRenderer = L.canvas({padding: 0.3, pane: 'edges'});
+let osm = null;
+$('#osm').onchange = e => { if (e.target.checked){ osm = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {subdomains: 'abcd', attribution:'© OpenStreetMap, © CARTO', maxZoom: 13, opacity: .45}).addTo(map); osm.bringToBack();
+    let bad = 0; osm.on('tileerror', () => { if (++bad === 3 && osm) { map.removeLayer(osm); osm = null; e.target.checked = false; alert('Подложку карты не удалось загрузить (нет доступа к серверу тайлов). Карта работает и без неё.'); } }); } else if (osm){ map.removeLayer(osm); osm = null; } };
+const center = new Array(n);
+const polys = new Array(n).fill(null).map(() => []);
+let sel = null;
+const geoLayer = L.geoJSON(D.geo, {
+  style: () => ({weight: .7, color: css('--surface'), fillOpacity: .8}),
+  onEachFeature: (f, lyr) => {
+    const i = f.properties.i; if (i == null) return;
+    polys[i].push(lyr); center[i] = [f.properties.lat, f.properties.lon];
+    lyr.bindTooltip(N[i].s, {permanent: true, direction: 'center', className: 'lbl ' + (N[i].kind === 'ГО' ? 'go' : 'mr')});
+    lyr.on('click', () => select(i));
+    lyr.on('mouseover', e => { if (sel !== i) lyr.setStyle({weight: 1.6, color: css('--ink2')}); showTip(e.originalEvent, hoverHtml(i)); });
+    lyr.on('mousemove', e => showTip(e.originalEvent, hoverHtml(i)));
+    lyr.on('mouseout', () => { hideTip(); styleOne(i); });
+  }
+}).addTo(map);
+map.setView(geoLayer.getBounds().getCenter(), 6.5);
+const dots = new Array(n).fill(null);
+const maxPop = Math.max(...N.map(x => x.pop || 0));
+const R0 = N.map(x => 2.5 + 6.5 * Math.sqrt((x.pop || 0) / maxPop));
+for (let i = 0; i < n; i++) if (center[i]) {
+  dots[i] = L.circleMarker(center[i], {pane: 'nodes', radius: R0[i], weight: 1, fillOpacity: 1}).addTo(map);
+  dots[i].on('click', () => select(i)); dots[i].bindTooltip(N[i].s, {className: 'tip', direction: 'top'});
+}
+map.attributionControl.addAttribution('Границы: geoBoundaries / OpenStreetMap');
+function zoomCls(){ const z = map.getZoom(), el = $('#map'); el.classList.toggle('z-lo', z < 7.25); el.classList.toggle('z-mid', z >= 7.25 && z < 8); }
+map.on('zoomend', () => { zoomCls(); if (typeof drawEdges === 'function' && D.layers) drawEdges(); }); zoomCls();
+
+/* раскраска */
+const colorOpts = [['type','Тип МО (кластер)'], ['macro','Макротип (3)'], ['quarter','Тип по кварталам (динамика)'], ['stab','Устойчивость отнесения']]
+  .concat(Object.entries(D.metrics).map(([k,v]) => ['m:'+k, 'Индекс: ' + v.label]))
+  .concat(Object.entries(D.feats).map(([k,v]) => ['f:'+k, 'Признак: ' + v[0]]));
+$('#colorBy').innerHTML = colorOpts.map(([v,l]) => `<option value="${v}">${esc(l)}</option>`).join('');
+$('#qSlider').max = D.quarters.length - 1; $('#qSlider').value = D.quarters.length - 1;
+function valueOf(i, mode){
+  if (mode === 'stab') return N[i].stab;
+  if (mode.startsWith('m:')) return N[i].mp[mode.slice(2)];
+  if (mode.startsWith('f:')) return N[i].f[mode.slice(2)];
+  return null;
+}
+function rankScale(mode){ const v = N.map((_, i) => valueOf(i, mode)).filter(x => x != null).sort((a,b)=>a-b);
+  return x => { if (x == null) return null; let lo = 0, hi = v.length; while (lo < hi){ const m = (lo+hi)>>1; v[m] < x ? lo = m+1 : hi = m; } return lo / Math.max(1, v.length - 1); }; }
+let fillOf = () => '#888';
+function recolor(){
+  const mode = $('#colorBy').value; $('#qWrap').hidden = mode !== 'quarter';
+  const qi = +$('#qSlider').value; $('#qLbl').textContent = D.quarters[qi];
+  if (mode === 'type') fillOf = i => COL(N[i].c);
+  else if (mode === 'macro') fillOf = i => css(MACROCOL[N[i].macro % 3]);
+  else if (mode === 'quarter') fillOf = i => COL(N[i].q[qi]);
+  else { const sc = mode === 'stab' || mode.startsWith('m:') ? (x => x == null ? null : (mode === 'stab' ? x : x / 100)) : rankScale(mode);
+    const bad = mode.startsWith('m:') && D.metrics[mode.slice(2)].sense < 0;
+    fillOf = i => { const t = sc(valueOf(i, mode)); return t == null ? css('--grid') : ramp(t, bad ? '--rampbad0' : '--ramp0', bad ? '--rampbad1' : '--ramp1'); }; }
+  for (let i = 0; i < n; i++) styleOne(i);
+  legend(mode, qi);
+}
+const UNC = i => N[i].typ < 0 || N[i].stab < .5 || (N[i].p && Math.max(...N[i].p) < .5);
+let group = null;
+function styleOne(i){ const on = sel == null ? (!group || group.has(i)) : (sel === i || related.has(i));
+  const u = $('#uncChk') && $('#uncChk').checked && UNC(i);
+  const grp = group && sel == null && group.has(i);
+  polys[i].forEach(p => p.setStyle({fillColor: fillOf(i), fillOpacity: sel === i ? .88 : on ? .78 : .3,
+    weight: sel === i ? 2.6 : grp ? 2.2 : u ? 1.4 : .7, dashArray: u && sel !== i ? '4 3' : null,
+    color: sel === i || grp ? css('--ink') : u ? css('--ink2') : css('--surface')}));
+  if (sel === i) polys[i].forEach(p => p.bringToFront());
+  if (dots[i]) { dots[i].setRadius(R0[i] + (sel === i ? 2 : 0));
+    dots[i].setStyle({fillColor: fillOf(i), color: sel === i ? css('--ink') : css('--surface'), weight: sel === i ? 2.5 : 1, fillOpacity: on ? 1 : .35, opacity: on ? 1 : .35}); } }
+const Legend = L.control({position: 'bottomleft'});
+Legend.onAdd = () => { const d = L.DomUtil.create('div', 'legend'); d.id = 'legend'; L.DomEvent.disableClickPropagation(d); return d; };
+Legend.addTo(map);
+function legend(mode, qi){
+  const el = $('#legend');
+  if (mode === 'type' || mode === 'quarter'){
+    el.innerHTML = (mode === 'quarter' ? `<b>Тип в ${D.quarters[qi]}</b>` : '<b>Тип МО</b>') + Object.entries(D.names).map(([c, nm]) =>
+      `<div class="row" data-c="${c}"><span class="sw" style="background:${COL(+c)}"></span>${esc(nm)}</div>`).join('');
+    el.querySelectorAll('.row').forEach(r => r.onclick = () => { const c = +r.dataset.c; const ids = N.map((x,i)=>i).filter(i => N[i].c === c);
+      map.fitBounds(L.featureGroup(ids.flatMap(i => polys[i])).getBounds(), {padding:[20,20]}); });
+  } else if (mode === 'macro'){
+    el.innerHTML = '<b>Макротип</b>' + Object.entries(D.macro_names).map(([c, nm]) => `<div class="row"><span class="sw" style="background:${css(MACROCOL[+c % 3])}"></span>${esc(nm)}</div>`).join('');
+  } else {
+    const bad = mode.startsWith('m:') && D.metrics[mode.slice(2)].sense < 0;
+    const a = bad ? '--rampbad0' : '--ramp0', b = bad ? '--rampbad1' : '--ramp1';
+    const ttl = colorOpts.find(o => o[0] === mode)[1].replace(/^(Индекс|Признак): /, '');
+    const note = mode.startsWith('m:') ? 'процентиль среди МО, 0–100' : mode === 'stab' ? 'доля бутстреп-выборок, 0–1' : 'ранговая шкала';
+    let ends = ['ниже', 'выше'];
+    if (mode.startsWith('f:')) { const v = N.map(x => x.f[mode.slice(2)]).filter(x => x != null); ends = [fmtF(mode.slice(2), Math.min(...v)), fmtF(mode.slice(2), Math.max(...v))]; }
+    if (mode.startsWith('m:')) ends = ['0', '100'];
+    if (mode === 'stab') ends = ['0', '1'];
+    el.innerHTML = `<b>${esc(ttl)}</b><div class="grad" style="background:linear-gradient(90deg,${ramp(0,a,b)},${ramp(1,a,b)})"></div>
+      <div style="display:flex;justify-content:space-between" class="num"><span>${ends[0]}</span><span>${ends[1]}</span></div><div class="muted">${note}</div>`
+      + (mode.startsWith('m:') ? `<div class="muted" style="margin-top:4px">${esc(D.metrics[mode.slice(2)].interp)}</div>` : '');
+  }
+}
+function hoverHtml(i){ const x = N[i], mode = $('#colorBy').value; let v = '';
+  if (mode.startsWith('m:')) v = `<br>${esc(D.metrics[mode.slice(2)].label)}: ${fmtN(x.mp[mode.slice(2)])}-й процентиль`;
+  if (mode.startsWith('f:')) v = `<br>${esc(D.feats[mode.slice(2)][0])}: ${fmtF(mode.slice(2), x.f[mode.slice(2)])}`;
+  return `<b>${esc(x.s)}</b><br><span class="sw" style="background:${COL(x.c)}"></span> ${esc(D.names[x.c])}<br>население ${fmtN(x.pop)}${v}`; }
+
+/* рёбра */
+const LAYERS = {none:'нет', backbone:'Каркас сети (сильнейшие связи)', fused:'Совмещённая сеть (итоговая модель, все рёбра)', flow_rub:'Потоки госзаказа, ₽ (поставщик → заказчик)', procurement_flow:'Потоки госзаказа (нормированные)',
+  comovement:'Синхронность трат', lead_lag:'Опережение трат (стрелка → ведомый)', dtw:'Сходство формы рядов (DTW)', attr:'Сходство признаков', distance:'Близость по дорогам'};
+$('#edgeLayer').innerHTML = Object.entries(LAYERS).filter(([k]) => k === 'none' || D.layers[k]).map(([k,l]) => `<option value="${k}">${esc(l)}</option>`).join('');
+$('#edgeLayer').value = 'backbone';
+const edgeGroup = L.layerGroup().addTo(map);
+let related = new Set();
+/* Рёбра рисуются как плоская flow-map: умеренные кривые Безье с изгибом в пикселях экрана,
+   ширина и прозрачность — по корню из нормированной силы связи. Данные рёбер (кто, с кем, вес) не меняются. */
+function edgeGeom(a, b, off){
+  const A = map.latLngToLayerPoint(a), B = map.latLngToLayerPoint(b);
+  const dx = B.x - A.x, dy = B.y - A.y, Lp = Math.hypot(dx, dy) || 1, nx = -dy / Lp, ny = dx / Lp;
+  const o = typeof off === 'function' ? off(Lp) : off;
+  const C = L.point((A.x + B.x) / 2 + nx * o, (A.y + B.y) / 2 + ny * o), px = [];
+  for (let s = 0; s <= 20; s++){ const t = s / 20;
+    px.push(L.point((1-t)*(1-t)*A.x + 2*(1-t)*t*C.x + t*t*B.x, (1-t)*(1-t)*A.y + 2*(1-t)*t*C.y + t*t*B.y)); }
+  return {px, ll: px.map(p => map.layerPointToLatLng(p)), Lp};
+}
+const bendPx = Lp => Lp < 80 ? 5 + Lp / 80 * 7 : Lp < 250 ? 12 + (Lp - 80) / 170 * 13 : Math.min(38, 25 + (Lp - 250) / 300 * 13);
+function arrowHead(px, r){ const tip = px[17], prev = px[15];
+  const dx = tip.x - prev.x, dy = tip.y - prev.y, l = Math.hypot(dx, dy) || 1, ux = dx / l, uy = dy / l, sz = 6 + r;
+  return [tip, L.point(tip.x - ux*sz - uy*sz*.55, tip.y - uy*sz + ux*sz*.55), L.point(tip.x - ux*sz + uy*sz*.55, tip.y - uy*sz - ux*sz*.55)].map(p => map.layerPointToLatLng(p)); }
+function drawEdges(){
+  edgeGroup.clearLayers(); related = new Set();
+  const lay = $('#edgeLayer').value; const thrP = +$('#edgeThr').value;
+  if (lay === 'none' || !D.layers[lay]) { $('#thrLbl').textContent = ''; for (let i=0;i<n;i++) styleOne(i); return; }
+  let E = D.layers[lay];
+  if (lay === 'backbone' && sel != null) {   // у выбранного МО показываем все его связи из итоговой сети
+    const seen = new Set(E.map(e => Math.min(e[0], e[1]) + '-' + Math.max(e[0], e[1])));
+    E = E.concat(D.layers.fused.filter(e => (e[0] === sel || e[1] === sel) && !seen.has(Math.min(e[0], e[1]) + '-' + Math.max(e[0], e[1]))));
+  }
+  const val = e => lay === 'flow_rub' ? Math.log10(e[2]) : e[2];
+  const W = E.map(val).sort((a,b)=>a-b);
+  const thr = W[Math.floor(thrP/100 * (W.length-1))];
+  const wmax = W[W.length-1], wmin = W[0];
+  $('#thrLbl').textContent = lay === 'flow_rub' ? fmtN(10**thr/1e6, 1) + ' млн ₽' : fmtN(thr, 2);
+  const only = $('#onlySel').checked && sel != null;
+  const ink = css('--edge'), dir = lay === 'flow_rub' || lay === 'lead_lag';
+  const zoomBoost = map.getZoom() >= 8 ? 1.35 : map.getZoom() >= 7.25 ? 1.15 : 1;
+  const deg = {}; E.forEach(e => { deg[e[0]] = (deg[e[0]] || 0) + 1; deg[e[1]] = (deg[e[1]] || 0) + 1; });
+  const items = [];
+  E.forEach(e => {
+    const w = val(e), touches = sel != null && (e[0] === sel || e[1] === sel);
+    if (w < thr && !touches) return;
+    if (only && !touches) return;
+    if (touches) { related.add(e[0]); related.add(e[1]); }
+    if (!center[e[0]] || !center[e[1]]) return;
+    items.push({e, w, touches, t: Math.sqrt(Math.max(0, (w - wmin) / Math.max(1e-9, wmax - wmin)))});
+  });
+  items.sort((a, b) => (a.touches - b.touches) || (a.w - b.w));      // сильные и выбранные — поверх
+  items.forEach(({e, w, touches, t}) => {
+    // неориентированные: от меньшего номера к большему; ориентированные: A→B и B→A расходятся на разные стороны
+    const [s0, s1] = dir || e[0] < e[1] ? [e[0], e[1]] : [e[1], e[0]];
+    const hub = Math.max(deg[s0] || 0, deg[s1] || 0) > 6 ? (((s0 * 31 + s1 * 17) % 5) - 2) * .14 : 0;   // лёгкий веер у хабов
+    const g = edgeGeom(center[s0], center[s1], Lp => bendPx(Lp) * (1 + hub));
+    const width = (touches ? .6 : 0) + .6 + 3.2 * t;
+    const base = lay === 'backbone' ? .16 + .28 * t : .08 + .24 * t;
+    const op = sel != null ? (touches ? .55 + .25 * t : .04) : Math.min(.45, base * zoomBoost);
+    const line = L.polyline(g.ll, {renderer: edgeRenderer, color: ink, weight: width, opacity: op, lineCap: 'round', interactive: true});
+    const lname = LAYERS[lay] || lay;
+    const lbl = lay === 'flow_rub' ? `<b>${esc(N[e[0]].s)} → ${esc(N[e[1]].s)}</b><br>${esc(lname)}<br>${fmtN(e[2]/1e6, 1)} млн ₽ за 2023–2024`
+      : lay === 'lead_lag' ? `<b>${esc(N[e[0]].s)} → ${esc(N[e[1]].s)}</b><br>${esc(lname)}<br>опережает на ${e[3]} мес., сила ${fmtN(e[2], 2)}`
+      : `<b>${esc(N[e[0]].s)} ↔ ${esc(N[e[1]].s)}</b><br>${esc(lname)}<br>вес ${fmtN(e[2], 3)}`;
+    line.bindTooltip(lbl, {sticky: true, className: 'tip'});
+    let head = null;
+    const showHead = o => { if (!dir) return; head = L.polygon(arrowHead(g.px, width), {renderer: edgeRenderer, color: ink, fillColor: ink, fillOpacity: o, opacity: o, weight: 0, interactive: false}); edgeGroup.addLayer(head); };
+    line.on('mouseover', () => { line.setStyle({opacity: .75, weight: width + .8}); if (!head) showHead(.75); });
+    line.on('mouseout', () => { line.setStyle({opacity: op, weight: width}); if (head && !touches) { edgeGroup.removeLayer(head); head = null; } });
+    edgeGroup.addLayer(line);
+    if (touches) showHead(op);
+  });
+  for (let i = 0; i < n; i++) styleOne(i);
+}
+$('#edgeLayer').addEventListener('input', () => { $('#edgeThr').value = $('#edgeLayer').value === 'backbone' ? 0 : 80; });
+['edgeLayer','edgeThr','onlySel'].forEach(id => $('#'+id).addEventListener('input', drawEdges));
+$('#edgeThr').value = 0;
+['colorBy','qSlider'].forEach(id => $('#'+id).addEventListener('input', recolor));
+$('#molist').innerHTML = N.map(x => `<option value="${esc(x.s)}">`).join('');
+$('#search').addEventListener('change', e => { const i = N.findIndex(x => x.s.toLowerCase() === e.target.value.toLowerCase() || x.mo.toLowerCase().includes(e.target.value.toLowerCase())); if (i >= 0) { select(i, true); } });
+
+/* карточка МО */
+function select(i, zoom){
+  sel = (sel === i && !zoom) ? null : i;
+  drawEdges(); panel();
+  if (sel != null && zoom) map.fitBounds(L.featureGroup(polys[sel]).getBounds(), {maxZoom: 9.5, padding: [40,40]});
+}
+map.on('click', e => { if (!e.originalEvent.target.closest || !e.originalEvent.target.closest('.leaflet-interactive')) { sel = null; drawEdges(); panel(); } });
+function spark(vals, labels){
+  const v = vals.map((x, i) => [i, x]).filter(p => p[1] != null); if (v.length < 3) return '<div class="muted">нет рядов СберИндекса</div>';
+  const W = 360, H = 70, P = 4, ys = v.map(p => p[1]), lo = Math.min(...ys), hi = Math.max(...ys);
+  const X = i => P + i/(vals.length-1)*(W-2*P), Y = y => H - P - (y-lo)/Math.max(1, hi-lo)*(H-2*P-12);
+  const d = v.map((p, k) => (k ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join('');
+  const last = v[v.length-1];
+  return `<svg viewBox="0 0 ${W} ${H+14}" width="100%" role="img" aria-label="траты по месяцам">
+    <path d="${d} L${X(last[0])} ${H-P} L${X(v[0][0])} ${H-P}Z" fill="var(--surface-2)"/><path d="${d}" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+    <circle cx="${X(last[0])}" cy="${Y(last[1])}" r="3" fill="var(--ink)"/>
+    <text x="${X(last[0])-4}" y="${Y(last[1])-6}" font-size="10" text-anchor="end">${fmtN(last[1])} ₽</text>
+    <text x="${P}" y="${H+12}" font-size="10">${labels[0]}</text><text x="${W-P}" y="${H+12}" font-size="10" text-anchor="end">${labels[labels.length-1]}</text></svg>`;
+}
+const RISK = new Set(['Локализация госзаказа','Конкуренция в закупках','Бюджетная зависимость','Утечка потребительского спроса','Демография','Рост без людей']);
+const OPP = new Set(['Опорный центр снабжения','Связующее звено сети','Опережающий индикатор']);
+/* ---------- расчёт индексов, неопределённость, ориентир ---------- */
+function pctOf(k, v, neg){ const a = N.map(z => z.f[k]).filter(t => t != null); if (v == null) return null;
+  const le = a.filter(t => neg ? t >= v : t <= v).length, eq = a.filter(t => t === v).length; return 100 * (le - (eq - 1) / 2) / a.length; }
+const FL = k => (D.feats[k] || [k])[0];
+function explain(k, i){
+  const x = N[i], f = x.f, d = D.metrics[k], v = x.m[k];
+  const line = (a, b) => `<div>${a}${b != null ? ': <b>' + b + '</b>' : ''}</div>`;
+  const pc = (key, neg) => fmtN(pctOf(key, f[key], neg)) + '-й';
+  let s = `<div><i>${esc(d.formula)}</i></div>`;
+  if (k === 'localization') s += line(FL('proc_local_sh'), fmtF('proc_local_sh', f.proc_local_sh));
+  else if (k === 'external_dep') s += line(FL('proc_ufa_sh'), fmtF('proc_ufa_sh', f.proc_ufa_sh)) + line(FL('proc_out_sh'), fmtF('proc_out_sh', f.proc_out_sh)) + line('Сумма', fmtN(v * 100, 1) + '%');
+  else if (k === 'competition') s += line(FL('proc_single_sh'), fmtF('proc_single_sh', f.proc_single_sh)) + line('1 − доля', fmtN(v * 100, 1) + '%');
+  else if (k === 'online_leakage') s += line('Маркетплейсы', fmtF('sh_Маркетплейсы', f['sh_Маркетплейсы'])) + line('Общепит', fmtF('sh_Общественное питание', f['sh_Общественное питание'])) + line('Маркетплейсы / (маркетплейсы + общепит)', v == null ? 'н/д' : fmtN(v * 100, 1) + '%');
+  else if (k === 'budget_dep') s += line(FL('grants_pc') + ' — ' + fmtF('grants_pc', f.grants_pc), pc('grants_pc') + ' процентиль') + line(FL('emp_sh_budget') + ' — ' + fmtF('emp_sh_budget', f.emp_sh_budget), f.emp_sh_budget == null ? 'н/д' : pc('emp_sh_budget') + ' процентиль') + line('Среднее процентилей', fmtN(v, 1));
+  else if (k === 'activity') s += ['spend_total', 'wage', 'emp_per_1000'].map(q => line(FL(q) + ' — ' + fmtF(q, f[q]), f[q] == null ? 'н/д' : pc(q) + ' процентиль')).join('') + line('Среднее процентилей', fmtN(v, 1));
+  else if (k === 'demo_resilience') s += line('Рождаемость — ' + fmtF('birth_rate', f.birth_rate), f.birth_rate == null ? 'н/д' : pc('birth_rate') + ' процентиль') + line('Смертность — ' + fmtF('death_rate', f.death_rate) + ' (чем ниже, тем лучше)', f.death_rate == null ? 'н/д' : pc('death_rate', true) + ' процентиль') + line('Миграция — ' + fmtF('migr_rate', f.migr_rate), f.migr_rate == null ? 'н/д' : pc('migr_rate') + ' процентиль') + line('Среднее процентилей', fmtN(v, 1));
+  else s += line('Значение', v == null ? 'н/д' : fmtN(v, Math.abs(v) < 10 ? 3 : 0));
+  s += line('Место среди 63 МО', fmtN(x.mp[k]) + '-й процентиль') + `<div class="muted">${esc(d.interp)}</div>`;
+  return s;
+}
+function uncBlock(i){
+  const x = N[i]; if (!x.p) return '';
+  const pr = x.p.map((p, c) => [c, p]).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  const u = UNC(i);
+  return `<div class="unc"><h3>${u ? 'Пограничный район: тип определён неуверенно' : 'Тип определён уверенно'}</h3>
+    <div class="hint">Вероятность типа по модели случайного леса; силуэт ${fmtN(x.typ, 2)}, устойчивость в бутстрепе ${fmtN(x.stab, 2)}.</div>
+    <div class="bars">${pr.map(([c, p]) => `<span><span class="sw" style="background:${COL(c)}"></span> ${esc(D.names[c])}</span><span class="bar"><i style="width:${p * 100}%;background:${COL(c)}"></i></span><span class="num">${fmtN(p * 100)}%</span>`).join('')}</div></div>`;
+}
+const CMP_F = ['spend_total','wage','emp_per_1000','grants_pc','emp_sh_budget','emp_sh_industry','proc_pc','proc_local_sh','proc_single_sh','sh_Маркетплейсы','sh_Общественное питание','migr_rate','birth_rate','death_rate','urban_share'];
+function benchTable(i, j){
+  if (j < 0) return '';
+  const a = N[i], b = N[j];
+  const rowsM = Object.entries(D.metrics).filter(([k, d]) => d.sense !== 0).map(([k, d]) => { const dv = a.mp[k] - b.mp[k]; const better = d.sense * dv > 5, worse = d.sense * dv < -5;
+    return `<tr><td>${esc(d.label)}</td><td class="n">${fmtN(a.mp[k])}</td><td class="n">${fmtN(b.mp[k])}</td><td class="n ${better ? 'hi' : worse ? 'lo' : ''}">${dv > 0 ? '+' : ''}${fmtN(dv)}</td></tr>`; }).join('');
+  const rowsF = CMP_F.filter(k => D.feats[k]).map(k => { const u = D.feats[k][1], va = a.f[k], vb = b.f[k];
+    const dv = va == null || vb == null ? null : (u === '%' ? (va - vb) * 100 : va - vb);
+    return `<tr><td>${esc(FL(k))}</td><td class="n">${fmtF(k, va)}</td><td class="n">${fmtF(k, vb)}</td><td class="n">${dv == null ? '—' : (dv > 0 ? '+' : '') + fmtN(dv, Math.abs(dv) < 10 ? 1 : 0) + (u === '%' ? ' п.п.' : '')}</td></tr>`; }).join('');
+  return `<div class="scroll" style="margin-top:6px"><table class="cmp sm"><tr><th>Индекс, процентиль</th><th class="n">${esc(a.s)}</th><th class="n">${esc(b.s)}</th><th class="n">Δ</th></tr>${rowsM}
+    <tr><th colspan="4">Показатели</th></tr>${rowsF}</table></div><div class="hint">Зелёным — где ${esc(a.s)} лучше ориентира, красным — где отстаёт (разница больше 5 процентилей).</div>`;
+}
+/* ---------- сравнение районов ---------- */
+let cmpSet = [];
+function addCmp(i){ if (cmpSet.includes(i)) cmpSet = cmpSet.filter(z => z !== i); else if (cmpSet.length < 5) cmpSet.push(i); renderCmp(); }
+function renderCmp(){
+  const bd = $('#cmpBadge'); bd.hidden = !cmpSet.length; bd.textContent = cmpSet.length;
+  const B = $('#cmpBody');
+  if (!cmpSet.length) { B.innerHTML = '<div class="hint">Пока пусто. Выберите районы в списке выше или в карточке района на карте.</div>'; return; }
+  const ids = cmpSet, head = ids.map((i, t) => `<th class="n"><span title="начертание линии на графике">${lnSample(t)}</span><span class="sw" style="background:${COL(N[i].c)}"></span> ${esc(N[i].s)} <button class="chip" data-rm="${i}" title="убрать" aria-label="убрать ${esc(N[i].s)}">✕</button></th>`).join('');
+  const mark = (vals, sense) => { const ok = vals.filter(v => v != null); if (ok.length < 2 || sense === 0) return vals.map(() => '');
+    const mx = Math.max(...ok), mn = Math.min(...ok); return vals.map(v => v == null ? '' : v === mx ? (sense > 0 ? 'hi' : 'lo') : v === mn ? (sense > 0 ? 'lo' : 'hi') : ''); };
+  const mRows = Object.entries(D.metrics).map(([k, d]) => { const vals = ids.map(i => N[i].mp[k]), cl = mark(vals, d.sense);
+    return `<tr><td>${esc(d.label)}</td>${vals.map((v, t) => `<td class="n ${cl[t]}">${fmtN(v)}</td>`).join('')}</tr>`; }).join('');
+  const fRows = CMP_F.filter(k => D.feats[k]).map(k => `<tr><td>${esc(FL(k))}</td>${ids.map(i => `<td class="n">${fmtF(k, N[i].f[k])}</td>`).join('')}</tr>`).join('');
+  const recRows = `<tr><td>Проблемы и возможности</td>${ids.map(i => `<td style="white-space:normal;min-width:140px">${[...new Set(N[i].recs.map(r => r.topic))].filter(t => t !== 'Ориентир').map(t => `<span class="tag ${RISK.has(t) ? 'risk' : OPP.has(t) ? 'opp' : ''}">${esc(t)}</span>`).join(' ')}</td>`).join('')}</tr>`;
+  B.innerHTML = `<div class="scroll"><table class="cmp"><tr><th></th>${head}</tr>
+    <tr><td>Тип</td>${ids.map(i => `<td style="white-space:normal"><span class="sw" style="background:${COL(N[i].c)}"></span> ${esc(D.names[N[i].c])}</td>`).join('')}</tr>
+    <tr><td>Население</td>${ids.map(i => `<td class="n">${fmtN(N[i].pop)}</td>`).join('')}</tr>${recRows}
+    <tr><th class="grp" colspan="${ids.length + 1}">Индексы, процентиль среди МО (зелёным — лучший, красным — худший среди выбранных)</th></tr>${mRows}
+    <tr><th class="grp" colspan="${ids.length + 1}">Показатели</th></tr>${fRows}</table></div>
+    <h3 style="margin-top:14px">Безналичные траты на жителя, ₽/мес — общая шкала</h3>${multiSpark(ids)}`;
+  B.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => addCmp(+b.dataset.rm));
+}
+const LS = [['var(--ink)',''],['var(--ink)','7 4'],['var(--muted)',''],['var(--muted)','7 4'],['var(--ink)','2 3']];
+const LC = t => LS[t][0];
+const lnSample = t => `<svg width="22" height="8" style="vertical-align:middle;margin-right:6px" aria-hidden="true"><line x1="1" x2="21" y1="4" y2="4" stroke="${LS[t][0]}" stroke-width="2" stroke-dasharray="${LS[t][1]}"/></svg>`;
+function multiSpark(ids){
+  const W = 760, H = 220, P = 44, all = ids.flatMap(i => N[i].sp.filter(v => v != null)); if (!all.length) return '';
+  const lo = Math.min(...all), hi = Math.max(...all), M = D.months.length;
+  const X = t => P + t / (M - 1) * (W - P - 110), Y = v => H - 24 - (v - lo) / Math.max(1, hi - lo) * (H - 40);
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:860px;display:block" role="img" aria-label="траты по месяцам">`;
+  niceTicks(lo, hi, 4).forEach(v => s += `<line x1="${P}" x2="${W - 110}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--gridline)"/><text x="${P - 6}" y="${Y(v) + 4}" font-size="11" text-anchor="end">${fmtN(v)}</text>`);
+  s += `<line x1="${P}" x2="${W - 110}" y1="${H - 24}" y2="${H - 24}" stroke="var(--axis)"/>
+    <text x="${P}" y="${H - 8}" font-size="10">${D.months[0]}</text><text x="${W - 110}" y="${H - 8}" font-size="10" text-anchor="end">${D.months[M - 1]}</text>`;
+  const labs = [];
+  ids.forEach((i, t) => { const pts = N[i].sp.map((v, k) => v == null ? null : [X(k), Y(v)]).filter(Boolean); if (!pts.length) return;
+    const c = LC(t); labs.push({y: pts[pts.length - 1][1] + 4, c, s: N[i].s});
+    s += `<polyline points="${pts.map(p => p.map(z => z.toFixed(1)).join(',')).join(' ')}" fill="none" stroke="${c}" stroke-width="1.8" stroke-dasharray="${LS[t][1]}"/>`; });
+  labs.sort((a, b) => a.y - b.y); labs.forEach((l, k) => { if (k && l.y - labs[k - 1].y < 13) l.y = labs[k - 1].y + 13; });
+  labs.forEach(l => s += `<text x="${W - 104}" y="${l.y.toFixed(1)}" font-size="11" fill="${l.c}">${esc(l.s)}</text>`);
+  return s + '</svg>';
+}
+function panel(){
+  const P = $('#panel');
+  if (sel == null){
+    const cnt = {}; N.forEach(x => x.recs.forEach(r => cnt[r.topic] = (cnt[r.topic]||0) + 1));
+    P.innerHTML = (group ? `<h2>Подсвечено по условиям: ${group.size} МО</h2><div class="chips">${[...group].map(i => `<button class="chip" data-gs="${i}"><span class="sw" style="background:${COL(N[i].c)}"></span>${esc(N[i].s)}</button>`).join('')}</div><hr style="border:0;border-top:1px solid var(--grid);margin:12px 0">` : '') + `<h2>${esc(D.region)}</h2>
+      <div class="hint">Нажмите на район или город — откроется карточка с индексами, выводами и рекомендациями. Колёсико или щипок — приближение; при приближении появляются подписи всех МО.</div>
+      <h3>Типы</h3><div class="chips">${D.types.map(t => `<button class="chip" data-type="${t.c}"><span class="sw" style="background:${COL(t.c)}"></span>${esc(t.name)} · ${t.members.length}</button>`).join('')}</div>
+      <h3>Темы рекомендаций</h3><div class="bars">${Object.entries(cnt).sort((a,b)=>b[1]-a[1]).map(([k,v]) =>
+        `<span>${esc(k)}</span><span class="bar"><i style="width:${v/n*100}%;background:${RISK.has(k)?'var(--bad)':OPP.has(k)?'var(--good)':'var(--warn)'}"></i></span><span class="num">${v}</span>`).join('')}</div>
+      <h3>Сеть</h3><div class="hint">Итоговая сеть = ${fmtN(D.alpha*100)}% сходство признаков + ${fmtN((1-D.alpha)*100)}% связи: ${Object.entries(D.weights).map(([k,w]) => esc(LAYERS[k]||k).toLowerCase() + ' ' + fmtN(w*100) + '%').join(', ')}. Каждый МО связан с ${D.knn} ближайшими соседями.</div>`;
+    P.querySelectorAll('[data-gs]').forEach(b => b.onclick = () => select(+b.dataset.gs, true));
+    P.querySelectorAll('[data-type]').forEach(b => b.onclick = () => { const c = +b.dataset.type; const ids = N.map((x,i)=>i).filter(i => N[i].c === c); map.fitBounds(L.featureGroup(ids.flatMap(i => polys[i])).getBounds(), {padding:[20,20]}); });
+    return;
+  }
+  const x = N[sel], tp = D.types.find(t => t.c === x.c);
+  const med = k => { const v = tp.members.map(i => N[i].f[k]).filter(v => v != null).sort((a,b)=>a-b); return v.length ? v[Math.floor(v.length/2)] : null; };
+  const reg = k => { const v = N.map(z => z.f[k]).filter(v => v != null).sort((a,b)=>a-b); return v[Math.floor(v.length/2)]; };
+  const mbar = Object.entries(D.metrics).map(([k, d]) => { const p = x.mp[k]; const good = d.sense === 0 ? null : (d.sense > 0 ? p >= 50 : p < 50);
+    const col = d.sense === 0 ? 'var(--neutral-status)' : (good ? 'var(--good)' : 'var(--risk)');
+    return `<details class="ix"><summary><span>${esc(d.label)}</span><span class="bar"><i style="width:${p}%;background:${col}"></i></span><span class="num">${fmtN(p)}</span></summary><div class="calc">${explain(k, sel)}</div></details>`; }).join('');
+  const recs = x.recs.map(r => `<div class="rec ${RISK.has(r.topic)?'risk':OPP.has(r.topic)?'opp':'info'}"><b>${esc(r.topic)}</b><small>${esc(r.evidence)}</small><span>${esc(r.action)}</span></div>`).join('');
+  const keyF = ['spend_total','wage','emp_per_1000','grants_pc','proc_pc','proc_local_sh','proc_single_sh','sh_Маркетплейсы','migr_rate','urban_share'].filter(k => D.feats[k]);
+  const lay = $('#edgeLayer').value, E = D.layers[lay] || [];
+  const nb = E.filter(e => e[0] === sel || e[1] === sel).sort((a,b) => b[2]-a[2]).slice(0, 6);
+  P.innerHTML = `<div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><h2>${esc(x.s)}</h2><button class="chip" id="closeSel">закрыть ✕</button></div>
+    <div class="metaline"><span style="color:var(--ink)"><span class="sw" style="background:${COL(x.c)}"></span>${esc(D.names[x.c])}</span></div>
+    <div class="metaline"><span>макротип: ${esc(D.macro_names[x.macro])}</span></div>
+    <div class="metaline"><span>население ${fmtN(x.pop)}</span>
+      <span title="доля бутстреп-выборок, где МО остаётся со своим типом">устойчивость ${fmtN(x.stab, 2)}</span></div>
+    <div>${esc(x.summary)}</div>
+    <h3>Выводы и рекомендации</h3>${recs}
+    ${x.anom.length ? `<h3>Чем отличается от своего типа</h3><ul class="plain">${x.anom.map(a => `<li>${esc(a)}</li>`).join('')}</ul>` : ''}
+    ${uncBlock(sel)}
+    <div style="display:flex;flex-wrap:wrap;gap:8px"><button class="btn" id="toCmp">${cmpSet.includes(sel) ? '✓ в сравнении' : '+ к сравнению'}</button>${x.bench ? `<button class="btn" id="benchBtn">сравнить с ориентиром: ${esc(N[N.findIndex(z => z.mo === x.bench)].s)}</button>` : ''}</div>
+    <div id="benchBox"></div>
+    <h3>Индексы (процентиль среди МО) — нажмите, чтобы увидеть расчёт</h3><div>${mbar}</div>
+    <h3>Ключевые показатели</h3><div class="scroll"><table><tr><th></th><th class="n">МО</th><th class="n">тип</th><th class="n">регион</th></tr>
+      ${keyF.map(k => `<tr><td>${esc(D.feats[k][0])}</td><td class="n">${fmtF(k, x.f[k])}</td><td class="n">${fmtF(k, med(k))}</td><td class="n">${fmtF(k, reg(k))}</td></tr>`).join('')}</table></div>
+    <h3>Тип по кварталам</h3><div class="chips">${x.q.map((c, j) => `<span title="${D.quarters[j]}: ${esc(D.names[c])}" style="display:flex;flex-direction:column;align-items:center;font-size:10px" class="muted"><span class="sw" style="width:28px;height:12px;background:${COL(c)}"></span>${D.quarters[j].slice(2)}</span>`).join('')}</div>
+    <h3>Безналичные траты на жителя, ₽/мес</h3>${spark(x.sp, D.months)}
+    ${x.analogs.length ? `<h3>Аналоги по сети</h3><div class="chips">${x.analogs.map(a => { const j = N.findIndex(z => z.mo === a); return `<button class="chip" data-go="${j}">${esc(N[j].s)}${x.bench === a ? ' · ориентир' : ''}</button>`; }).join('')}</div>` : ''}
+    ${nb.length ? `<h3>Сильнейшие связи: ${esc((LAYERS[lay]||'').toLowerCase())}</h3><div class="chips">${nb.map(e => { const j = e[0] === sel ? e[1] : e[0]; return `<button class="chip" data-go="${j}">${esc(N[j].s)} · ${lay === 'flow_rub' ? fmtN(e[2]/1e6,1) + ' млн ₽' : fmtN(e[2],2)}</button>`; }).join('')}</div>` : ''}`;
+  $('#closeSel').onclick = () => { sel = null; drawEdges(); panel(); };
+  $('#toCmp').onclick = () => { addCmp(sel); panel(); };
+  if ($('#benchBtn')) $('#benchBtn').onclick = () => { const b = $('#benchBox'); b.innerHTML = b.innerHTML ? '' : benchTable(sel, N.findIndex(z => z.mo === x.bench)); };
+  P.querySelectorAll('[data-go]').forEach(b => b.onclick = () => select(+b.dataset.go, true));
+  P.scrollTop = 0;
+}
+recolor(); drawEdges(); panel();
+
+/* ---------- корреляции ---------- */
+const CSTOPS = [[-1,'--rn2'],[-.5,'--rn1'],[0,'--r0'],[.5,'--rp1'],[1,'--rp2']];
+function rcol(r){ r = Math.max(-1, Math.min(1, r)); for (let k = 0; k < 4; k++) if (r <= CSTOPS[k+1][0]) return ramp((r - CSTOPS[k][0]) / .5, CSTOPS[k][1], CSTOPS[k+1][1]); return css('--rp2'); }
+const pairKey = (a, b) => a < b ? a + '|' + b : b + '|' + a;
+const PART = {}; if (D.corr) D.corr.top.forEach(r => PART[pairKey(r.x, r.y)] = r);
+const fq = q => q == null ? '—' : q < .001 ? '< 0,001' : fmtN(q, 3);
+let hsel = null;
+function heat(){
+  if (!D.corr) { $('#heat').textContent = 'Запустите econtypes correlate'; return; }
+  const V = D.corr.vars, m = V.length, cs = 20, lw = 250, th = 160, W = lw + m*cs + 150, H = th + m*cs + 6;
+  const lab = (v, k) => { const t = featLabel(v); return t.length > k ? t.slice(0, k - 1) + '…' : t; };
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="матрица ранговых корреляций">`;
+  V.forEach((v, i) => {
+    s += `<text class="rl" id="rl${i}" x="${lw - 8}" y="${th + i*cs + cs*.68}" text-anchor="end"><title>${esc(featLabel(v))}</title>${esc(lab(v, 40))}</text>`;
+    s += `<text class="cl" id="cl${i}" transform="translate(${lw + i*cs + cs*.55},${th - 6}) rotate(-50)"><title>${esc(featLabel(v))}</title>${esc(lab(v, 30))}</text>`; });
+  for (let i = 0; i < m; i++) for (let j = 0; j < m; j++) {
+    if (i === j) { s += `<rect x="${lw + j*cs}" y="${th + i*cs}" width="${cs}" height="${cs}" fill="var(--surface-2)"/><circle cx="${lw + j*cs + cs/2}" cy="${th + i*cs + cs/2}" r="1.6" fill="var(--muted)"/>`; continue; }
+    const r = D.corr.rho[i][j]; if (r == null) continue;
+    const q = D.corr.q[i][j];
+    s += `<rect class="cell" x="${lw + j*cs}" y="${th + i*cs}" width="${cs}" height="${cs}" fill="${rcol(r)}" opacity="${q < .05 ? 1 : .22}" data-i="${i}" data-j="${j}"/>`;
+  }
+  s += `<rect id="hHov" width="${cs}" height="${cs}" fill="none" stroke="var(--ink)" stroke-width="1" visibility="hidden" pointer-events="none"/>`;
+  s += `<rect id="hSel" width="${cs}" height="${cs}" fill="none" stroke="var(--ink)" stroke-width="2" visibility="hidden" pointer-events="none"/>`;
+  $('#heat').innerHTML = s + '</svg>';
+  const svg = $('#heat svg'), hov = $('#hHov');
+  let last = null;
+  const hl = (i, j, on) => { [$('#rl' + i), $('#cl' + j)].forEach(t => t && t.classList.toggle('hl', on)); };
+  svg.addEventListener('mousemove', e => { const r = e.target.closest('rect.cell'); if (!r) { hideTip(); hov.setAttribute('visibility', 'hidden'); if (last) hl(...last, false); last = null; return; }
+    const i = +r.dataset.i, j = +r.dataset.j; if (last) hl(...last, false); last = [i, j]; hl(i, j, true);
+    hov.setAttribute('x', r.getAttribute('x')); hov.setAttribute('y', r.getAttribute('y')); hov.setAttribute('visibility', 'visible');
+    const q = D.corr.q[i][j], pr = PART[pairKey(V[i], V[j])];
+    showTip(e, `<b>${esc(featLabel(V[i]))}</b><br>↔ <b>${esc(featLabel(V[j]))}</b><br>ρ Спирмена: ${fmtN(D.corr.rho[i][j], 2)}<br>q (FDR): ${fq(q)}<br>значимость после FDR: ${q < .05 ? 'да' : 'нет'}`
+      + (pr && pr.prho != null ? `<br>ρ при контроле: ${fmtN(pr.prho, 2)}${pr.pq < .05 ? ' (сохраняется)' : ''}` : '')); });
+  svg.addEventListener('mouseleave', () => { hideTip(); hov.setAttribute('visibility', 'hidden'); if (last) hl(...last, false); last = null; });
+  svg.addEventListener('click', e => { const r = e.target.closest('rect.cell'); if (r) scatter(V[+r.dataset.i], V[+r.dataset.j]); });
+}
+function markCell(a, b){ const V = D.corr.vars, i = V.indexOf(a), j = V.indexOf(b), sr = $('#hSel'); if (!sr || i < 0 || j < 0) return;
+  sr.setAttribute('x', 250 + j*20); sr.setAttribute('y', 160 + i*20); sr.setAttribute('visibility', 'visible'); hsel = [i, j]; }
+function getVar(i, v){ return v.startsWith('m_') ? N[i].m[v.slice(2)] : N[i].f[v]; }
+const fmtV = (v, x) => x == null ? 'н/д' : v.startsWith('m_') ? fmtN(x, Math.abs(x) < 10 ? 2 : 0) : fmtF(v, x);
+function niceTicks(lo, hi, k){ const span = hi - lo || 1, step0 = span / k, mag = 10 ** Math.floor(Math.log10(step0)), err = step0 / mag;
+  const step = (err >= 5 ? 10 : err >= 2 ? 5 : err >= 1.5 ? 2 : 1) * mag, t = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-12; v += step) t.push(+v.toFixed(12)); return t; }
+function scatter(a, b){
+  const pts = N.map((x, i) => [getVar(i, a), getVar(i, b), i]).filter(p => p[0] != null && p[1] != null);
+  const W = 540, H = 360, L0 = 58, B0 = 46, T0 = 10, R0_ = 14;
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+  let [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  const px = (x1 - x0) * .04 || 1, py = (y1 - y0) * .04 || 1; x0 -= px; x1 += px; y0 -= py; y1 += py;
+  const X = v => L0 + (v - x0) / (x1 - x0) * (W - L0 - R0_), Y = v => T0 + (1 - (v - y0) / (y1 - y0)) * (H - T0 - B0);
+  const ia = D.corr.vars.indexOf(a), ib = D.corr.vars.indexOf(b), r = D.corr.rho[ia][ib], q = D.corr.q[ia][ib], pr = PART[pairKey(a, b)];
+  $('#scTitle').innerHTML = `<span>${esc(featLabel(a))}</span><span>× ${esc(featLabel(b))}</span>`;
+  $('#scStat').innerHTML = r != null ? `<span>ρ = <b>${fmtN(r, 2)}</b></span><span class="sig ${q < .05 ? 'yes' : ''}">${q < .05 ? 'значимо после FDR' : 'незначимо после FDR'}, q ${fq(q)}</span>`
+    + (pr && pr.prho != null ? `<span>при контроле: ${fmtN(pr.prho, 2)}${pr.pq < .05 ? ' *' : ''}</span>` : '') : '';
+  const tx = niceTicks(x0, x1, 5), ty = niceTicks(y0, y1, 5), tl = (v, k) => fmtN(v, Math.abs(v) < 10 ? 2 : 0);
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="диаграмма рассеяния">`;
+  tx.forEach(v => s += `<line x1="${X(v)}" x2="${X(v)}" y1="${T0}" y2="${H - B0}" stroke="var(--gridline)"/><text x="${X(v)}" y="${H - B0 + 16}" font-size="11" text-anchor="middle">${tl(v)}</text>`);
+  ty.forEach(v => s += `<line x1="${L0}" x2="${W - R0_}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--gridline)"/><text x="${L0 - 6}" y="${Y(v) + 4}" font-size="11" text-anchor="end">${tl(v)}</text>`);
+  s += `<line x1="${L0}" x2="${W - R0_}" y1="${H - B0}" y2="${H - B0}" stroke="var(--axis)"/><line x1="${L0}" x2="${L0}" y1="${T0}" y2="${H - B0}" stroke="var(--axis)"/>
+    <text x="${(W + L0) / 2}" y="${H - 8}" font-size="12" text-anchor="middle">${esc(featLabel(a))}</text>
+    <text transform="translate(14,${(H - B0 + T0) / 2}) rotate(-90)" font-size="12" text-anchor="middle">${esc(featLabel(b))}</text>`;
+  pts.forEach(p => s += `<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="5" fill="${COL(N[p[2]].c)}" stroke="var(--surface)" stroke-width="1" data-k="${p[2]}" style="cursor:pointer"/>`);
+  const short = t => t.length > 26 ? t.slice(0, 25) + '…' : t;
+  $('#scatter').innerHTML = s + `</svg><div class="tlegend">${Object.entries(D.names).map(([c, nm]) => `<span title="${esc(nm)}"><span class="sw" style="background:${COL(+c)}"></span>${esc(short(nm))}</span>`).join('')}</div>
+    <p class="note">Ось Y — ${esc(featLabel(b))}. Цвет — тип МО. Нажмите на точку, чтобы открыть МО на карте.</p>`;
+  $('#scatter').querySelectorAll('circle').forEach(c => { const i = +c.dataset.k;
+    c.onmouseenter = () => { c.setAttribute('r', 7); c.setAttribute('stroke', 'var(--ink)'); c.setAttribute('stroke-width', 1.5); };
+    c.onmousemove = e => showTip(e, `<b>${esc(N[i].s)}</b><br><span class="sw" style="background:${COL(N[i].c)}"></span> ${esc(D.names[N[i].c])}<br>${esc(featLabel(a))}: ${fmtV(a, getVar(i,a))}<br>${esc(featLabel(b))}: ${fmtV(b, getVar(i,b))}`);
+    c.onmouseleave = () => { hideTip(); c.setAttribute('r', 5); c.setAttribute('stroke', 'var(--surface)'); c.setAttribute('stroke-width', 1); };
+    c.onclick = () => { hideTip(); document.querySelector('[data-t="map"]').click(); setTimeout(() => select(i, true), 80); }; });
+  markCell(a, b);
+}
+function lagChart(){
+  if (!D.lag.length) return;
+  const W = 520, H = 170, L0 = 40, R0_ = 12, T0 = 14, B0 = 26, k = D.lag.length;
+  const mx = Math.max(...D.lag.map(r => Math.abs(r.median)), .1) * 1.15;
+  const X = idx => L0 + (idx + .5) * (W - L0 - R0_) / k, Y = v => T0 + (1 - (v + mx) / (2 * mx)) * (H - T0 - B0);
+  const best = D.lag.reduce((a, r) => Math.abs(r.median) > Math.abs(a.median) ? r : a, D.lag[0]);
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="лаговая корреляция госзаказа и трат">`;
+  niceTicks(-mx, mx, 4).forEach(v => s += `<line x1="${L0}" x2="${W - R0_}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--gridline)"/><text x="${L0 - 6}" y="${Y(v) + 4}" font-size="11" text-anchor="end">${fmtN(v, 2)}</text>`);
+  s += `<line x1="${L0}" x2="${W - R0_}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--ink2)" stroke-width="1"/>`;
+  D.lag.forEach((r, idx) => { const x = X(idx), y = Y(r.median), c = r.median >= 0 ? 'var(--rp2)' : 'var(--rn2)', isB = r === best;
+    s += `<g><title>лаг ${r.lag > 0 ? '+' : ''}${r.lag} мес: медиана ${fmtN(r.median, 2)}, среднее ${fmtN(r.mean, 2)}, доля МО с положительной связью ${fmtN(r.share_pos * 100)}%</title>
+      <line x1="${x}" x2="${x}" y1="${Y(0)}" y2="${y}" stroke="${c}" stroke-width="2"/>
+      <circle cx="${x}" cy="${y}" r="${isB ? 5.5 : 4}" fill="${c}" stroke="${isB ? 'var(--ink)' : 'var(--surface)'}" stroke-width="${isB ? 1.5 : 1}"/>
+      ${isB ? `<text x="${x + 9}" y="${y + 4}" font-size="11" fill="var(--ink)">${fmtN(r.median, 2)}</text>` : ''}
+      <text x="${x}" y="${H - 8}" font-size="11" text-anchor="middle">${r.lag > 0 ? '+' : r.lag < 0 ? '−' : ''}${Math.abs(r.lag)}</text></g>`; });
+  s += `<text x="${W - R0_}" y="${H - 8}" font-size="11" text-anchor="end" fill="var(--muted)">лаг, мес</text>`;
+  $('#lagc').innerHTML = s + '</svg>';
+}
+function topTable(){
+  if (!D.corr) return;
+  $('#topcorr').innerHTML = '<thead><tr><th>Показатель 1</th><th>Показатель 2</th><th class="n">ρ</th><th class="n">q (FDR)</th><th class="n">при контроле</th></tr></thead><tbody>' +
+    D.corr.top.map(r => `<tr data-a="${esc(r.x)}" data-b="${esc(r.y)}"><td>${esc(featLabel(r.x))}</td><td>${esc(featLabel(r.y))}</td><td class="n rho" style="color:${r.rho > 0 ? 'var(--rp2)' : 'var(--rn2)'}">${fmtN(r.rho, 2)}</td><td class="n">${fmtN(r.q, 4)}</td><td class="n">${r.prho == null ? '—' : fmtN(r.prho, 2) + (r.pq < .05 ? ' *' : '')}</td></tr>`).join('') + '</tbody>';
+  $('#topcorr').querySelectorAll('tr[data-a]').forEach(t => t.onclick = () => { scatter(t.dataset.a, t.dataset.b); $('#scTitle').scrollIntoView({behavior: 'smooth', block: 'nearest'}); });
+}
+heat(); lagChart(); topTable(); if (D.corr && D.corr.top.length) scatter(D.corr.top[0].x, D.corr.top[0].y);
+
+/* ---------- типы ---------- */
+$('#typeCards').innerHTML = D.types.map(t => {
+  const mx = Math.max(...t.sig.map(s => Math.abs(s.effect)), 1);
+  return `<div class="tprof" style="--tc:${COL(t.c)}">
+    <div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;gap:8px;align-items:center"><span class="sw" style="background:${COL(t.c)}"></span><h2>${esc(t.name)}</h2></div>
+      <div class="cnt">${t.members.length} МО</div>
+      <div class="chips">${t.members.map(i => `<button class="chip" data-go="${i}">${esc(N[i].s)}</button>`).join('')}</div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><h3>Чем отличается от остальных МО</h3>
+    <div class="bars" style="grid-template-columns:minmax(0,1fr) 150px 44px">${t.sig.map(s => `<span>${esc(featLabel(s.feature))}</span>
+      <span class="bar" style="background:var(--grid)"><i style="left:${s.effect < 0 ? 50 - Math.abs(s.effect)/mx*50 : 50}%;width:${Math.abs(s.effect)/mx*50}%;background:${s.effect > 0 ? 'var(--rp2)' : 'var(--rn2)'}"></i><i style="left:50%;width:1px;background:var(--ink2)"></i></span>
+      <span class="num">${s.effect > 0 ? '+' : ''}${fmtN(s.effect, 1)}</span>`).join('')}</div>
+    <div class="hint">Разница медиан типа и остальных МО в единицах межквартильного размаха.</div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><h3>Медианные индексы типа</h3><div class="bars">${Object.entries(D.metrics).filter(([k]) => D.metrics[k].sense !== 0).map(([k, d]) => { const p = t.med[k], good = d.sense > 0 ? p >= 50 : p < 50;
+      return `<span>${esc(d.label)}</span><span class="bar"><i style="width:${p}%;background:${good ? 'var(--good)' : 'var(--risk)'}"></i></span><span class="num">${fmtN(p)}</span>`; }).join('')}</div></div></div>`; }).join('');
+document.querySelectorAll('#typeCards [data-go]').forEach(b => b.onclick = () => { document.querySelector('[data-t="map"]').click(); setTimeout(() => select(+b.dataset.go, true), 80); });
+
+/* ---------- качество ---------- */
+(function(){
+  const ix = ['SW','CH','S_Dbw','MQ','AVI','AVU'];
+  const MN = {spectral_fused:'Спектральная, признаки + связи', louvain_fused:'Louvain, признаки + связи', kmeans_attr:'k-means, признаки', gmm_attr:'Гауссовы смеси, признаки', ward_attr:'Уорд, признаки', louvain_struct:'Louvain, только связи', spectral_struct:'Спектральная, только связи'};
+  const best = {}; ix.forEach(k => best[k] = Math.max(...Q.icvi.map(r => r['z_'+k] ?? -1e9)));
+  const icvi = `<div class="box"><h2>Сравнение методов кластеризации (k = ${D.k})</h2>
+    <div class="hint">Индексы качества (ICVI), нормированные на случайные перестановки меток: z = (значение − среднее по перестановкам) / стандартное отклонение. Больше — лучше; для S_Dbw знак обращён.</div>
+    <div class="scroll"><table><tr><th>Метод</th>${ix.map(k => `<th class="n">${k}</th>`).join('')}<th class="n">мин. размер</th></tr>
+    ${Q.icvi.map(r => `<tr class="${r.method === Q.method ? 'best' : ''}"><td>${esc(MN[r.method] || r.method)} <span class="muted" style="font:11px var(--f-mono)">${esc(r.method)}</span></td>${ix.map(k => `<td class="n" style="${r['z_'+k] === best[k] ? 'font-weight:600' : ''}">${fmtN(r['z_'+k], 1)}</td>`).join('')}<td class="n">${r.minsize}</td></tr>`).join('')}</table></div>
+    <div class="hint">*_attr — только признаки; *_struct — только связи; *_fused — признаки и связи вместе (итоговая модель: ${esc(Q.method)}).</div></div>`;
+  const ml = D.ml ? `<div class="box"><h2>Машинное обучение: что определяет тип</h2>
+    <div>Случайный лес восстанавливает тип МО, которого не видел при обучении (leave-one-out), с точностью <b>${fmtN(D.ml.acc*100)}%</b> против ${fmtN(D.ml.base*100)}% у угадывания самого крупного класса.</div>
+    <div class="bars">${D.ml.imp.map(r => `<span>${esc(featLabel(r.feature))}</span><span class="bar"><i style="width:${r.importance/D.ml.imp[0].importance*100}%;background:var(--ink2)"></i></span><span class="num">${fmtN(r.importance, 3)}</span>`).join('')}</div>
+    <div class="hint">Важность признака — среднее снижение неоднородности (MDI) по 300 деревьям.</div></div>` : '';
+  const V = Q.val;
+  const val = V ? `<div class="box"><h2>Проверка на новых данных</h2>
+    <div>Типы построены по 2023–2024 гг. Затем МО заново относятся к ближайшему типу только по закупкам следующих лет.</div>
+    <div class="bars">${Object.entries(V.holdout).map(([y, h]) => `<span>${y} (${h.p_value < 0.001 ? 'p < 0,001' : 'p = ' + fmtN(h.p_value, 3)})</span><span class="bar"><i style="width:${h.accuracy*100}%;background:var(--good)"></i></span><span class="num">${fmtN(h.accuracy*100)}%</span>`).join('')}
+    <span>случайное угадывание</span><span class="bar"><i style="width:${V.chance_mean*100}%;background:var(--neutral-status)"></i></span><span class="num">${fmtN(V.chance_mean*100)}%</span></div></div>` : '';
+  const st = `<div class="box"><h2>Устойчивость и география</h2><div class="bars" style="grid-template-columns:minmax(0,1fr) auto">
+    <span>Бутстреп (80% МО × 200), ARI детальной типологии</span><span class="num">${fmtN(Q.boot, 2)}</span>
+    <span>То же для макроуровня (3 типа)</span><span class="num">${fmtN(Q.macro_boot, 2)}</span>
+    <span>Расстояние внутри типа / у случайного разбиения</span><span class="num">${fmtN(Q.spatial.within_km)} / ${fmtN(Q.spatial.random_mean_km)} км</span>
+    <span>p-value пространственной связности</span><span class="num">${Q.spatial.p_value < 0.001 ? '< 0,001' : fmtN(Q.spatial.p_value, 3)}</span></div>
+    <h3>Согласованность соседних кварталов (ARI)</h3><div class="bars">${Q.qari.map(r => `<span>${r.from} → ${r.to}</span><span class="bar"><i style="width:${r.ARI*100}%;background:var(--ink2)"></i></span><span class="num">${fmtN(r.ARI, 2)}</span>`).join('')}</div></div>`;
+  const ec = `<div class="box"><h2>Вклад каждого слоя связей</h2><div class="hint">Кластеризация по одному слою и совпадение с итоговой (ARI). Ни один слой не повторяет итог — модель действительно совмещает разные связи.</div>
+    <div class="scroll"><table><tr><th>Слой</th><th class="n">MQ</th><th class="n">ARI с итогом</th></tr>${Q.edges_cmp.map(r => `<tr><td>${esc(LAYERS[r.edges] || r.edges)}</td><td class="n">${fmtN(r.MQ, 2)}</td><td class="n">${fmtN(r.ARI_vs_final, 2)}</td></tr>`).join('')}</table></div></div>`;
+  $('#qual').innerHTML = icvi + ml + val + st + ec;
+})();
+
+/* ---------- как это работает ---------- */
+$('#how').innerHTML = `<div class="prose"><h2>Как устроен расчёт</h2>
+  <p>Программа <code>econtypes</code> берёт исходные таблицы из базы данных, строит для каждого муниципалитета профиль из ${Object.keys(D.feats).length} признаков, связывает муниципалитеты сетью из нескольких слоёв, находит типы методами машинного обучения без учителя, проверяет их и превращает результат в индексы, выводы и рекомендации. Эта страница собирается заново после каждого пересчёта (${esc(D.generated)}).</p></div>
+  <div class="steps">${[
+    ['ingest','Данные в базу','Реестр контрактов ЕИС (44-ФЗ), траты по картам и расстояния СберИндекса, демография и бюджет Башкортостанстата, занятость и зарплаты БД ПМО Росстата. Контракты привязываются к МО по ИНН заказчика и поставщика.'],
+    ['features','Профиль МО','Госзаказ на жителя, доля местных поставщиков, отраслевая структура по ОКПД2, структура трат населения, демография, дотации, занятость, плотность. Робастная нормировка, пропуски — kNN-заполнение.'],
+    ['network','Сеть МО','Слои: синхронность месячных трат, опережение на 1–3 мес., сходство формы рядов (DTW), денежные потоки госзаказа между МО, сходство признаков. Каждый слой прорежен до ' + D.knn + ' соседей и взвешен.'],
+    ['cluster','Типы (без учителя)','7 методов: k-means, Уорд, GMM по признакам; спектральная кластеризация и Louvain по связям и по совмещённой сети. Число типов выбирается автоматически по индексам качества.'],
+    ['icvi','Оценка качества','SW, CH, DB, S_Dbw, модулярность, AVI, AVU нормируются на случайные перестановки, чтобы сравнивать методы на одной шкале.'],
+    ['dynamics','Динамика','Эволюционная спектральная кластеризация по скользящим четырём кварталам: видно, какие МО меняют тип.'],
+    ['explain','Объяснение (с учителем)','Случайный лес учится предсказывать тип по признакам; точность на отложенных МО и важность признаков показывают, что типы осмысленны. Модель классифицирует МО на новых данных.'],
+    ['metrics','Индексы и связи','13 индексов (локализация, конкуренция, бюджетная зависимость, хаб снабжения…), корреляции Спирмена с поправкой FDR, частные корреляции, лаги.'],
+    ['report','Выводы и рекомендации','Правила над процентилями индексов и сравнением с медианой своего типа. Каждая рекомендация показывает числа, на которых она основана.']
+  ].map((s, k) => `<div class="step"><em>econtypes ${s[0]}</em><b>${s[1]}</b><span>${s[2]}</span></div>`).join('')}</div>
+  <div class="box"><h2>Индексы</h2><div class="scroll"><table><tr><th>Индекс</th><th>Как считается</th><th>Как читать</th></tr>
+    ${Object.values(D.metrics).map(m => `<tr><td>${esc(m.label)}</td><td>${esc(m.formula)}</td><td>${esc(m.interp)}</td></tr>`).join('')}</table></div></div>
+  <div class="box"><h2>Другие регионы</h2><div class="prose">
+    <p>Модель типовая: Башкортостан — пример применения. Всё региональное задаётся в разделе <code>region</code> конфигурации (название, код субъекта в ИНН, региональный центр, особые МО); остальной расчёт одинаков для любого субъекта. Основные данные федеральные: набор СберИндекса покрывает ≈2 100 МО России, реестр ЕИС, БД ПМО и границы МО есть для всех регионов; региональная демография и законы о бюджете необязательны. Типы без заданных названий получают имя по профилю. Запуск: <code>econtypes --config config/регион.yaml all</code>, порядок — в <code>docs/SCALING.md</code>.</p></div></div>
+  <div class="box"><h2>Обновление данных</h2><div class="prose">
+    <p>Новая выгрузка ЕИС: <code>econtypes add-eis папка 2026</code>, затем <code>econtypes all</code>. Любая другая база: <code>econtypes --db postgresql://… all</code>. Все таблицы результатов (типы, индексы, рёбра, корреляции, рекомендации) лежат в базе в таблицах <code>res_*</code>.</p></div></div>`;
+
+/* ---------- выводы ---------- */
+const ORDER = ['Локализация госзаказа','Конкуренция в закупках','Бюджетная зависимость','Утечка потребительского спроса','Демография','Рост без людей','Опорный центр снабжения','Связующее звено сети','Опережающий индикатор','Переходный профиль','Ориентир','Без выраженных рисков'];
+const MEANING = {
+  'Локализация госзаказа':'Бюджетные деньги района уходят внешним поставщикам — можно вернуть часть заказа местному бизнесу.',
+  'Конкуренция в закупках':'Повышенная доля закупок у единственного поставщика — резерв экономии и прозрачности.',
+  'Бюджетная зависимость':'Экономика держится на дотациях и бюджетных рабочих местах при низкой активности.',
+  'Утечка потребительского спроса':'Жители тратят на маркетплейсах много больше, чем в местных кафе и услугах.',
+  'Демография':'Отток населения, высокая смертность или низкая рождаемость.',
+  'Рост без людей':'Экономика сильная, но население уходит.',
+  'Опорный центр снабжения':'Поставщики района обслуживают многих соседей — точка роста для кооперации.',
+  'Связующее звено сети':'Район связывает разные части региона — удобен для пилотных проектов.',
+  'Опережающий индикатор':'Траты здесь меняются раньше, чем у соседей, — ранний сигнал для мониторинга.',
+  'Переходный профиль':'Район на границе двух типов и может сменить тип.',
+  'Ориентир':'Есть похожий район с более высокой активностью, у которого стоит поучиться.',
+  'Без выраженных рисков':'Показатели близки к медиане своего типа или лучше.'};
+const kind = t => RISK.has(t) ? 'risk' : OPP.has(t) ? 'opp' : '';
+function goMap(i){ document.querySelector('[data-t="map"]').click(); setTimeout(() => select(i, true), 120); }
+$('#summary').innerHTML = (D.summary || []).map(t => `<p>${esc(t)}</p>`).join('');
+$('#finds').innerHTML = (D.findings || []).map(f => `<li><b>${esc(f.title)}</b><span>${esc(f.text)}</span></li>`).join('');
+const byTopic = {};
+N.forEach((x, i) => x.recs.forEach(r => (byTopic[r.topic] = byTopic[r.topic] || []).push(i)));
+$('#topics').innerHTML = ORDER.filter(t => byTopic[t] && t !== 'Ориентир' && t !== 'Без выраженных рисков').map(t =>
+  `<div class="topic ${kind(t)}"><header><b>${esc(t)}</b><span class="num">${byTopic[t].length} МО</span></header><small>${esc(MEANING[t] || '')}</small>
+   <div class="chips">${byTopic[t].map(i => `<button class="chip" data-go="${i}"><span class="sw" style="background:${COL(N[i].c)}"></span>${esc(N[i].s)}</button>`).join('')}</div></div>`).join('');
+$('#topics').querySelectorAll('[data-go]').forEach(b => b.onclick = () => goMap(+b.dataset.go));
+$('#typeFilter').innerHTML = '<option value="">все типы</option>' + Object.entries(D.names).map(([c, nm]) => `<option value="${c}">${esc(nm)}</option>`).join('');
+$('#topicFilter').innerHTML = '<option value="">все</option>' + ORDER.filter(t => byTopic[t]).map(t => `<option>${esc(t)}</option>`).join('');
+function mainRec(x){ const r = x.recs.slice().sort((a, b) => ORDER.indexOf(a.topic) - ORDER.indexOf(b.topic))[0]; return r; }
+function rows(){
+  const q = $('#moFilter').value.trim().toLowerCase(), tf = $('#typeFilter').value, pf = $('#topicFilter').value;
+  const ids = N.map((x, i) => i).filter(i => (!q || N[i].s.toLowerCase().includes(q)) && (!tf || N[i].c === +tf) && (!pf || N[i].recs.some(r => r.topic === pf)) && condOk(i))
+    .sort((a, b) => N[a].c - N[b].c || N[a].s.localeCompare(N[b].s, 'ru'));
+  $('#moCount').textContent = `показано ${ids.length} из ${n}`;
+  $('#moRows').innerHTML = ids.map(i => { const x = N[i], m = mainRec(x);
+    return `<details data-i="${i}"><summary><div><div class="nm"><span class="sw" style="background:${COL(x.c)}"></span>${esc(x.s)}</div><div class="hint">${esc(D.names[x.c])}</div></div>
+      <div><div class="main">${m ? `<b>${esc(m.topic)}.</b> ${esc(m.evidence)}` : ''}</div>
+      <div class="tags">${[...new Set(x.recs.map(r => r.topic))].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)).map(t => `<span class="tag ${kind(t)}">${esc(t)}</span>`).join('')}</div></div></summary>
+      <div class="body"><div>${esc(x.summary)}</div>
+      ${x.recs.map(r => `<div class="rec ${RISK.has(r.topic)?'risk':OPP.has(r.topic)?'opp':'info'}"><b>${esc(r.topic)}</b><small>${esc(r.evidence)}</small><span>${esc(r.action)}</span></div>`).join('')}
+      ${x.anom.length ? `<div class="hint">Отличается от своего типа: ${x.anom.map(esc).join('; ')}</div>` : ''}
+      <div class="chips"><button class="chip" data-go="${i}">Показать на карте →</button><button class="chip" data-cmp="${i}">+ к сравнению</button></div></div></details>`; }).join('');
+  $('#moRows').querySelectorAll('[data-go]').forEach(b => b.onclick = e => { e.preventDefault(); goMap(+b.dataset.go); });
+  $('#moRows').querySelectorAll('[data-cmp]').forEach(b => b.onclick = e => { e.preventDefault(); addCmp(+b.dataset.cmp); b.textContent = cmpSet.includes(+b.dataset.cmp) ? '✓ в сравнении' : '+ к сравнению'; });
+}
+/* поиск по условиям */
+const PRESETS = [
+  ['', 'без условий', []],
+  ['bud', 'Бюджетная зависимость + низкая активность + отток', [['budget_dep','>=',75],['activity','<=',40],['demo_resilience','<=',40]]],
+  ['leak', 'Деньги уходят: госзаказ и траты', [['localization','<=',30],['online_leakage','>=',70]]],
+  ['comp', 'Мало конкуренции в закупках', [['competition','<=',25]]],
+  ['hub', 'Опорные центры снабжения', [['hub','>=',80]]],
+  ['grow', 'Сильная экономика, но уходят люди', [['activity','>=',70],['demo_resilience','<=',40]]],
+  ['own', 'Свои условия…', [['activity','>=',50],['', '>=', 50],['', '>=', 50]]]];
+$('#preset').innerHTML = PRESETS.map(p => `<option value="${p[0]}">${esc(p[1])}</option>`).join('');
+let conds = [];
+function condUI(){
+  const box = $('#condBox'); if (!conds.length) { box.innerHTML = ''; return; }
+  const opt = sel => '<option value="">—</option>' + Object.entries(D.metrics).map(([k, d]) => `<option value="${k}" ${k === sel ? 'selected' : ''}>${esc(d.label)}</option>`).join('');
+  box.innerHTML = `<div class="cond">${conds.map((c, t) => `<select data-ci="${t}" data-f="k">${opt(c[0])}</select><select data-ci="${t}" data-f="op"><option ${c[1] === '>=' ? 'selected' : ''}>&gt;=</option><option ${c[1] === '<=' ? 'selected' : ''}>&lt;=</option></select><input type="number" min="0" max="100" step="5" value="${c[2]}" data-ci="${t}" data-f="v" style="width:60px" aria-label="процентиль"> ${t < conds.length - 1 ? '<b>и</b>' : ''}`).join(' ')}
+    <span class="hint">процентиль среди МО, 0–100</span> <button class="chip" id="condMap">показать на карте →</button></div>`;
+  box.querySelectorAll('[data-ci]').forEach(el => el.addEventListener('input', () => { const c = conds[+el.dataset.ci]; if (el.dataset.f === 'k') c[0] = el.value; else if (el.dataset.f === 'op') c[1] = el.value.replace('&gt;', '>').replace('&lt;', '<'); else c[2] = +el.value; rows(); }));
+  $('#condMap').onclick = () => { const ids = N.map((x, i) => i).filter(condOk); group = new Set(ids); sel = null;
+    $('#groupInfo').innerHTML = `Подсвечено: ${ids.length} МО <button class="chip" id="groupClr">сбросить</button>`; $('#groupClr').onclick = () => { group = null; $('#groupInfo').innerHTML = ''; recolor(); if (sel == null) panel(); };
+    document.querySelector('[data-t="map"]').click(); setTimeout(() => { recolor(); drawEdges(); panel(); if (ids.length) map.fitBounds(L.featureGroup(ids.flatMap(i => polys[i])).getBounds(), {padding: [30, 30]}); }, 120); };
+}
+function condOk(i){ return conds.every(([k, op, v]) => !k || (op === '>=' ? N[i].mp[k] >= v : N[i].mp[k] <= v)); }
+$('#preset').addEventListener('input', () => { const p = PRESETS.find(z => z[0] === $('#preset').value); conds = p[2].map(c => c.slice()); condUI(); rows(); });
+$('#cmpAdd').innerHTML = '<option value="">выберите…</option>' + N.map((x, i) => [x.s, i]).sort((a, b) => a[0].localeCompare(b[0], 'ru')).map(([s_, i]) => `<option value="${i}">${esc(s_)}</option>`).join('');
+$('#cmpAdd').addEventListener('input', e => { if (e.target.value !== '') addCmp(+e.target.value); e.target.value = ''; });
+$('#cmpClear').onclick = () => { cmpSet = []; renderCmp(); };
+$('#uncChk').addEventListener('input', recolor);
+['moFilter','typeFilter','topicFilter'].forEach(id => $('#'+id).addEventListener('input', rows));
+rows();
+
+
+</script>

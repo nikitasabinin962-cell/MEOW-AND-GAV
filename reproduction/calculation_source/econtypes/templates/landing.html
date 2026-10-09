@@ -1,0 +1,438 @@
+<title>Семь экономик Башкортостана</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: одна колонка ~1120px; главный экран — «карта по дорогам» + карточка МО справа; ниже — типы, метод, проверка */
+:root{
+  --bg:#f4f6f3; --surface:#fbfcfa; --ink:#14201b; --ink2:#4a5650; --muted:#7d8781; --line:#dde3de; --grid:#e6ebe7;
+  --accent:#1d6b57; --accent-soft:#dcebe5; --pos:#c4302f; --neg:#256abf; --mid:#eef0ed;
+  --c0:#2a78d6; --c1:#eb6834; --c2:#1baf7a; --c3:#eda100; --c4:#e87ba4; --c5:#008300; --c6:#4a3aa7;
+  --f-display:"Unbounded","Golos Text",system-ui,sans-serif; --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1412; --surface:#161c19; --ink:#eef2ef; --ink2:#b9c3bd; --muted:#87918b; --line:#2a332e; --grid:#232b27;
+  --accent:#5cc3a5; --accent-soft:#1d332c; --pos:#e66767; --neg:#5598e7; --mid:#262d29;
+  --c0:#3987e5; --c1:#d95926; --c2:#199e70; --c3:#c98500; --c4:#d55181; --c5:#2f9b2f; --c6:#9085e9; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1412; --surface:#161c19; --ink:#eef2ef; --ink2:#b9c3bd; --muted:#87918b; --line:#2a332e; --grid:#232b27;
+  --accent:#5cc3a5; --accent-soft:#1d332c; --pos:#e66767; --neg:#5598e7; --mid:#262d29;
+  --c0:#3987e5; --c1:#d95926; --c2:#199e70; --c3:#c98500; --c4:#d55181; --c5:#2f9b2f; --c6:#9085e9; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1160px;margin:0 auto;padding-inline:20px;padding-block:0 64px}
+h1,h2,h3{text-wrap:balance;margin:0}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(30px,5.4vw,58px);line-height:1.04;letter-spacing:-.01em}
+h2{font-family:var(--f-display);font-weight:500;font-size:clamp(21px,2.6vw,28px);line-height:1.2}
+h3{font-size:16px;font-weight:600}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)} .ink2{color:var(--ink2)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+section{display:grid;gap:18px;padding-block:44px 8px;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+header.hero{display:grid;gap:18px;padding-block:44px 28px}
+.lead{font-size:clamp(16px,1.6vw,19px);color:var(--ink2);max-width:62ch}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:6px}
+.fact{display:grid;gap:0}
+.fact b{font-family:var(--f-display);font-weight:500;font-size:22px;font-variant-numeric:tabular-nums}
+.fact span{font-size:13px;color:var(--muted)}
+/* explorer */
+.explorer{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.explorer{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:8px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{font:inherit;font-size:13px;padding:6px 10px;border:0;background:transparent;color:var(--ink2);cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink);font-weight:500}
+button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.period{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink2);flex:1 1 260px}
+.period input{flex:1;accent-color:var(--accent)}
+.period output{font-family:var(--f-mono);min-width:96px;color:var(--ink)}
+#map{width:100%;height:auto;display:block;touch-action:manipulation}
+#map text{font-family:var(--f-body)}
+.node{cursor:pointer}
+.node circle{stroke:var(--surface);stroke-width:1.6}
+.node.dim{opacity:.18}
+.node.sel circle{stroke:var(--ink);stroke-width:2.4}
+.legend{display:flex;flex-wrap:wrap;gap:6px 8px;margin-top:10px}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;padding:4px 9px 4px 6px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink2);cursor:pointer;font-family:inherit}
+.chip i{width:16px;height:16px;border-radius:50%;display:inline-grid;place-items:center;font-style:normal;font-size:10px;font-weight:600;color:#fff;flex:none}
+.chip[aria-pressed="true"]{border-color:var(--ink2);color:var(--ink)}
+.note{font-size:12.5px;color:var(--muted);margin-top:8px}
+.card h3{font-size:19px;font-family:var(--f-display);font-weight:500}
+.card .meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--ink2);margin:6px 0 10px}
+.kv{display:grid;grid-template-columns:minmax(0,1fr) auto 80px;gap:3px 10px;font-size:13px;align-items:center}
+.kv .v{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.bar{position:relative;height:8px;background:var(--mid);border-radius:4px}
+.bar span{position:absolute;top:0;bottom:0;border-radius:4px}
+.bar::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--muted)}
+.spark{width:100%;height:64px;display:block;margin:6px 0 4px}
+.qstrip{display:flex;gap:3px;margin:4px 0 12px}
+.qstrip span{flex:1;height:14px;border-radius:3px}
+/* types */
+.types{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.type{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px;align-content:start}
+.type .hd{display:flex;gap:10px;align-items:flex-start}
+.type .num{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;font-size:13px;flex:none}
+.type .members{font-size:12.5px;color:var(--muted)}
+.dev{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:13px}
+.dev .z{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.z.up{color:var(--pos)} .z.down{color:var(--neg)}
+/* method */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;counter-reset:s;padding:0;margin:0;list-style:none}
+.steps li{counter-increment:s;display:grid;gap:6px;align-content:start;padding-top:12px;border-top:2px solid var(--ink)}
+.steps li::before{content:"шаг " counter(s);font-family:var(--f-mono);font-size:11.5px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+.steps li p{font-size:14px;color:var(--ink2)}
+.formula{font-family:var(--f-mono);font-size:13px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;white-space:nowrap}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{font-weight:500;color:var(--muted);font-size:12px}
+tbody tr:last-child td{border-bottom:0}
+tr.best td{font-weight:600}
+td.heat{font-family:var(--f-mono)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;align-items:start}
+.figure{display:grid;gap:8px}
+.figure svg{width:100%;height:auto;display:block}
+.cap{font-size:13px;color:var(--ink2)}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.check{border-left:3px solid var(--accent);padding:4px 0 4px 12px;display:grid;gap:4px}
+.check b{font-family:var(--f-display);font-weight:500;font-size:20px;font-variant-numeric:tabular-nums}
+.check span{font-size:13.5px;color:var(--ink2)}
+ul.plain{margin:0;padding-left:18px;display:grid;gap:6px;max-width:80ch}
+code{font-family:var(--f-mono);font-size:.92em;background:var(--accent-soft);padding:1px 5px;border-radius:4px}
+#tip{position:fixed;pointer-events:none;z-index:10;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:6px;max-width:260px;line-height:1.4;opacity:0;transition:opacity .08s}
+.links{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:18px;font-size:14px}.links a{color:var(--accent)}.links a.go{font-weight:600}
+footer{padding-block:28px 0;font-size:13px;color:var(--muted);border-top:1px solid var(--line);margin-top:40px;display:grid;gap:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">СберИндекс · онлайн-конкурс · номинация «Кластеризация» · авторы: Гилязетдинова Елена Рубиновна, Давлетова Лиана Фаритовна</div>
+  <h1>Семь экономик Башкортостана</h1>
+  <p class="lead">Мы сложили в одну сеть два кошелька каждого района: что покупают жители (безналичные траты СберИндекса) и на что и у кого покупает государство (153 218 контрактов 44-ФЗ из ЕИС). Спектральная кластеризация этой сети делит 63 муниципалитета на семь типов локальной экономики. Географию модели не давали, но типы всё равно легли на карту цельными областями.</p>
+  <div class="facts">
+    <div class="fact"><b>63</b><span>района и городских округа</span></div>
+    <div class="fact"><b>24 мес.</b><span>трат, 2023–2024</span></div>
+    <div class="fact"><b>153 218</b><span>контрактов 44-ФЗ</span></div>
+    <div class="fact"><b>5 слоёв</b><span>связей между МО</span></div>
+    <div class="fact"><b id="f-k">7</b><span>типов экономики</span></div>
+  </div>
+  <nav class="links">
+    <a class="go" href="https://elena30r.github.io/econtypes/dashboard.html">Интерактивный дашборд: карта, выводы по каждому району →</a>
+    <a href="https://elena30r.github.io/econtypes/report.pdf">Методологический отчёт (PDF)</a>
+    <a href="https://elena30r.github.io/econtypes/appendix.pdf">Приложение: карточки 63 МО (PDF)</a>
+    <a href="https://github.com/Elena30R/econtypes">Код на GitHub</a>
+  </nav>
+</header>
+
+<section id="explore" aria-labelledby="h-explore">
+  <h2 id="h-explore">Карта по дорогам</h2>
+  <p class="ink2">Точки расставлены многомерным шкалированием автодорожных расстояний СберИндекса: чем ближе точки, тем короче путь между центрами МО. Размер — население, цвет и номер — тип. Нажмите на район, чтобы увидеть его профиль; ползунок показывает, как менялся тип по кварталам.</p>
+  <div class="explorer">
+    <div class="panel">
+      <div class="controls">
+        <div class="seg" role="group" aria-label="Слой линий">
+          <button type="button" id="ly-net" aria-pressed="true">Связи сети</button>
+          <button type="button" id="ly-flow" aria-pressed="false">Потоки госзаказа</button>
+          <button type="button" id="ly-none" aria-pressed="false">Без линий</button>
+        </div>
+        <label class="period" for="q">Период <input id="q" type="range" min="0" max="8" step="1" value="8"><output id="qv">2023–2024</output></label>
+      </div>
+      <svg id="map" role="img" aria-label="Карта муниципалитетов Башкортостана по типам экономики"></svg>
+      <div class="legend" id="legend"></div>
+      <p class="note" id="layer-note">Линии — сильнейшие связи совмещённой сети; цветные соединяют МО одного типа.</p>
+    </div>
+    <div class="panel card" id="card" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="types" aria-labelledby="h-types">
+  <h2 id="h-types">Семь типов и чем они отличаются</h2>
+  <p class="ink2">Для каждого типа — пять признаков, по которым он сильнее всего отличается от среднего района. Число — отклонение в стандартных отклонениях (σ): красное выше среднего, синее ниже.</p>
+  <div class="types" id="type-cards"></div>
+</section>
+
+<section id="method" aria-labelledby="h-method">
+  <h2 id="h-method">Как построена сеть</h2>
+  <ol class="steps">
+    <li><h3>Узлы и атрибуты</h3><p>63 МО, у каждого 21 признак: уровень и структура трат, госзаказ на жителя, доли местных, уфимских и иногородних поставщиков, отраслевая структура по ОКПД2, демография, дотации, доступность рынков.</p></li>
+    <li><h3>Связка источников</h3><p>Контракт привязан к МО по первым четырём цифрам ИНН (код налоговой инспекции района). id СберИндекса сопоставлены с названиями по совпадению рядов трат.</p></li>
+    <li><h3>Пять слоёв рёбер</h3><p>Синхронность трат, лаговая корреляция, DTW, потоки госзаказа «поставщик → заказчик» и атрибутное сходство. Расстояние по дорогам в модель не входит, оно служит проверкой.</p></li>
+    <li><h3>Атрибутированная сеть</h3><p>Атрибуты и структура смешиваются с весом α = 0,5; каждый слой разрежен до 8 ближайших соседей.</p></li>
+    <li><h3>Выбор метода и k</h3><p>7 методов × k = 3…8, семь ICVI, каждый нормирован на случайную базовую линию из 40 перестановок.</p></li>
+    <li><h3>Динамика</h3><p>Сети по кварталам (окно 4 кв.), эволюционная спектральная кластеризация, выравнивание меток венгерским алгоритмом.</p></li>
+  </ol>
+  <div class="formula">W = α·S<sub>атриб</sub> + (1−α)·[0,35·S<sub>синхр</sub> + 0,10·S<sub>лаг</sub> + 0,15·S<sub>DTW</sub> + 0,40·S<sub>потоки</sub>],&nbsp;&nbsp; S<sub>потоки</sub>(i,j) ∝ F<sub>ij</sub>/√(out<sub>i</sub>·in<sub>j</sub>) + F<sub>ji</sub>/√(out<sub>j</sub>·in<sub>i</sub>)</div>
+</section>
+
+<section id="compare" aria-labelledby="h-compare">
+  <h2 id="h-compare">Сравнение методов</h2>
+  <p class="ink2">Сырые индексы зависят от числа кластеров: силуэт падает с ростом k, AVU растёт. Поэтому сравниваем z-оценки — насколько разбиение лучше случайного с теми же размерами кластеров. Атрибутированная сеть выигрывает у методов «только атрибуты» и «только сеть».</p>
+  <div class="two">
+    <div class="figure"><svg id="kchart" role="img" aria-label="Средний нормированный ICVI по числу кластеров"></svg><p class="cap">Средний z-ICVI по k. Пунктир — выбранное k.</p></div>
+    <div class="tbl"><table id="icvi"></table></div>
+  </div>
+  <h3>Влияние правила построения рёбер</h3>
+  <div class="tbl"><table id="edges"></table></div>
+  <p class="cap">Каждый слой кластеризован отдельно (спектральный метод, то же k). ARI — согласие с итоговым разбиением; MQ и AVI посчитаны на графе самого слоя. Ни один слой в одиночку не воспроизводит итог: синхронность трат и потоки госзаказа добавляют к атрибутам разную информацию.</p>
+</section>
+
+<section id="dynamics" aria-labelledby="h-dyn">
+  <h2 id="h-dyn">Как типы меняются во времени</h2>
+  <div class="two">
+    <div class="figure"><svg id="trans" role="img" aria-label="Матрица переходов между типами по кварталам"></svg><p class="cap">Переходы между типами от квартала к кварталу (сумма по 7 переходам). На диагонали — МО, сохранившие тип.</p></div>
+    <div style="display:grid;gap:12px">
+      <p class="ink2" id="dyn-text"></p>
+      <div class="tbl"><table id="beta"></table></div>
+      <p class="cap">Выбор β — веса истории. При β = 0,5 разбиения соседних кварталов согласованы заметно сильнее, а модулярность квартальной сети почти не падает.</p>
+    </div>
+  </div>
+</section>
+
+<section id="checks" aria-labelledby="h-checks">
+  <h2 id="h-checks">Почему этому можно доверять</h2>
+  <div class="checks" id="checks-box"></div>
+</section>
+
+<section id="data" aria-labelledby="h-data">
+  <h2 id="h-data">Данные и воспроизводимость</h2>
+  <ul class="plain">
+    <li><b>СберИндекс</b> (набор хакатона, CC BY-SA 4.0): безналичные траты по МО и категориям, автодорожные расстояния между МО, индекс доступности рынков.</li>
+    <li><b>ЕИС, реестр контрактов 44-ФЗ</b>: все контракты заказчиков Башкортостана за 2023–2024 гг. и за 2025 и январь–октябрь 2026 г. (для внешней проверки).</li>
+    <li><b>Росстат</b>: численность населения МО на 01.01.2024. <b>Башкортостанстат</b>: демография по районам, 2023. <b>Законы о бюджете РБ</b> 2023 и 2024: дотации на выравнивание.</li>
+    <li>Весь анализ запускается одной командой <code>./run_all.sh</code> (≈ 35 с); гиперпараметры — в <code>config/config.yaml</code>.</li>
+  </ul>
+  <p class="cap">Ограничения: префикс ИНН показывает место регистрации, а не работы организации; 24 месяца трат дают слабые лаговые связи; в выгрузке ЕИС пропущено около 2% страниц; у ЗАТО Межгорье нет данных СберИндекса (траты восстановлены по соседям).</p>
+</section>
+
+<section id="scale" aria-labelledby="h-scale">
+  <h2 id="h-scale">Типовая модель для любого региона</h2>
+  <p class="lead" style="max-width:80ch">Башкортостан — пример применения. Всё региональное собрано в одном разделе конфигурации: название субъекта, код в ИНН, региональный центр, особые МО. Остальной расчёт одинаков для любого региона, а основные данные федеральные.</p>
+  <ul class="plain">
+    <li><b>Данные есть по всей стране:</b> набор СберИндекса покрывает ≈2 100 муниципалитетов России, реестр контрактов ЕИС, БД ПМО Росстата и границы МО доступны для каждого субъекта. Региональная демография и законы о бюджете необязательны.</li>
+    <li><b>Настройка автоматическая:</b> привязка ИНН к МО выводится из названий заказчиков, число типов — по индексам качества, а типы без заданных названий получают имя по профилю («Тип 3: выше доля горожан, ниже рождаемость»).</li>
+    <li><b>Запуск — пять шагов:</b> скопировать конфиг по образцу <code>config/region_template.yaml</code>, выгрузить ЕИС и численность, затем <code>econtypes --config config/регион.yaml all</code>. Перенос проверяется автотестом на конфигурации Татарстана.</li>
+    <li><b>Масштаб:</b> данные нескольких регионов можно объединить и получить общую типологию МО — сеть и метрики устроены одинаково.</li>
+  </ul>
+</section>
+
+<footer><span>Авторы: Гилязетдинова Елена Рубиновна, Давлетова Лиана Фаритовна.</span><span>Данные: СберИндекс, ЕИС (zakupki.gov.ru), Росстат, Башкортостанстат, законы Республики Башкортостан.</span></footer>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const D = /*__DATA__*/null;
+const C = i => `var(--c${i})`;
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+const fmt = (v, d = 0) => v == null ? "—" : v.toLocaleString("ru-RU", { maximumFractionDigits: d, minimumFractionDigits: d });
+const nm = c => D.names[String(c)];
+const tip = $("#tip");
+function showTip(ev, html) { tip.innerHTML = html; tip.style.opacity = 1; const x = Math.min(ev.clientX + 14, innerWidth - 270); tip.style.left = x + "px"; tip.style.top = (ev.clientY + 14) + "px"; }
+function hideTip() { tip.style.opacity = 0; }
+function fmtFeat(k, v) { if (v == null) return "—"; const u = D.feats[k][1]; if (u === "%") return fmt(v * 100, 1) + " %"; if (u === "‰") return fmt(v, 1) + " ‰"; if (k === "market_access") return fmt(v, 0); if (k === "log_density") return fmt(Math.exp(v), 1) + " чел./км²"; return fmt(v, 0) + " " + u; }
+
+/* ---------- карта ---------- */
+const svg = $("#map");
+const xs = D.nodes.map(n => n.x), ys = D.nodes.map(n => n.y);
+const pad = 0.28, x0 = Math.min(...xs) - pad, x1 = Math.max(...xs) + pad, y0 = Math.min(...ys) - pad, y1 = Math.max(...ys) + pad;
+const W = 760, H = Math.round(W * (y1 - y0) / (x1 - x0));
+svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+const px = x => (x - x0) / (x1 - x0) * W, py = y => (y1 - y) / (y1 - y0) * H;
+const byMo = Object.fromEntries(D.nodes.map(n => [n.mo, n]));
+const maxPop = Math.max(...D.nodes.map(n => n.pop));
+const rad = n => 4.5 + 15 * Math.sqrt(n.pop / maxPop);
+const gLines = el("g", {}, svg), gNodes = el("g", {}, svg), gLab = el("g", { "pointer-events": "none" }, svg);
+const defs = el("defs", {}, svg);
+const mk = el("marker", { id: "arr", viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 5, markerHeight: 5, orient: "auto-start-reverse" }, defs);
+el("path", { d: "M0,0 L10,5 L0,10 z", fill: "var(--neg)" }, mk);
+
+let period = 8, layer = "net", selected = "МР Бурзянский", focusType = null;
+const label = n => n.s.replace("ский", "ск.").replace("цкий", "цк.");
+const nodeEls = {};
+D.nodes.forEach(n => {
+  const g = el("g", { class: "node", tabindex: 0, role: "button", "aria-label": n.mo }, gNodes);
+  el("circle", { cx: px(n.x), cy: py(n.y), r: rad(n) }, g);
+  el("text", { x: px(n.x), y: py(n.y) + 3.4, "text-anchor": "middle", "font-size": 9.5, "font-weight": 600, fill: "#fff", "pointer-events": "none" }, g);
+  const t = el("text", { x: px(n.x), y: py(n.y) + rad(n) + 10, "text-anchor": "middle", "font-size": 9.5, fill: "var(--ink2)" }, gLab);
+  t.textContent = label(n);
+  g.addEventListener("click", () => { selected = n.mo; render(); });
+  g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selected = n.mo; render(); } });
+  g.addEventListener("mousemove", e => showTip(e, `<b>${n.mo}</b><br>${typeOf(n) + 1}. ${nm(typeOf(n))}<br>население ${fmt(n.pop)}`));
+  g.addEventListener("mouseleave", hideTip);
+  nodeEls[n.mo] = g;
+});
+function typeOf(n) { return period === 8 ? n.c : n.q[period]; }
+
+function drawLines() {
+  gLines.replaceChildren();
+  if (layer === "net") {
+    D.edges.forEach(e => {
+      const a = byMo[e.s], b = byMo[e.t], same = typeOf(a) === typeOf(b);
+      el("line", { x1: px(a.x), y1: py(a.y), x2: px(b.x), y2: py(b.y), stroke: same ? C(typeOf(a)) : "var(--line)",
+        "stroke-opacity": same ? 0.5 : 0.9, "stroke-width": 0.6 + 2.2 * e.w }, gLines);
+    });
+  } else if (layer === "flow") {
+    const mx = Math.max(...D.flows.map(f => f.rub));
+    D.flows.slice(0, 60).forEach(f => {
+      const a = byMo[f.s], b = byMo[f.t];
+      const ax = px(a.x), ay = py(a.y), bx = px(b.x), by = py(b.y), dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy) || 1;
+      const ex = bx - dx / L * (rad(b) + 3), ey = by - dy / L * (rad(b) + 3);
+      const cx = (ax + ex) / 2 - dy * 0.15, cy = (ay + ey) / 2 + dx * 0.15;
+      const p = el("path", { d: `M${ax},${ay} Q${cx},${cy} ${ex},${ey}`, fill: "none", stroke: "var(--neg)", "stroke-opacity": 0.5,
+        "stroke-width": 0.6 + 4 * Math.sqrt(f.rub / mx), "marker-end": "url(#arr)" }, gLines);
+      p.addEventListener("mousemove", ev => showTip(ev, `${f.s} → ${f.t}<br><b>${fmt(f.rub / 1e6, 0)} млн ₽</b> контрактов за 2023–2024`));
+      p.addEventListener("mouseleave", hideTip);
+    });
+  }
+}
+
+function drawNodes() {
+  D.nodes.forEach(n => {
+    const g = nodeEls[n.mo], t = typeOf(n);
+    g.querySelector("circle").setAttribute("fill", C(t));
+    g.querySelector("text").textContent = t + 1;
+    g.classList.toggle("sel", n.mo === selected);
+    g.classList.toggle("dim", focusType !== null && t !== focusType);
+  });
+}
+
+function drawLegend() {
+  const L = $("#legend"); L.replaceChildren();
+  Object.keys(D.names).map(Number).sort((a, b) => a - b).forEach(c => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip"; b.setAttribute("aria-pressed", focusType === c);
+    b.innerHTML = `<i style="background:${C(c)}">${c + 1}</i>${nm(c)}`;
+    b.addEventListener("click", () => { focusType = focusType === c ? null : c; render(); });
+    L.appendChild(b);
+  });
+}
+
+function drawCard() {
+  const n = byMo[selected], t = typeOf(n);
+  const box = $("#card");
+  const zs = Object.keys(D.feats).map(k => { const v = n.f[k], m = D.mean[k]; return { k, v, m }; });
+  const sd = {}; Object.keys(D.feats).forEach(k => { const vals = D.nodes.map(x => x.f[k]).filter(v => v != null); const mu = vals.reduce((a, b) => a + b, 0) / vals.length; sd[k] = Math.sqrt(vals.reduce((a, b) => a + (b - mu) ** 2, 0) / (vals.length - 1)) || 1; });
+  const sp = n.sp.filter(v => v != null);
+  let spark = "";
+  if (sp.length > 2) {
+    const lo = Math.min(...sp), hi = Math.max(...sp), w = 300, h = 60;
+    const pts = n.sp.map((v, i) => v == null ? null : [i / (n.sp.length - 1) * w, h - 6 - (v - lo) / (hi - lo || 1) * (h - 14)]).filter(Boolean);
+    const d = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join("");
+    const last = pts[pts.length - 1];
+    spark = `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-label="Безналичные траты по месяцам">
+      <path d="${d} L${w},${h} L0,${h} Z" fill="${C(n.c)}" fill-opacity=".12" stroke="none"/>
+      <path d="${d}" fill="none" stroke="${C(n.c)}" stroke-width="2" vector-effect="non-scaling-stroke"/>
+      <circle cx="${last[0]}" cy="${last[1]}" r="3" fill="${C(n.c)}"/></svg>
+      <div class="note" style="margin:0">Безналичные траты на жителя: ${fmt(sp[0])} ₽ (янв. 2023) → ${fmt(sp[sp.length - 1])} ₽ (дек. 2024)</div>`;
+  } else spark = `<p class="note">Нет данных СберИндекса по тратам (значения восстановлены по соседям).</p>`;
+  const strip = n.q.map((c, i) => `<span title="${D.quarters[i]}: ${c + 1}. ${nm(c)}" style="background:${C(c)}"></span>`).join("");
+  const rows = zs.map(({ k, v, m }) => {
+    const z = v == null ? 0 : Math.max(-2.5, Math.min(2.5, (v - m) / sd[k]));
+    const left = z < 0 ? 50 + z / 2.5 * 50 : 50, width = Math.abs(z) / 2.5 * 50;
+    return `<span>${D.feats[k][0]}</span><span class="v">${fmtFeat(k, v)}</span><span class="bar" title="отклонение ${z.toFixed(1)} σ"><span style="left:${left}%;width:${width}%;background:${z >= 0 ? "var(--pos)" : "var(--neg)"}"></span></span>`;
+  }).join("");
+  box.innerHTML = `<div class="eyebrow">${n.kind === "ГО" ? "городской округ" : "муниципальный район"}</div>
+    <h3>${n.s}</h3>
+    <div class="meta"><span><b style="color:${C(t)}">●</b> ${t + 1}. ${nm(t)}</span><span>макро-тип: ${D.macro_names[String(n.macro)]}</span><span>население ${fmt(n.pop)}</span>
+      <span title="доля бутстреп-выборок, где МО остаётся с «своими»">устойчивость ${fmt(n.stab * 100)} %</span><span>смен типа: ${n.sw} из 7</span></div>
+    ${spark}
+    <div class="note" style="margin:10px 0 2px">Тип по кварталам, 2023 I → 2024 IV</div><div class="qstrip">${strip}</div>
+    <div class="kv">${rows}</div>
+    <p class="note">Полоса — отклонение от среднего по 63 МО (±2,5 σ). Признаки — средние за 2023–2024.</p>`;
+}
+
+function render() { drawLines(); drawNodes(); drawLegend(); drawCard(); }
+const lyBtns = { net: $("#ly-net"), flow: $("#ly-flow"), none: $("#ly-none") };
+const notes = { net: "Линии — сильнейшие связи совмещённой сети; цветные соединяют МО одного типа.", flow: "Стрелки — 60 крупнейших потоков госзаказа: поставщик из МО → заказчик в другом МО, 2023–2024. Наведите на стрелку, чтобы увидеть сумму.", none: "Только узлы: так лучше видно, что типы занимают цельные области." };
+Object.entries(lyBtns).forEach(([k, b]) => b.addEventListener("click", () => { layer = k; Object.entries(lyBtns).forEach(([kk, bb]) => bb.setAttribute("aria-pressed", kk === k)); $("#layer-note").textContent = notes[k]; render(); }));
+const qlab = i => i === 8 ? "2023–2024" : D.quarters[i].replace("Q", " · ") + " кв.";
+$("#q").addEventListener("input", e => { period = +e.target.value; $("#qv").textContent = qlab(period); render(); });
+
+/* ---------- типы ---------- */
+$("#type-cards").innerHTML = D.prof.map(p => `<article class="type">
+  <div class="hd"><span class="num" style="background:${C(p.c)}">${p.c + 1}</span><div><h3>${p.name}</h3><div class="members">${p.n} МО: ${p.members.map(m => m.replace("МР ", "").replace("ГО ", "г. ")).join(", ")}</div></div></div>
+  <div class="dev">${p.top.map(t => `<span>${D.feats[t.f][0]} <span class="muted">· ${fmtFeat(t.f, t.v)}</span></span><span class="z ${t.z > 0 ? "up" : "down"}">${t.z > 0 ? "+" : "−"}${Math.abs(t.z).toFixed(1)} σ</span>`).join("")}</div>
+</article>`).join("");
+
+/* ---------- сравнение методов ---------- */
+const ML = { spectral_fused: "Спектральная · атриб. сеть", louvain_fused: "Louvain · атриб. сеть", kmeans_attr: "k-means · атрибуты", ward_attr: "Ward · атрибуты", gmm_attr: "GMM · атрибуты", spectral_struct: "Спектральная · только сеть", louvain_struct: "Louvain · только сеть" };
+(function kchart() {
+  const s = $("#kchart"), w = 460, h = 260, l = 34, r = 12, t = 12, b = 28; s.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  const ks = [...new Set(D.icvi_k.map(d => d.k))], zs = D.icvi_k.map(d => d.z);
+  const lo = Math.floor(Math.min(...zs) / 2) * 2, hi = Math.ceil(Math.max(...zs) / 2) * 2;
+  const X = k => l + (k - ks[0]) / (ks[ks.length - 1] - ks[0]) * (w - l - r), Y = z => t + (hi - z) / (hi - lo) * (h - t - b);
+  for (let z = lo; z <= hi; z += 2) { el("line", { x1: l, x2: w - r, y1: Y(z), y2: Y(z), stroke: "var(--grid)" }, s); el("text", { x: l - 6, y: Y(z) + 3.5, "text-anchor": "end", "font-size": 10, fill: "var(--muted)" }, s).textContent = z; }
+  ks.forEach(k => el("text", { x: X(k), y: h - 9, "text-anchor": "middle", "font-size": 10, fill: "var(--muted)" }, s).textContent = "k=" + k);
+  el("line", { x1: X(D.k), x2: X(D.k), y1: t, y2: h - b, stroke: "var(--muted)", "stroke-dasharray": "3 3" }, s);
+  const order = ["spectral_fused", "louvain_fused", "kmeans_attr", "ward_attr", "gmm_attr", "louvain_struct", "spectral_struct"];
+  const col = { spectral_fused: "var(--accent)", louvain_fused: "var(--accent)" };
+  order.forEach(m => {
+    const pts = D.icvi_k.filter(d => d.method === m).sort((a, b) => a.k - b.k);
+    const fused = m.endsWith("fused"), struct = m.endsWith("struct");
+    el("path", { d: pts.map((p, i) => (i ? "L" : "M") + X(p.k) + "," + Y(p.z)).join(""), fill: "none", stroke: fused ? "var(--accent)" : "var(--muted)",
+      "stroke-width": m === "spectral_fused" ? 2.6 : 1.4, "stroke-dasharray": struct ? "4 3" : (m === "louvain_fused" ? "6 3" : "none"), "stroke-opacity": fused ? 1 : .7 }, s);
+    pts.forEach(p => { const c = el("circle", { cx: X(p.k), cy: Y(p.z), r: m === "spectral_fused" ? 4 : 2.6, fill: fused ? "var(--accent)" : "var(--muted)", stroke: "var(--surface)", "stroke-width": 1 }, s);
+      const hit = el("circle", { cx: X(p.k), cy: Y(p.z), r: 9, fill: "transparent" }, s);
+      hit.addEventListener("mousemove", e => showTip(e, `${ML[m]}<br>k = ${p.k}: z = ${p.z.toFixed(1)}`)); hit.addEventListener("mouseleave", hideTip); });
+    const last = pts[pts.length - 1];
+    if (m === "spectral_fused" || m === "kmeans_attr" || m === "spectral_struct") el("text", { x: X(last.k) - 4, y: Y(last.z) - 8, "text-anchor": "end", "font-size": 10, fill: fused ? "var(--accent)" : "var(--ink2)" }, s).textContent = ML[m];
+  });
+})();
+(function icviTable() {
+  const cols = ["z_SW", "z_CH", "z_DB", "z_S_Dbw", "z_MQ", "z_AVI", "z_AVU"];
+  const mx = Math.max(...D.icvi.flatMap(r => cols.map(c => r[c])));
+  const rows = [...D.icvi].sort((a, b) => b.z_mean - a.z_mean);
+  $("#icvi").innerHTML = `<thead><tr><th>Метод (k = ${D.k})</th>${cols.map(c => `<th>${c.slice(2)}</th>`).join("")}<th>ср.</th></tr></thead><tbody>` +
+    rows.map((r, i) => `<tr class="${i === 0 ? "best" : ""}"><td>${ML[r.method]}</td>${cols.map(c => `<td class="heat" style="background:color-mix(in srgb, var(--accent) ${Math.round(r[c] / mx * 38)}%, transparent)">${r[c].toFixed(0)}</td>`).join("")}<td class="mono">${r.z_mean.toFixed(1)}</td></tr>`).join("") + "</tbody>";
+})();
+(function edgesTable() {
+  const EL = { attr: "Косинус атрибутов", comovement: "Корреляция рядов трат", lead_lag: "Лаговая корреляция (1–3 мес.)", dtw: "DTW", procurement_flow: "Потоки госзаказа", distance: "Расстояние по дорогам (проверка)" };
+  $("#edges").innerHTML = `<thead><tr><th>Рёбра</th><th>ARI с итогом</th><th>MQ</th><th>AVI</th><th>SW</th></tr></thead><tbody>` +
+    D.edges_cmp.map(r => `<tr><td>${EL[r.edges]}</td><td class="mono">${r.ARI_vs_final.toFixed(2)}</td><td class="mono">${r.MQ.toFixed(2)}</td><td class="mono">${r.AVI.toFixed(2)}</td><td class="mono">${r.SW.toFixed(2)}</td></tr>`).join("") + "</tbody>";
+})();
+
+/* ---------- динамика ---------- */
+(function trans() {
+  const s = $("#trans"), n = Object.keys(D.names).length, cell = 34, l = 34, t = 30, w = l + n * cell + 6, h = t + n * cell + 6;
+  s.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  let mx = 0; for (const a in D.trans) for (const b in D.trans[a]) mx = Math.max(mx, D.trans[a][b]);
+  el("text", { x: l, y: 11, "font-size": 10, fill: "var(--muted)" }, s).textContent = "в квартале t+1 →";
+  for (let i = 0; i < n; i++) {
+    el("text", { x: l - 8, y: t + i * cell + cell / 2 + 4, "text-anchor": "end", "font-size": 11, fill: "var(--ink2)" }, s).textContent = i + 1;
+    el("text", { x: l + i * cell + cell / 2, y: t - 6, "text-anchor": "middle", "font-size": 11, fill: "var(--ink2)" }, s).textContent = i + 1;
+    for (let j = 0; j < n; j++) {
+      const v = (D.trans[i] || {})[j] || 0;
+      const r = el("rect", { x: l + j * cell + 1, y: t + i * cell + 1, width: cell - 2, height: cell - 2, rx: 3, fill: v ? C(i) : "var(--mid)", "fill-opacity": v ? 0.15 + 0.85 * v / mx : 1 }, s);
+      const tx = el("text", { x: l + j * cell + cell / 2, y: t + i * cell + cell / 2 + 4, "text-anchor": "middle", "font-size": 10.5, fill: v / mx > 0.55 ? "#fff" : "var(--ink)", "pointer-events": "none" }, s);
+      tx.textContent = v || "";
+      r.addEventListener("mousemove", e => showTip(e, `${i + 1}. ${nm(i)} → ${j + 1}. ${nm(j)}<br><b>${v}</b> переходов`)); r.addEventListener("mouseleave", hideTip);
+    }
+  }
+  const Y = D.dyn, mv = Y.movers;
+  const byDir = {}; mv.forEach(m => { const k = m.frm + ">" + m.to; (byDir[k] = byDir[k] || []).push(m.s); });
+  const moves = Object.entries(byDir).map(([k, list]) => { const [f, to] = k.split(">").map(Number); return `${list.join(", ")} — из «${nm(f)}» в «${nm(to)}»`; }).join("; ");
+  $("#dyn-text").innerHTML = `От квартала к кварталу МО сохраняют тип в <b>${fmt(Y.stay_share * 100)} %</b> случаев. Устойчивее всего «${nm(Y.most_stable[0])}» и «${nm(Y.most_stable[1])}». Чаще всего МО обмениваются между типами ${Y.pair[0] + 1} и ${Y.pair[1] + 1} (${Y.pair_n} переходов в обе стороны)` + (moves ? `. Устойчивый сдвиг 2023 → 2024: ${moves}.` : ".");
+})();
+(function betaTable() {
+  $("#beta").innerHTML = `<thead><tr><th>β</th><th>согласованность кварталов, ARI</th><th>модулярность снимка</th><th>ARI со статичным</th></tr></thead><tbody>` +
+    D.beta.map(r => `<tr class="${r.beta === 0.5 ? "best" : ""}"><td class="mono">${r.beta}</td><td class="mono">${r.temporal_ARI.toFixed(2)}</td><td class="mono">${r.snapshot_MQ.toFixed(3)}</td><td class="mono">${r.ARI_vs_static.toFixed(2)}</td></tr>`).join("") + "</tbody>";
+})();
+
+/* ---------- проверки ---------- */
+$("#checks-box").innerHTML = [
+  [`${fmt(D.spatial.within_km)} км`, `среднее дорожное расстояние внутри типа против ${fmt(D.spatial.random_mean_km)} км у случайного разбиения (p < 0,001). Географию модели не давали.`],
+  [`ARI ${D.boot.toFixed(2)}`, `устойчивость при бутстрепе: 200 раз выбрасываем 20% МО и кластеризуем заново.`],
+  [`${fmt(D.val.holdout["2025"].accuracy * 100)} % и ${fmt(D.val.holdout["2026"].accuracy * 100)} %`, `по одним закупкам 2025 и 2026 гг. (вне обучения) тип МО узнаётся ближайшим центроидом; случайно — ${fmt(D.val.chance_mean * 100)} % (p < 0,001).`],
+  [`k = ${D.k}`, `максимум нормированных ICVI для итогового метода; самый маленький тип — ${Math.min(...D.prof.map(p => p.n))} МО, одиночных кластеров нет.`],
+].map(([b, s]) => `<div class="check"><b>${b}</b><span>${s}</span></div>`).join("");
+
+render();
+</script>

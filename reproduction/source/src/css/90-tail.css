@@ -1,0 +1,25 @@
+/* ---------- печать и движение ---------- */
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+footer.foot{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 20px}
+
+/* ---------- адаптив: поля, сетки, малые экраны ---------- */
+.field{min-width:0;max-width:100%}
+.field select,.field input{min-width:0;max-width:100%}
+.cwork>*,.lagsec>*,.treewrap>*,.evid>*,.howgrid>*,.verdict>*,.themes>*,.tprof>*{min-width:0}
+.dotplot .trk,.tover .trk{margin:0 8px}
+@media (max-width:700px){
+  .filters .field,.mapbar .field,.cmpbar .field{width:100%}
+  .filters .field select,.filters .field input,.mapbar .field select,.mapbar .field input[type=search],.cmpbar .field select{flex:1 1 0;width:0}
+  .filters .count{margin-left:0}
+  .mapbar .right,.mapbar .grp{width:100%}
+  .mapbar .grp .field select{max-width:none!important}
+  .dotplot,.tover{grid-template-columns:1fr}
+  .dotplot .lab,.tover .lab{border-bottom:0;padding-bottom:0}
+  .dotplot .trk,.tover .trk{min-height:30px}
+  .phead h2{font-size:22px}
+  .verdict .lead{font-size:18px}
+  .slot{min-width:0;width:100%;max-width:none}
+  .sigbars{grid-template-columns:minmax(0,1fr) 110px 44px}
+  .pair{padding:14px}
+  .cmds .crow .copy{max-width:100%;overflow:auto}
+}

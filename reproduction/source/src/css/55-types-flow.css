@@ -1,0 +1,32 @@
+/* ====================================================================
+   5. Типы МО — переходы между типами по кварталам
+   ==================================================================== */
+.tflow .tf-stats{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;font-size:13px;color:var(--ink2);margin:0 0 10px}
+.tflow .tf-st b{color:var(--ink);font-weight:600}
+.tflow .tf-st .mono{font-size:12px}
+.tflow .tf-legend{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.tflow .tf-legend .chip{font-size:12.5px;min-height:28px}
+.tflow .tf-legend .chip .mono{color:var(--ink2);font-size:11.5px}
+.tflow .tf-legend .chip[aria-pressed=true]{box-shadow:inset 0 0 0 1.5px var(--pearl-edge);background:var(--surface-2)}
+.tflow .tf-box{padding:4px 6px 0;background:var(--surface)}
+#tfChart{height:460px;min-width:760px}
+.tflow .tf-pick{font-size:13.5px;line-height:1.7;color:var(--ink2);margin:10px 0 0;max-width:110ch}
+.tflow .tf-pick b{color:var(--ink)}
+.tflow .tf-pick .link{font-size:13.5px}
+.tflow .tf-q{display:inline-flex;gap:4px;align-items:center;white-space:nowrap;padding:1px 6px;border-radius:5px}
+.tflow .tf-q.chg{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line-strong)}
+.tflow .tf-q .mono{font-size:11.5px;color:var(--muted)}
+.tflow .tf-det{margin-top:12px}
+.tflow .tf-det>summary{display:inline-flex;gap:6px;align-items:center;cursor:pointer;font-size:13.5px;color:var(--ink2);list-style:none;min-height:28px}
+.tflow .tf-det>summary::-webkit-details-marker{display:none}
+.tflow .tf-tbox{max-height:420px;margin-top:8px}
+.tf-tab{border-collapse:collapse;width:100%;font-size:12.5px}
+.tf-tab th,.tf-tab td{padding:4px 8px;border-bottom:1px solid var(--line-soft);text-align:left;white-space:nowrap}
+.tf-tab thead th{position:sticky;top:0;background:var(--surface);z-index:1;font-weight:500;color:var(--ink2)}
+.tf-tab th[scope=row]{font-weight:400}
+.tf-tab td.c{text-align:center}
+.tf-tab td.c .sw{margin-right:4px}
+.tf-tab td.chg{background:var(--surface-2)}
+.tf-tab td.n{text-align:right}
+.tf-tab tr.on th,.tf-tab tr.on td{background:color-mix(in srgb,var(--pearl) 40%,transparent)}
+@media (max-width:640px){#tfChart{height:520px}}

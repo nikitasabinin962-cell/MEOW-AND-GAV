@@ -1,0 +1,280 @@
+{
+  "database": "econtypes_research_20261009.sqlite",
+  "integrity": "ok",
+  "table_counts": {
+    "dataset_metadata": 8,
+    "sources": 18,
+    "municipalities": 63,
+    "population": 252,
+    "baseline_feature_aggregates": 2016,
+    "baseline_monthly_spending": 1512,
+    "baseline_cluster_labels": 567,
+    "baseline_graph_edges": 2800,
+    "msp_snapshot_rows": 150234,
+    "msp_municipality_candidates": 150234,
+    "msp_supplier_index_snapshot": 157996,
+    "atmo_contract_observations": 1045,
+    "procurement_notice_exports": 10000,
+    "data_quality_checks": 6,
+    "processed_contracts": 359615
+  },
+  "population_controls": [
+    {
+      "year": 2022,
+      "municipalities": 63,
+      "sum_population": 4091621,
+      "pdf_region_control": 4091621
+    },
+    {
+      "year": 2023,
+      "municipalities": 63,
+      "sum_population": 4077600,
+      "pdf_region_control": 4077600
+    },
+    {
+      "year": 2024,
+      "municipalities": 63,
+      "sum_population": 4064361,
+      "pdf_region_control": 4064361
+    },
+    {
+      "year": 2025,
+      "municipalities": 63,
+      "sum_population": 4042377,
+      "pdf_region_control": 4042377
+    }
+  ],
+  "atmo": [
+    {
+      "law": "223-ФЗ",
+      "rows": 910,
+      "unique_api_record_ids": 908,
+      "total_price_kopecks": 14973114824,
+      "statuses": {
+        "contract:active": 910
+      },
+      "contract_date_min": "2025-01-16",
+      "contract_date_max": "2026-10-08",
+      "empty_normalized_contract_dates": 0,
+      "normalized_subject_differs_from_raw": 910,
+      "both_INNs_not_available": 910,
+      "negative_prices": 0
+    },
+    {
+      "law": "44-ФЗ",
+      "rows": 135,
+      "unique_api_record_ids": 135,
+      "total_price_kopecks": 360258441,
+      "statuses": {
+        "contract:active": 74,
+        "contract:fulfilled": 58,
+        "contract:terminated": 3
+      },
+      "contract_date_min": "2024-01-10",
+      "contract_date_max": "2024-12-11",
+      "empty_normalized_contract_dates": 135,
+      "normalized_subject_differs_from_raw": 135,
+      "both_INNs_not_available": 135,
+      "negative_prices": 0
+    }
+  ],
+  "msp": {
+    "rows": 150234,
+    "unique_inns": 150234,
+    "category_counts": {
+      "1": 145411,
+      "3": 413,
+      "2": 4410
+    },
+    "invalid_inn_checksum_rows": 0,
+    "missing_headcount_rows": 111477,
+    "address_statuses": {
+      "district_text_candidate": 60089,
+      "city_text_candidate": 90144,
+      "conflicting_address_strings": 1
+    }
+  },
+  "quality_checks": [
+    {
+      "check_name": "population_63_MO_all_years_sum_equals_region",
+      "status": "PASS",
+      "details": [
+        {
+          "year": 2022,
+          "municipalities": 63,
+          "sum_population": 4091621,
+          "pdf_region_control": 4091621
+        },
+        {
+          "year": 2023,
+          "municipalities": 63,
+          "sum_population": 4077600,
+          "pdf_region_control": 4077600
+        },
+        {
+          "year": 2024,
+          "municipalities": 63,
+          "sum_population": 4064361,
+          "pdf_region_control": 4064361
+        },
+        {
+          "year": 2025,
+          "municipalities": 63,
+          "sum_population": 4042377,
+          "pdf_region_control": 4042377
+        }
+      ]
+    },
+    {
+      "check_name": "msp_unique_INNs_reconcile_supplied_QA",
+      "status": "PASS",
+      "details": {
+        "csv_rows": 150234,
+        "unique_inns": 150234,
+        "supplied_QA_entity_rows": 150247,
+        "supplied_QA_unique_inns": 150234,
+        "note": "CSV exports 150234 unique rows; prior QA counts 150247 entity observations. Difference of 13 is retained as an upstream lineage discrepancy, not fabricated duplicate rows in this CSV.",
+        "category_counts": {
+          "1": 145411,
+          "3": 413,
+          "2": 4410
+        },
+        "invalid_inn_checksum_rows": 0,
+        "missing_headcount_rows": 111477,
+        "address_statuses": {
+          "district_text_candidate": 60089,
+          "city_text_candidate": 90144,
+          "conflicting_address_strings": 1
+        }
+      }
+    },
+    {
+      "check_name": "national_supplier_index_valid_identifiers",
+      "status": "PASS",
+      "details": {
+        "imported_rows": 157996,
+        "invalid_inns": 0
+      }
+    },
+    {
+      "check_name": "atmo_raw_fields_recovered_with_duplicates_exposed",
+      "status": "PASS",
+      "details": [
+        {
+          "law": "223-ФЗ",
+          "rows": 910,
+          "unique_api_record_ids": 908,
+          "total_price_kopecks": 14973114824,
+          "statuses": {
+            "contract:active": 910
+          },
+          "contract_date_min": "2025-01-16",
+          "contract_date_max": "2026-10-08",
+          "empty_normalized_contract_dates": 0,
+          "normalized_subject_differs_from_raw": 910,
+          "both_INNs_not_available": 910,
+          "negative_prices": 0
+        },
+        {
+          "law": "44-ФЗ",
+          "rows": 135,
+          "unique_api_record_ids": 135,
+          "total_price_kopecks": 360258441,
+          "statuses": {
+            "contract:active": 74,
+            "contract:fulfilled": 58,
+            "contract:terminated": 3
+          },
+          "contract_date_min": "2024-01-10",
+          "contract_date_max": "2024-12-11",
+          "empty_normalized_contract_dates": 135,
+          "normalized_subject_differs_from_raw": 135,
+          "both_INNs_not_available": 135,
+          "negative_prices": 0
+        }
+      ]
+    },
+    {
+      "check_name": "all_8_processed_contract_parts_and_MSP_join",
+      "status": "PASS",
+      "details": {
+        "imported_parts": 8,
+        "rows": 359615,
+        "law_counts": {
+          "44-ФЗ": 279459,
+          "223-ФЗ": 79994,
+          "": 162
+        },
+        "financial_status_counts": {
+          "known": 357126,
+          "identity_unconfirmed": 2297,
+          "currency_conflict": 192
+        },
+        "missing_supplier_inn": 82063,
+        "msp_join": {
+          "found_in_snapshot": 173892,
+          "not_found_in_snapshot": 103660,
+          "supplier_inn_unavailable": 82063
+        },
+        "upstream_report_quoted_total_rub": 1263174213398.89,
+        "note": "MSP join is status on 2026-09-10, NOT at contract signing. Amounts across currencies/statuses/identity conflicts must not be blindly summed."
+      }
+    },
+    {
+      "check_name": "trade_workbook_notice_grain_separate",
+      "status": "PASS",
+      "details": {
+        "rows": 10000,
+        "columns": [
+          "Название",
+          "Лот",
+          "Цена",
+          "Цена в ₽",
+          "Аванс",
+          "Дата публикации",
+          "Срок",
+          "Дата аукциона",
+          "Способ отбора",
+          "Номер торга",
+          "Ссылка",
+          "ЭТП",
+          "Тип",
+          "Обеспечение заявки",
+          "Обеспечение контракта",
+          "Валюта",
+          "Место исполнения",
+          "Категория",
+          "Ответственный",
+          "Информация по торгу",
+          "Информация по срокам",
+          "Заказчик",
+          "Регион",
+          "ИНН заказчика",
+          "КПП заказчика",
+          "Контактное лицо",
+          "Телефон заказчика",
+          "E-mail заказчика",
+          "Победитель",
+          "ИНН победителя",
+          "Контакты победителя",
+          "Итоговая цена",
+          "Снижение",
+          "Номер контракта",
+          "Предмет контракта",
+          "Ссылка на контракт",
+          "Комментарий",
+          "Гарантийное обязательство",
+          "Полное наименование заказчика",
+          "Ограничения"
+        ]
+      }
+    }
+  ],
+  "foreign_key_violations": [],
+  "msp_supplier_index_rows": 157996,
+  "msp_join_statuses": {
+    "found_in_snapshot": 173892,
+    "not_found_in_snapshot": 103660,
+    "supplier_inn_unavailable": 82063
+  }
+}

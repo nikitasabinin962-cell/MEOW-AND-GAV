@@ -1,0 +1,731 @@
+{
+ "file": "econtypes.html",
+ "at": "2026-10-08T13:58:48.587Z",
+ "contrast": {
+  "light/out": {
+   "checked": 910,
+   "fails": []
+  },
+  "light/map": {
+   "checked": 126,
+   "fails": []
+  },
+  "light/cmp": {
+   "checked": 769,
+   "fails": []
+  },
+  "light/corr": {
+   "checked": 536,
+   "fails": []
+  },
+  "light/types": {
+   "checked": 852,
+   "fails": []
+  },
+  "light/quality": {
+   "checked": 465,
+   "fails": []
+  },
+  "light/how": {
+   "checked": 283,
+   "fails": []
+  },
+  "dark/out": {
+   "checked": 910,
+   "fails": []
+  },
+  "dark/map": {
+   "checked": 126,
+   "fails": []
+  },
+  "dark/cmp": {
+   "checked": 769,
+   "fails": []
+  },
+  "dark/corr": {
+   "checked": 536,
+   "fails": []
+  },
+  "dark/types": {
+   "checked": 852,
+   "fails": []
+  },
+  "dark/quality": {
+   "checked": 465,
+   "fails": []
+  },
+  "dark/how": {
+   "checked": 283,
+   "fails": []
+  }
+ },
+ "focus": {
+  "out": {
+   "steps": 45,
+   "unique": 7,
+   "noIndicator": []
+  },
+  "map": {
+   "steps": 44,
+   "unique": 21,
+   "noIndicator": []
+  },
+  "cmp": {
+   "steps": 44,
+   "unique": 13,
+   "noIndicator": []
+  },
+  "corr": {
+   "steps": 44,
+   "unique": 13,
+   "noIndicator": []
+  },
+  "types": {
+   "steps": 45,
+   "unique": 10,
+   "noIndicator": []
+  },
+  "quality": {
+   "steps": 44,
+   "unique": 5,
+   "noIndicator": []
+  },
+  "how": {
+   "steps": 44,
+   "unique": 5,
+   "noIndicator": []
+  }
+ },
+ "targets": {
+  "out": [],
+  "map": [],
+  "cmp": [
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Локализация госза",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Локализация госзак",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Локализация госза",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Локализация госзаказа",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Локализация го",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Внешняя зависимос",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Внешняя зависимост",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Внешняя зависимос",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Внешняя зависимость с",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Внешняя зависи",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Конкурентность за",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Конкурентность зак",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Конкурентность за",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Конкурентность закупо",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Конкурентность",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Бюджетная зависим",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Бюджетная зависимо",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Бюджетная зависим",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Бюджетная зависимость",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Бюджетная зави",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Утечка спроса в о",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Утечка спроса в он",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Утечка спроса в о",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Утечка спроса в онлай",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Утечка спроса ",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Экономическая акт",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Экономическая акти",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Экономическая акт",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Экономическая активно",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Экономическая ",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Демографическая у",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Демографическая ус",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Демографическая у",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Демографическая устой",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Демографическа",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Индекс хаба снабж",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Индекс хаба снабже",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Индекс хаба снабж",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Индекс хаба снабжения",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Индекс хаба сн",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Охват поставок: 8",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Охват поставок: 71",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Охват поставок: 1",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Охват поставок: 74-й ",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Охват поставок",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Мостовой индекс: ",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Мостовой индекс: 5",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Мостовой индекс: ",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Мостовой индекс: 6-й ",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Мостовой индек",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Синхронность с ре",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Синхронность с рег",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Синхронность с ре",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Синхронность с регион",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Синхронность с",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Опережение: 54-й ",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Опережение: 54-й п",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Опережение: 54-й ",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Опережение: 54-й проц",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Опережение: 54",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Кумертау, Типичность: 25-й ",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "г. Салават, Типичность: 40-й п",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бакалинский, Типичность: 24-й ",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Бирский, Типичность: 6-й проце",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   },
+   {
+    "el": "button.cx-dot",
+    "t": "Благовещенский, Типичность: 32",
+    "w": 24,
+    "h": 12,
+    "inline": false,
+    "via": "",
+    "eq": true
+   }
+  ],
+  "corr": [],
+  "types": [],
+  "quality": [],
+  "how": []
+ },
+ "reflow320": {
+  "out": {
+   "hscroll": 0,
+   "overlaps": [],
+   "n": 0
+  },
+  "map": {
+   "hscroll": 0,
+   "overlaps": [],
+   "n": 0
+  },
+  "cmp": {
+   "hscroll": 0,
+   "overlaps": [],
+   "n": 0
+  },
+  "corr": {
+   "hscroll": 0,
+   "overlaps": [],
+   "n": 0
+  },
+  "types": {
+   "hscroll": 0,
+   "overlaps": [],
+   "n": 0
+  },
+  "quality": {
+   "hscroll": 0,
+   "overlaps": [],
+   "n": 0
+  },
+  "how": {
+   "hscroll": 0,
+   "overlaps": [],
+   "n": 0
+  }
+ }
+}

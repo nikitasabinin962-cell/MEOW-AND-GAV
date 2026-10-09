@@ -1,0 +1,15 @@
+{
+  "name": "econtypes-dashboard",
+  "private": true,
+  "version": "4.0.0",
+  "description": "Редизайн дашборда «Экономические типы муниципалитетов Башкортостана»",
+  "scripts": {
+    "build": "python3 build.py --check",
+    "test": "python3 build.py && node tests/qa-selftest.js && node tests/check.js econtypes.html",
+    "audit": "node tests/a11y-audit.js econtypes.html",
+    "shots": "node tests/shots.js econtypes.html"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
+}

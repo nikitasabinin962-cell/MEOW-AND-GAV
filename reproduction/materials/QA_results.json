@@ -1,0 +1,32 @@
+{
+  "contract_rows": 359615,
+  "supplier_inns_unique": 16337,
+  "supplier_inn_empty_rows": 82063,
+  "supplier_inn_invalid_rows": 0,
+  "enriched_contracts": 359615,
+  "contract_msp_status_counts": {
+    "Не найден в реестре МСП на 2026-09-10": 103660,
+    "Найден в реестре МСП на 2026-09-10": 173892,
+    "Нет корректного ИНН поставщика": 82063
+  },
+  "contract_enriched_parts": 8,
+  "status": "COMPLETE",
+  "recovered_after_output_error": true,
+  "files_xml_attempted": 7519,
+  "xml_documents_processed": 6767447,
+  "bashkortostan_entities": 150247,
+  "bashkortostan_unique_inns_in_database": 150234,
+  "bash_category_codes": {
+    "1": 145424,
+    "2": 4410,
+    "3": 413
+  },
+  "xml_errors_reported_in_original_log": 0,
+  "verification": "Сверено с журналом и сохраненными таблицами",
+  "notes": [
+    "XML повторно не читались; использована база SQLite.",
+    "Статус МСП установлен на 10.09.2026, не на дату контракта.",
+    "Текст адреса не является подтвержденным ОКТМО.",
+    "Отдельные внутренние счетчики старого запуска недоступны."
+  ]
+}

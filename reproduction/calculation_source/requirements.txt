@@ -1,0 +1,15 @@
+# установка пакета вместе с зависимостями:  pip install -e .
+pandas>=2.1
+numpy>=1.26
+pyarrow>=14
+scikit-learn>=1.4
+scipy>=1.11
+networkx>=3.2
+pyyaml>=6
+matplotlib>=3.8
+python-docx>=1.1
+sqlalchemy>=2.0
+shapely>=2.0
+pytest>=8
+# + системная утилита pdftotext (poppler-utils) для чтения PDF Башкортостанстата
+# PostgreSQL: pip install psycopg2-binary

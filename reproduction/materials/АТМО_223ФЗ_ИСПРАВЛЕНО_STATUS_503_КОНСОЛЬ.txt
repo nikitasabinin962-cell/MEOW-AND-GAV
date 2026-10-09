@@ -1,0 +1,467 @@
+/*
+ АТМО 223-ФЗ — исправленный сборщик для вкладки «Договор заключён», прямой API.
+ Работает на https://zakaz.bashkortostan.ru/notices/fl223/contract:active?filter=...
+ Вкладка остается неподвижной. Отдельная БД IndexedDB, файлы только с АТМО_223ФЗ_...
+ Сначала автоматически сверяет цену договора с видимыми карточками.
+ Не изменяет файлы/данные существующих парсеров 44-ФЗ. Ничего не перезаписывает.
+*/
+(() => {
+ 'use strict';
+ const ORIGIN='https://zakaz.bashkortostan.ru';
+ const API_HOST='api-zakaz.bashkortostan.ru';
+ const PREFIX='АТМО_223ФЗ_ДОГОВОР_ЗАКЛЮЧЕН_';
+ const DB='ATMO_API_223_CONTRACT_ACTIVE_V1';
+ const PART=1500, CONCURRENT=2, MAX_PAGES=150000, TIMEOUT=30000, RETRIES=2;
+ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+ const text=e=>(e?.textContent||'').replace(/\s+/g,' ').trim();
+ const clean=x=>x===null||x===undefined?'':String(x).trim();
+ const fail=s=>{throw new Error(s);};
+ const pad=n=>String(n).padStart(5,'0');
+ const stamp=()=>new Date().toISOString().replace(/\D/g,'').slice(0,14)+'_'+Math.random().toString(36).slice(2,7);
+ if(location.origin!==ORIGIN || location.pathname!=='/notices/fl223/contract:active'){
+   console.error('АТМО 223-ФЗ: откройте вкладку «Договор заключён», а не «Все»: https://zakaz.bashkortostan.ru/notices/fl223/contract:active');return;
+ }
+ if(!window.showDirectoryPicker){console.error('В Opera недоступен выбор папки через File System Access API.');return;}
+ if(document.getElementById('atmo-223-panel')){console.warn('Панель 223-ФЗ уже существует. Не вставляйте код второй раз.');return;}
+ let filter;
+ try{filter=JSON.parse(new URL(location.href).searchParams.get('filter')||'null');}catch{}
+ if(!filter || !/^\d{4}-\d{2}-\d{2}$/.test(filter.orderDateStart||'') ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(filter.orderDateFinish||'') ||
+    filter.orderDateStart>filter.orderDateFinish){
+   console.error('АТМО 223-ФЗ: сначала задайте период 01.01.2023–08.10.2026 и откройте «Договор заключён».');return;
+ }
+ const signature='223_CONTRACT_ACTIVE|'+filter.orderDateStart+'|'+filter.orderDateFinish;
+ const ORIGINAL=location.href;
+ const fields=[
+  'Источник','Закон','Статус_реестра','Номер_закупки','Дата_заключения_договора',
+  'Цена_договора_руб','Цена_договора_копейки','Сумма_закупки_руб',
+  'Заказчик','Поставщик','Предмет','Ссылка_на_закупку','Ссылка_на_договор',
+  'Электронные_подписи_проверены','API_страница','Позиция_на_странице','Дата_выгрузки'
+ ];
+ let db,folder,state,running=false,paused=false,message='Готово. Выберите папку и начните.', panel;
+ const el=(id)=>document.getElementById(id);
+ const kvOpen=()=>new Promise((resolve,reject)=>{
+  const q=indexedDB.open(DB,1);
+  q.onupgradeneeded=()=>q.result.createObjectStore('kv');
+  q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error);
+ });
+ const get=k=>new Promise((resolve,reject)=>{let q=db.transaction('kv','readonly').objectStore('kv').get(k);q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error);});
+ const put=(k,v)=>new Promise((resolve,reject)=>{let tx=db.transaction('kv','readwrite');tx.objectStore('kv').put(v,k);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);});
+ function money(value){
+  if(value===null||value===undefined||value==='')return null;
+  if(typeof value==='object')return null;
+  let s=clean(value).replace(/[\s\u00a0\u202f]/g,'').replace(/(?:руб(?:лей|ля|ль)?\.?|₽|RUB)$/i,'');
+  if(/^[-+]?\d{1,3}(?:,\d{3})+\.\d{1,2}$/.test(s))s=s.replace(/,/g,'');
+  if(/^[-+]?\d{1,3}(?:\.\d{3})+,\d{1,2}$/.test(s))s=s.replace(/\./g,'');
+  const m=s.match(/^([+-]?\d+)(?:[.,](\d{1,2}))?$/);
+  if(!m)return null;
+  const negative=m[1].startsWith('-');
+  const units=m[1].replace(/^[+-]/,'').replace(/^0+(?=\d)/,'');
+  const frac=(m[2]||'').padEnd(2,'0');
+  const kopeks=(BigInt(units)*100n+BigInt(frac)).toString();
+  return {rub:(negative?'-':'')+units+','+frac,kop:(negative?'-':'')+kopeks};
+ }
+ function flatten(v,prefix='',out={},d=0){
+  if(d>7){if(prefix)out[prefix]=JSON.stringify(v);return out;}
+  if(Array.isArray(v)){if(prefix)out[prefix]=JSON.stringify(v);return out;}
+  if(v&&typeof v==='object')for(const [k,x] of Object.entries(v))flatten(x,prefix?prefix+'.'+k:k,out,d+1);
+  else if(prefix)out[prefix]=v;
+  return out;
+ }
+ const keyValue=(flat,tests)=>{
+  for(const re of tests){const entry=Object.entries(flat).find(([k,v])=>re.test(k)&&v!==null&&v!==undefined&&v!=='');if(entry)return entry[1];}
+  return '';
+ };
+ const dateRe=/\b(?:20\d{2}-\d{2}-\d{2}|\d{2}\.\d{2}\.20\d{2})\b/;
+ function normDate(s){s=clean(s);let m=s.match(/(\d{4})-(\d{2})-(\d{2})/);if(m)return `${m[3]}.${m[2]}.${m[1]}`;
+  m=s.match(/(\d{2})\.(\d{2})\.(20\d{2})/);return m?`${m[1]}.${m[2]}.${m[3]}`:s;}
+ function uiExamples(doc=document){
+  return [...doc.querySelectorAll('.card.border-light')].map(c=>{
+   const a=c.querySelector('.card-header a[href^="/purchases/fl223/"]');
+   if(!a)return null;
+   const ps=[...c.querySelectorAll('p')];
+   const named=label=>{
+    const p=ps.find(x=>text(x).startsWith(label+':'));
+    return text(p?.querySelector('span.fw-600'));
+   };
+   const priceEl=[...c.querySelectorAll('.purchase_part-subheader span')].find(x=>text(x).startsWith('Сумма закупки:'));
+   return {
+     number:text(a).replace(/^№\s*/,'').trim(),
+     price:money(named('Цена договора')),
+     purchasePrice:money(text(priceEl?.querySelector('span.fw-600'))),
+     signed:normDate(named('Договор заключен')),
+     status:text(c.querySelector('.status-title')),
+     href:a.getAttribute('href')
+   };
+  }).filter(Boolean);
+ }
+ const view=uiExamples();
+ if(!view.length || !view.every(x=>/договор\s+заключ[её]н/i.test(x.status))){
+  console.error('АТМО: на экране должны быть карточки со статусом «Договор заключён». Дождитесь загрузки страницы.');return;
+ }
+ function stat(msg){
+  if(msg)message=msg;
+  el('atmo-223-status').textContent=[
+   message,
+   `Папка: ${folder?.name||'не выбрана'}`,
+   `ТОЛЬКО 223-ФЗ | Договор заключён | ${filter.orderDateStart} — ${filter.orderDateFinish}`,
+   `API-страница: ${state?.nextPage||1} / ${state?.totalPages??'определяется'} | потоков: ${CONCURRENT}`,
+   `В файлах: ${state?.saved||0} | в буфере: ${state?.buffer?.length||0} | частей: ${(state?.part||1)-1}`,
+   `Межстраничных повторов (не удаляются): ${state?.overlaps||0}`,
+   'Имена файлов: АТМО_223ФЗ_ДОГОВОР_ЗАКЛЮЧЕН_...'
+  ].join('\n');
+ }
+ // Фиксируем выбранный раздел напрямую: вкладка «Договор заключён» — не accepting.
+ // URL выведен из обнаруженного формата API, но первый ответ обязательно проверяем
+ // против номеров, цен и статуса видимых карточек, прежде чем сохранить данные.
+ function expectedAPI(){
+  const u=new URL('https://api-zakaz.bashkortostan.ru/api/front/v1/notices/fl223');
+  u.searchParams.set('orderDateStart',filter.orderDateStart);
+  u.searchParams.set('orderDateFinish',filter.orderDateFinish);
+  u.searchParams.set('page','1');
+  u.searchParams.set('status','contract:active');
+  return u.href;
+ }
+ function validTemplate(source){
+  try{
+   const u=new URL(source);
+   return u.hostname===API_HOST && u.pathname==='/api/front/v1/notices/fl223' &&
+    u.searchParams.get('orderDateStart')===filter.orderDateStart &&
+    u.searchParams.get('orderDateFinish')===filter.orderDateFinish &&
+    u.searchParams.get('status')==='contract:active';
+  }catch{return false;}
+ }
+ const pageKey=url=>{
+  const u=new URL(url);
+  const existing=[...u.searchParams.keys()].find(k=>/(?:^|\[)(?:page|pageNumber|page_number)(?:\]|$)/i.test(k));
+  return existing||'page';
+ };
+ function apiURL(n){
+  const url=new URL(state.template);
+  url.searchParams.set(state.pageKey,String(n));
+  return url.href;
+ }
+ async function fetchPage(n){
+  const url=apiURL(n);
+  for(let attempt=0;attempt<=RETRIES;attempt++){
+   const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),TIMEOUT);
+   let res;
+   try{
+    res=await fetch(url,{method:'GET',mode:'cors',credentials:'include',headers:{Accept:'application/json'},cache:'no-store',signal:ctl.signal});
+   }catch(e){
+    clearTimeout(tm);
+    if(attempt===RETRIES)fail(`API 223-ФЗ стр. ${n}: сетевая ошибка (${e.message}). Проверьте доступность сайта.`);
+    const wait=(attempt+1)*5000;
+    stat(`Сетевая ошибка API, ожидание ${wait/1000} с; повтор ${attempt+1}/${RETRIES}.`);
+    await sleep(wait);continue;
+   }
+   clearTimeout(tm);
+   if(res.ok){
+    try{return await res.json();}catch(e){fail('API вернул не JSON на странице '+n+': '+e.message);}
+   }
+   let detail='';
+   try{detail=(await res.text()).slice(0,350).replace(/[\r\n]/g,' ');}catch{}
+   if(res.status===400||res.status===401||res.status===403||res.status===404||res.status===422){
+    fail(`API HTTP ${res.status} (страница ${n}). Параметры status=contract:active и формат запроса требуют проверки в Network. ${detail}`);
+   }
+   if(![429,500,502,503,504].includes(res.status))
+    fail(`API HTTP ${res.status} (страница ${n}): ${detail}`);
+   if(attempt===RETRIES)
+    fail(`API HTTP ${res.status} (страница ${n}) после ${RETRIES+1} попыток. Сервер временно недоступен или ограничивает запросы. Данные и прогресс сохранены. ${detail}`);
+   const retryAfter=Number(res.headers.get('Retry-After'));
+   const wait=Number.isFinite(retryAfter)&&retryAfter>0?
+     Math.min(60000,retryAfter*1000):5000*(attempt+1);
+   stat(`API HTTP ${res.status}: ожидание ${wait/1000} с перед повтором ${attempt+1}/${RETRIES}.`);
+   await sleep(wait);
+  }
+ }
+ function arrayCandidates(root){
+  const found=[];
+  function visit(x,path=[],d=0){
+   if(Array.isArray(x)){
+    if((!x.length||x.every(z=>z&&typeof z==='object'&&!Array.isArray(z))) && path.length){
+     const label=path.join('.');
+     const score=(x.length?15:0)+(/data|items|notices|purchases|results|content|list/i.test(label)?8:0)+
+       (x.length===view.length?4:0)+ (x.some(z=>/ИЗ223-20\d{2}-\d+/i.test(JSON.stringify(z)))?25:0);
+     found.push({path,arr:x,score});
+    }
+    return;
+   }
+   if(!x||typeof x!=='object'||d>5)return;
+   for(const [k,v] of Object.entries(x))visit(v,[...path,k],d+1);
+  }
+  visit(root);return found.sort((a,b)=>b.score-a.score);
+ }
+ const at=(obj,path)=>path.reduce((v,k)=>v?.[k],obj);
+ function totalPages(root){
+  const results=[];
+  function walk(obj,d=0){
+   if(!obj||typeof obj!=='object'||Array.isArray(obj)||d>4)return;
+   for(const [k,v] of Object.entries(obj)){
+    if(/^(?:totalPages|pagesCount|pageCount|lastPage|total_pages|last_page|pages_total|lastPageNumber)$/i.test(k)
+       && /^\d+$/.test(String(v)))results.push(Number(v));
+    else if(v&&typeof v==='object')walk(v,d+1);
+   }
+  }
+  walk(root);
+  return results.length?results[0]:null;
+ }
+ const numberOf=raw=>{
+  const f=flatten(raw);
+  const from=keyValue(f,[/^(?:regNumber|registrationNumber|purchaseNumber|noticeNumber|number)$/i,/(?:^|\.)(?:regNumber|registrationNumber|purchaseNumber|noticeNumber)$/i]);
+  if(/ИЗ223-20\d{2}-\d{3,}/i.test(clean(from)))return clean(from).match(/ИЗ223-20\d{2}-\d{3,}/i)[0];
+  return JSON.stringify(raw).match(/ИЗ223-20\d{2}-\d{3,}/i)?.[0]||'';
+ };
+ function learnPath(items,expectedField){
+  const pairs=items.slice(0,Math.min(5,view.length)).map((item,i)=>({flat:flatten(item),expect:view[i][expectedField]?.kop}));
+  const good=pairs.filter(x=>x.expect!==undefined);
+  if(good.length<2)return null;
+  const keys=Object.keys(good[0].flat);
+  const ranked=[];
+  for(const k of keys){
+   const matching=good.filter(x=>money(x.flat[k])?.kop===x.expect).length;
+   if(matching<Math.min(2,good.length))continue;
+   const contract=/contract|agreement|deal|signed/i.test(k);
+   const purchase=/purchase|initial|start|maximum|base/i.test(k);
+   let bonus=expectedField==='price'?(contract?8:0)-(purchase?5:0):(purchase?8:0)-(contract?5:0);
+   ranked.push({k,score:matching*100+bonus});
+  }
+  return ranked.sort((a,b)=>b.score-a.score)[0]?.k||null;
+ }
+ function learnDatePath(items){
+  const target=view.slice(0,Math.min(4,items.length));
+  if(!target[0]?.signed)return null;
+  const keys=Object.keys(flatten(items[0]));
+  const ranked=[];
+  for(const k of keys){
+   const hits=target.filter((v,i)=>normDate(flatten(items[i])[k])===v.signed).length;
+   if(hits>=Math.min(2,target.length))ranked.push({k,score:hits*10+(/contract|signed|concluded|agreement/i.test(k)?3:0)});
+  }
+  return ranked.sort((a,b)=>b.score-a.score)[0]?.k||null;
+ }
+ function normalize(raw,n,i){
+  const flat=flatten(raw),number=numberOf(raw);
+  const c=money(state.contractPath?flat[state.contractPath]:null);
+  const buy=money(state.purchasePath?flat[state.purchasePath]:null);
+  const id=clean(keyValue(flat,[/^(?:purchaseId|noticeId|externalPurchaseId)$/i,/(?:^|\.)(?:purchaseId|noticeId)$/i,/^id$/i]));
+  const link=clean(keyValue(flat,[/^(?:purchaseUrl|noticeUrl|detailUrl|url|href|link)$/i,/(?:^|\.)(?:purchaseUrl|detailUrl|url|href)$/i]));
+  const purchaseLink=/^https?:\/\//i.test(link)?link:
+   link.startsWith('/purchases/fl223/')?ORIGIN+link:
+   /^\d+$/.test(id)?`${ORIGIN}/purchases/fl223/${id}/show`:'';
+  const name=clean(keyValue(flat,[/^(?:purchaseName|subject|description|title|name)$/i,/(?:^|\.)(?:purchaseName|subject|description|title)$/i]));
+  const buyer=clean(keyValue(flat,[/^(?:customerName|buyerName)$/i,/(?:^|\.)(?:customer|buyer|organization)\.(?:fullName|shortName|name)$/i,/(?:customer|buyer).*name/i]));
+  const supplier=clean(keyValue(flat,[/^(?:supplierName|providerName|winnerName)$/i,/(?:^|\.)(?:supplier|provider|winner|contractor)\.(?:fullName|shortName|name)$/i,/(?:supplier|provider|winner).*name/i]));
+  const data={
+   Источник:'АТМО',Закон:'223-ФЗ',Статус_реестра:'Договор заключён (фильтр АТМО)',
+   Номер_закупки:number,Дата_заключения_договора:state.signedPath?normDate(flat[state.signedPath]):'',
+   Цена_договора_руб:c?.rub||'',Цена_договора_копейки:c?.kop||'',
+   Сумма_закупки_руб:buy?.rub||'',Заказчик:buyer,Поставщик:supplier,Предмет:name,
+   Ссылка_на_закупку:purchaseLink,Ссылка_на_договор:purchaseLink?purchaseLink+'#atmo-contract':'',
+   Электронные_подписи_проверены:'НЕТ',API_страница:n,Позиция_на_странице:i+1,Дата_выгрузки:new Date().toISOString()
+  };
+  return {data,flat,raw};
+ }
+ const csvCell=v=>{
+  let s=clean(v);if(/^[=+@-]/.test(s))s="'"+s;
+  return '"'+s.replace(/"/g,'""')+'"';
+ };
+ function csv(records){
+  const rawKeys=[...new Set(records.flatMap(r=>Object.keys(r.flat)))].sort();
+  const head=[...fields,...rawKeys.map(k=>'API.'+k)];
+  const rows=[head,...records.map(r=>[...fields.map(k=>r.data[k]??''),...rawKeys.map(k=>r.flat[k]??'')])];
+  return '\uFEFF'+rows.map(row=>row.map(csvCell).join(';')).join('\r\n')+'\r\n';
+ }
+ async function saveIfNew(name,content){
+  let handle;
+  try{handle=await folder.getFileHandle(name);}catch(e){if(e.name!=='NotFoundError')throw e;}
+  if(handle){
+   if((await (await handle.getFile()).text())===content)return;
+   fail(`Файл ${name} уже существует с другим содержимым. Ничего не перезаписываю.`);
+  }
+  handle=await folder.getFileHandle(name,{create:true});
+  const stream=await handle.createWritable();
+  try{await stream.write(content);await stream.close();}catch(e){try{await stream.abort();}catch{}throw e;}
+ }
+ async function savePart(force=false){
+  if(!state?.buffer?.length || (!force && state.buffer.length<PART))return;
+  const r=state.buffer;
+  const base=`${PREFIX}${state.runId}_p${pad(r[0].data.API_страница)}-${pad(r[r.length-1].data.API_страница)}_часть_${pad(state.part)}`;
+  await saveIfNew(base+'.csv',csv(r));
+  await saveIfNew(base+'.json',JSON.stringify({section:'223-ФЗ',status:'Договор заключён',
+   filter,apiEndpoint:new URL(state.template).origin+new URL(state.template).pathname,
+   records:r.map(x=>({normalized:x.data,raw:x.raw}))},null,2));
+  state.saved+=r.length;state.part++;state.buffer=[];
+  await put(signature,state);stat('Сохранена пара файлов '+base+'.csv/.json');
+ }
+ function auditPage(items){
+  // Exact duplicates are not deleted, to avoid silently hiding source data.
+  const keys=items.map(x=>JSON.stringify(x));
+  const first=new Map(),repeats=[];
+  keys.forEach((k,i)=>{if(first.has(k))repeats.push([first.get(k)+1,i+1]);else first.set(k,i);});
+  return {keys,repeats};
+ }
+ async function run(){
+  if(running)return;
+  if(!folder){stat('Сначала выберите папку.');return;}
+  running=true;paused=false;el('atmo-223-start').disabled=true;el('atmo-223-pause').disabled=false;
+  try{
+   let perm=await folder.queryPermission({mode:'readwrite'});
+   if(perm!=='granted')perm=await folder.requestPermission({mode:'readwrite'});
+   if(perm!=='granted')fail('Нет доступа на запись в выбранную папку.');
+   const oldFolder=await get('folder');
+   state=await get(signature);
+   if(state&&oldFolder&&folder.isSameEntry&&!(await folder.isSameEntry(oldFolder)))fail('Прогресс 223-ФЗ относится к другой папке. Выберите прежнюю.');
+   if(!state){
+    state={runId:stamp(),template:null,pageKey:null,arrayPath:null,contractPath:null,purchasePath:null,signedPath:null,
+     nextPage:1,totalPages:null,buffer:[],saved:0,part:1,overlaps:0,lastKeys:[],lastSig:'',complete:false};
+    await put(signature,state);
+   }
+   if(state.complete){stat('Уже полностью выгружено. Повторно не запускаю.');return;}
+   // Исправляем сохранённый неверный status=accepting лишь пока не собрано данных.
+   if(!validTemplate(state.template)){
+    if(state.saved>0 || state.nextPage>1 || state.buffer?.length){
+     fail('В старом прогрессе другой статус API. Автоматически менять источник после сохранения записей небезопасно. Не удаляйте данные; пришлите показания панели.');
+    }
+    state.template=expectedAPI();state.pageKey='page';
+    await put(signature,state);
+    console.info('АТМО 223-ФЗ: источник зафиксирован:',new URL(state.template).pathname,
+      'status =',new URL(state.template).searchParams.get('status'));
+   }
+   // Если статус уже правильный, принудительно нормализуем ключ страницы.
+   state.pageKey='page';
+   if(state.buffer.length>=PART)await savePart(true);
+   if(state.nextPage>1 && state.lastKeys?.length){
+    stat('Проверяю контрольную страницу '+(state.nextPage-1)+' перед продолжением…');
+    const prev=await fetchPage(state.nextPage-1);
+    const prevItems=at(prev,state.arrayPath);
+    if(!Array.isArray(prevItems)||JSON.stringify(prevItems.map(x=>JSON.stringify(x)))!==JSON.stringify(state.lastKeys))
+      fail('Последняя выгруженная страница изменилась. Автоматическое продолжение остановлено во избежание пропусков.');
+   }
+   while(!paused && state.nextPage<=MAX_PAGES){
+    const page=state.nextPage;
+    const end=state.totalPages?Math.min(state.totalPages,page+CONCURRENT-1):page;
+    const pages=Array.from({length:end-page+1},(_,i)=>page+i);
+    const answers=await Promise.all(pages.map(fetchPage));
+    let finished=false;
+    for(let j=0;j<answers.length;j++){
+     const n=pages[j],answer=answers[j];
+     if(!state.arrayPath){
+      const opts=arrayCandidates(answer);
+      if(!opts.length){await saveIfNew(`${PREFIX}${state.runId}_ПРОВЕРИТЬ_ОТВЕТ.json`,JSON.stringify(answer,null,2));fail('API не содержит распознанных записей. Диагностика сохранена.');}
+      state.arrayPath=opts[0].path;
+      console.info('АТМО 223-ФЗ: путь записей в API',state.arrayPath.join('.'));
+     }
+     const items=at(answer,state.arrayPath);
+     if(!Array.isArray(items)){
+      await saveIfNew(`${PREFIX}${state.runId}_ОШИБКА_СТРУКТУРЫ_p${pad(n)}.json`,JSON.stringify(answer,null,2));
+      fail('На странице '+n+' поменялся формат API. Ответ сохранён для диагностики.');
+     }
+     if(state.totalPages===null){
+      const total=totalPages(answer);
+      const displayed=Number(document.querySelector('ul.pagination button[aria-checked="true"]')?.getAttribute('aria-setsize'));
+      state.totalPages=total||((Number.isInteger(displayed)&&displayed>0)?displayed:null);
+      if(!state.totalPages)fail('Не удалось определить количество страниц 223-ФЗ. Остановка без потери данных.');
+      if(state.totalPages>MAX_PAGES)fail('Слишком много страниц для текущих защитных настроек.');
+     }
+     if(!items.length){
+      if(n<state.totalPages)fail(`Неожиданная пустая страница ${n} из ${state.totalPages}. Данные не пропускаются.`);
+      finished=true;break;
+     }
+     if(!state.contractPath){
+      // Strict initial audit versus visible first 223-FZ cards.
+      const sample=items.slice(0,Math.min(3,view.length));
+      const apiNumbers=sample.map(numberOf);
+      const uiNumbers=view.slice(0,sample.length).map(x=>x.number);
+      if(apiNumbers.some((x,i)=>x!==uiNumbers[i])){
+       await saveIfNew(`${PREFIX}${state.runId}_ПРОВЕРИТЬ_API_ПЕРВАЯ_СТРАНИЦА.json`,
+          JSON.stringify({expectedFromPage:view.slice(0,5),apiFirstPage:answer},null,2));
+       fail('Порядок или номера в API не совпали с вкладкой «Договор заключён». Ответ сохранён для проверки.');
+      }
+      state.contractPath=learnPath(items,'price');
+      state.purchasePath=learnPath(items,'purchasePrice');
+      state.signedPath=learnDatePath(items);
+      if(!state.contractPath){
+       await saveIfNew(`${PREFIX}${state.runId}_НЕ_НАЙДЕНА_ЦЕНА_ДОГОВОРА.json`,
+         JSON.stringify({expectedFromPage:view.slice(0,5),apiFirstPage:answer},null,2));
+       fail('Не найдено поле цены ДОГОВОРА. Сохранена диагностика, чтобы не перепутать с суммой закупки.');
+      }
+      console.info('АТМО 223-ФЗ: поля проверены',{
+       договор:state.contractPath,сумма_закупки:state.purchasePath||'не распознана',дата_договора:state.signedPath||'не распознана'});
+      console.table(sample.map((x,i)=>({
+       номер:numberOf(x),цена_договора:money(flatten(x)[state.contractPath])?.rub,
+       контроль_на_сайте:view[i]?.price?.rub
+      })));
+     }
+     const audit=auditPage(items),signatureOfPage=JSON.stringify(audit.keys);
+     if(signatureOfPage===state.lastSig)fail(`API повторил предыдущую страницу целиком: ${n}. Остановлено.`);
+     if(audit.repeats.length){
+      await saveIfNew(`${PREFIX}${state.runId}_АУДИТ_ПОВТОРОВ_p${pad(n)}.json`,
+       JSON.stringify({page:n,repeatedRows:audit.repeats,raw:items},null,2));
+     }
+     const prev=new Set(state.lastKeys||[]);
+     state.overlaps+=audit.keys.filter(x=>prev.has(x)).length;
+     const parsed=items.map((raw,i)=>normalize(raw,n,i));
+     if(parsed.some(r=>!r.data.Номер_закупки))fail(`Страница ${n}: у одной из записей не определился номер. Выгрузка остановлена.`);
+     if(parsed.some(r=>!r.data.Цена_договора_руб)){
+      await saveIfNew(`${PREFIX}${state.runId}_НЕТ_ЦЕНЫ_ДОГОВОРА_p${pad(n)}.json`,JSON.stringify({page:n,raw:items},null,2));
+      fail(`Страница ${n}: у одной из записей отсутствует распознанная цена договора. Сохранён образец.`);
+     }
+     state.buffer.push(...parsed); // preserve server-provided records, dedupe during final merge
+     state.nextPage=n+1;state.lastKeys=audit.keys;state.lastSig=signatureOfPage;
+     await put(signature,state);
+     if(state.buffer.length>=PART)await savePart(true);
+     stat(`223-ФЗ: API страница ${n}/${state.totalPages}, получено ${items.length} договоров.`);
+     if(n>=state.totalPages){finished=true;break;}
+    }
+    if(finished)break;
+    if(!paused)await sleep(220);
+   }
+   await savePart(true);
+   if(paused)stat('ПАУЗА. Все накопленные записи сохранены, можно продолжить позднее.');
+   else if(state.nextPage>state.totalPages){
+    state.complete=true;await put(signature,state);
+    await saveIfNew(`${PREFIX}${state.runId}_ИТОГ.json`,JSON.stringify({
+     filter,source:'АТМО 223-ФЗ / Договор заключён',pageCount:state.totalPages,saved:state.saved,
+     overlaps:state.overlaps,files:state.part-1,signaturesVerified:false,
+     explanation:'Статус заключён по карточкам АТМО; криптографическая проверка подписей не проводилась.'
+    },null,2));
+    stat('ГОТОВО. Все страницы 223-ФЗ пройдены, файлы сохранены отдельно.');
+   }
+  }catch(e){
+   console.error('АТМО 223-ФЗ — остановка:',e);
+   try{await savePart(true);}catch(saveError){console.error('Не удалось записать буфер, он сохранён в IndexedDB:',saveError);}
+   stat('ОСТАНОВКА: '+e.message);
+  }finally{running=false;el('atmo-223-start').disabled=false;el('atmo-223-pause').disabled=true;}
+ }
+ panel=document.createElement('section');panel.id='atmo-223-panel';
+ Object.assign(panel.style,{position:'fixed',top:'10px',right:'10px',zIndex:'2147483647',width:'390px',padding:'13px',
+  background:'#fff',color:'#1a3947',border:'2px solid #2772a3',borderRadius:'9px',
+  boxShadow:'0 6px 22px #0004',font:'13px/1.45 Arial,sans-serif'});
+ panel.innerHTML=`<b style="font-size:16px">АТМО • 223-ФЗ • ДОГОВОР ЗАКЛЮЧЁН</b>
+ <p style="margin:5px 0">Прямой API без перелистывания. Только status=contract:active, без смешивания с 44-ФЗ.
+ CSV + исходный JSON. Отдельное сохранение.</p>
+ <pre id="atmo-223-status" style="max-height:250px;white-space:pre-wrap;overflow:auto;font:12px/1.5 Arial"></pre>
+ <button id="atmo-223-folder" style="padding:7px;margin:3px">1. Выбрать папку</button>
+ <button id="atmo-223-start" style="padding:7px;margin:3px">2. Начать / продолжить</button>
+ <button id="atmo-223-pause" style="padding:7px;margin:3px" disabled>Пауза</button>
+ <p style="font-size:11px;margin-bottom:0">Файлы только АТМО_223ФЗ_...; никакие файлы 44-ФЗ не меняются.</p>`;
+ document.body.append(panel);
+ el('atmo-223-folder').onclick=async()=>{
+  if(running){stat('Сначала остановите сбор кнопкой «Пауза».');return;}
+  try{
+   const selected=await showDirectoryPicker({id:'atmo-folder-223-only',mode:'readwrite'});
+   if(!db)db=await kvOpen();
+   const prior=await get('folder');
+   if(await get(signature) && prior && selected.isSameEntry && !(await selected.isSameEntry(prior)))
+    fail('Выберите папку, в которой начат этот сбор 223-ФЗ.');
+   folder=selected;await put('folder',folder);stat('Выбрана папка '+folder.name);
+  }catch(e){stat('Не удалось выбрать папку: '+e.message);}
+ };
+ el('atmo-223-start').onclick=async()=>{if(!db)db=await kvOpen();await run();};
+ el('atmo-223-pause').onclick=()=>{paused=true;stat('Дожидаюсь запросов и сохраняю буфер…');};
+ window.ATMO_223={pause(){paused=true;},get running(){return running;},get progress(){return state&&{nextPage:state.nextPage,totalPages:state.totalPages,saved:state.saved,buffer:state.buffer.length,complete:state.complete}}};
+ (async()=>{
+  try{db=await kvOpen();folder=await get('folder');}catch(e){console.warn('АТМО 223-ФЗ: сохранённая папка не восстановлена:',e);}
+  stat('Готово. Выберите папку и нажмите «Начать / продолжить».');
+ })();
+})();

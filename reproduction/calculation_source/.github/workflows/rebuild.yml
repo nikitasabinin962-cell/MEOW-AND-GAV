@@ -1,0 +1,39 @@
+# Пересчёт при изменении данных или настроек: новые файлы в data/raw или правка config.yaml →
+# полный прогон econtypes all → обновлённые таблицы/выводы коммитятся, дашборд публикуется на GitHub Pages.
+name: rebuild
+# Запуск вручную: вкладка Actions → rebuild → Run workflow (перед этим Settings → Pages → Source: GitHub Actions).
+# Чтобы пересчёт шёл автоматически при каждом изменении данных, добавьте:
+#   push: { paths: ["data/raw/**", "config/**"] }
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: sudo apt-get install -y poppler-utils
+      - run: pip install -e .
+      - run: econtypes all
+      - name: Commit results
+        run: |
+          git config user.name "econtypes-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs docs
+          git commit -m "Пересчёт результатов" || echo "без изменений"
+          git push
+      - run: bash scripts/update_site.sh && mkdir -p site && cp docs/index.html docs/dashboard.html docs/*.pdf site/
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: site }
+  deploy:
+    needs: rebuild
+    runs-on: ubuntu-latest
+    environment: { name: github-pages, url: "${{ steps.d.outputs.page_url }}" }
+    steps:
+      - id: d
+        uses: actions/deploy-pages@v4

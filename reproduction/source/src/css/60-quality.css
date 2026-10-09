@@ -1,0 +1,209 @@
+/* ====================================================================
+   6. КАЧЕСТВО МОДЕЛИ (V4): выровненные dot/interval-графики с осями
+   Все классы вкладки — с префиксом ql-, цвета — только из токенов.
+   ==================================================================== */
+
+/* ---------- А. что проверяется ---------- */
+.ql-checks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 22px;counter-reset:c}
+.ql-checks li{counter-increment:c;border-top:1px solid var(--line);padding:14px 0;display:flex;flex-direction:column;gap:6px}
+.ql-checks li::before{content:counter(c);font:500 12px var(--f-mono);color:var(--muted)}
+.ql-checks a{font-weight:600;font-size:14.5px;color:var(--ink);text-decoration:none;align-self:flex-start;border-radius:3px;display:inline-flex;align-items:center;min-height:24px}
+.ql-checks a:hover{color:var(--accent)}
+.ql-checks span{font-size:13px;color:var(--ink2)}
+@media (max-width:1100px){.ql-checks{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.ql-checks{grid-template-columns:1fr}}
+#qual .sec[tabindex]:focus{outline:none}
+#qual .sec[tabindex]:focus-visible,#qual .ql-card[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:6px;border-radius:4px}
+#qual .ql-card[tabindex]:focus{outline:none}
+
+/* ---------- поверхности, инструменты, легенды ---------- */
+.ql-panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-float);padding:14px 20px 12px}
+.ql-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px}
+.ql-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-float);padding:16px 20px 14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.ql-card h4{font-size:15px;line-height:1.3}
+.ql-what{font-size:13px;color:var(--ink2);line-height:1.5}
+.ql-hint{font-size:12.5px;color:var(--muted);line-height:1.5}
+@media (max-width:700px){.ql-panel,.ql-card{padding:12px 12px 10px}}
+.ql-tools{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:0 0 12px}
+.ql-tl{font-size:13px;color:var(--ink2)}
+.ql-legend{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:12.5px;color:var(--ink2);margin:0 0 14px}
+.ql-legend.in{margin:0 0 10px}
+.ql-legend span{display:inline-flex;align-items:center;gap:7px}
+.ql-lg{display:inline-block;position:relative;flex:none}
+.ql-lg.dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.ql-lg.dot2{width:10px;height:10px;border-radius:50%;background:var(--ink2)}
+.ql-lg.base{width:8px;height:8px;margin:0 1px;transform:rotate(45deg);border:1.5px solid var(--ink2);background:var(--surface)}
+.ql-lg.gain{width:22px;height:4px;border-radius:2px;background:color-mix(in srgb,var(--accent) 40%,transparent)}
+.ql-lg.ref{width:10px;height:10px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--accent)}
+.ql-lg.stem{width:26px;height:10px;background:linear-gradient(color-mix(in srgb,var(--accent) 55%,transparent),color-mix(in srgb,var(--accent) 55%,transparent)) left center/100% 2px no-repeat}
+.ql-lg.stem::after{content:"";position:absolute;right:0;top:0;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.ql-lg.wh{width:30px;height:12px;border-left:1.5px solid var(--ink2);border-right:1.5px solid var(--ink2)}
+.ql-lg.wh::before{content:"";position:absolute;left:0;right:0;top:50%;margin-top:-.75px;border-top:1.5px solid var(--ink2)}
+.ql-lg.wh::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px var(--surface)}
+.ql-lg.zero{width:10px;height:10px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--ink2)}
+.ql-lg.cx{width:8px;height:8px;border-radius:50%;border:1.3px solid var(--muted)}
+.ql-lg.mean{width:2px;height:12px;margin:0 3px;border-radius:1px;background:var(--ink2)}
+.ql-lg.dia{width:8px;height:8px;margin:0 1px;transform:rotate(45deg);background:var(--accent)}
+.ql-lg.conn{width:22px;height:2px;background:var(--line-strong)}
+.ql-sub{font-size:15px;margin:22px 0 10px}
+.ql-cap{font-size:13px;color:var(--ink2);margin-top:12px;max-width:112ch;line-height:1.5}
+.ql-cap b{font-weight:600;color:var(--ink)}
+
+/* ---------- общий механизм строк: колонка названий + дорожки с осями ---------- */
+.ql-d{container-type:inline-size;position:relative;min-width:0}
+.ql-r{display:grid;column-gap:24px;align-items:stretch;position:relative;min-width:0}
+.ql-n{grid-area:n;align-self:center;padding:6px 0;font-size:13.5px;line-height:1.3;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+.ql-n b{font-weight:600}
+.ql-n small{display:block;font-size:12px;color:var(--muted);line-height:1.35;margin-top:2px}
+.ql-c1{grid-area:t1;min-width:0}
+.ql-c2{grid-area:t2;min-width:0}
+.ql-g1{grid-area:g1}.ql-g2{grid-area:g2}
+.ql-y1{grid-area:y1}.ql-y2{grid-area:y2}
+.ql-tag{display:none;align-self:center;font-size:11.5px;color:var(--muted);line-height:1.2}
+.ql-b>.ql-r:hover{background:color-mix(in srgb,var(--surface-2) 70%,transparent)}
+.ql-b>.ql-r{border-radius:3px}
+
+/* дорожка: сетка делений, направляющая строки, метки */
+.ql-tr{position:relative;min-height:34px}
+.ql-tr::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dotted var(--line)}
+.ql-g{position:absolute;inset:0;pointer-events:none}
+.ql-b{position:relative}
+.ql-bgg{position:absolute;top:0;bottom:0;left:0;pointer-events:none;z-index:1}
+/* во время перестановки строки получают transform (свой контекст наложения) — сетка уходит под них,
+   чтобы линии не перечёркивали подписи и точки в промежуточных кадрах */
+.ql-b.ql-mv>.ql-bgg{z-index:0}
+.ql-g i{position:absolute;top:0;bottom:0;width:0;border-left:1px solid var(--line-soft)}
+.ql-g i.z{border-left-color:var(--muted)}
+.ql-dot{position:absolute;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px var(--surface);z-index:2}
+.ql-dot.zero{background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--ink2),0 0 0 2px var(--surface)}
+.ql-dot.ref{background:var(--surface);box-shadow:inset 0 0 0 2px var(--accent),0 0 0 2px var(--surface)}
+.ql-dot.y0{background:var(--ink2)}
+.ql-dot.main{width:11px;height:11px;margin:-5.5px 0 0 -5.5px;z-index:3}
+.ql-stem{position:absolute;top:50%;height:2px;margin-top:-1px;border-radius:1px;background:color-mix(in srgb,var(--accent) 55%,transparent);transform-origin:left center;z-index:1}
+.ql-wh{position:absolute;top:50%;height:12px;margin-top:-6px;border-left:1.5px solid var(--ink2);border-right:1.5px solid var(--ink2);transform-origin:center;z-index:1}
+.ql-wh::before{content:"";position:absolute;left:0;right:0;top:50%;margin-top:-.75px;border-top:1.5px solid var(--ink2)}
+.ql-gain{position:absolute;top:50%;height:4px;margin-top:-2px;border-radius:2px;background:color-mix(in srgb,var(--accent) 38%,transparent);transform-origin:left center;z-index:1}
+.ql-base{position:absolute;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;transform:rotate(45deg);background:var(--surface);border:1.5px solid var(--ink2);z-index:2}
+.ql-bl{position:absolute;top:4px;bottom:4px;width:0;border-left:1px dashed var(--muted);z-index:0}
+.ql-dia{position:absolute;top:50%;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;transform:rotate(45deg);background:var(--accent);box-shadow:0 0 0 2px var(--surface);z-index:2}
+.ql-conn{position:absolute;top:50%;height:2px;margin-top:-1px;background:var(--line-strong);z-index:1}
+.ql-cx{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;cursor:pointer;z-index:1}
+.ql-cx::after{content:"";position:absolute;inset:3.5px;border-radius:50%;border:1.3px solid var(--muted);background:var(--surface)}
+.ql-cx.mean::after{inset:1px 6px;border:0;border-radius:1px;background:var(--ink2)}
+.ql-cx:hover::after{border-color:var(--ink)}
+.ql-cx.on{visibility:hidden}
+.ql-v{position:absolute;top:50%;transform:translate(9px,-50%);font:12.5px/1.25 var(--f-mono);color:var(--ink);white-space:nowrap;z-index:2}
+.ql-v[data-side="l"]{transform:translate(calc(-100% - 9px),-50%)}
+.ql-v.mut{color:var(--muted)}
+.ql-v.na{transform:translate(4px,-50%)}
+.ql-v .v2{color:var(--ink2)}
+.ql-v.mut .v2{color:var(--muted)}
+.ql-num{align-self:center;text-align:right;font-size:12.5px;color:var(--ink);padding:6px 0}
+
+/* оси: подписи делений + засечки; сверху — над первой строкой, снизу — под последней */
+.ql-hc{min-width:0;display:flex;flex-direction:column;justify-content:flex-end}
+.ql-ht{font-size:12.5px;color:var(--muted);line-height:1.3;margin-bottom:6px}
+.ql-ht b{display:block;color:var(--ink);font-weight:600;font-size:13px}
+.ql-ht span{display:block}
+.ql-hc.on .ql-ht b::after{content:" ↓";color:var(--accent)}
+.ql-hn{text-align:right;font-size:12.5px;padding-bottom:9px}
+.ql-hn b{font-weight:600;color:var(--ink)}
+.ql-h .ql-n{align-self:end;padding-bottom:8px}
+.ql-ax{position:relative;height:22px;font:11.5px/14px var(--f-mono);color:var(--muted)}
+.ql-ax span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.ql-ax span.f{transform:none}
+.ql-ax span.l{transform:translateX(-100%)}
+.ql-ax span.z{color:var(--ink);font-weight:500}
+.ql-ax i{position:absolute;width:0;height:5px;border-left:1px solid var(--line-strong)}
+.ql-h .ql-ax{border-bottom:1px solid var(--line-strong)}
+.ql-h .ql-ax span{top:0}
+.ql-h .ql-ax i{bottom:0}
+.ql-f .ql-ax{border-top:1px solid var(--line-strong)}
+.ql-f .ql-ax span{top:7px}
+.ql-f .ql-ax i{top:0}
+.ql-f .ql-n{align-self:start;padding-top:6px}
+
+/* ---------- раскладки по видам графиков (контейнерные запросы: реальная ширина блока) ---------- */
+/* результат против базы */
+.k-b .ql-r{grid-template-columns:minmax(130px,190px) minmax(0,1fr);grid-template-areas:"n t1"}
+.k-b .ql-tr{min-height:46px}
+@container (max-width:439px){
+  .k-b .ql-r{grid-template-columns:minmax(0,1fr);grid-template-areas:"n" "t1"}
+  .k-b .ql-f{grid-template-areas:"t1" "n"}
+  .k-b .ql-tr{min-height:34px}
+}
+/* методы */
+.k-m .ql-r{grid-template-columns:minmax(160px,250px) minmax(0,1fr) 64px;grid-template-areas:"n t1 t2"}
+.k-m .ql-n{padding-left:10px}
+.k-m .ql-b>.ql-r.fin{box-shadow:inset 3px 0 0 var(--pearl-edge);background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.ql-fin{display:inline-block;font:500 11.5px/1.3 var(--f-body);color:var(--accent);margin-left:8px;white-space:nowrap}
+.k-m .ql-dot.main{transition:left .3s cubic-bezier(.25,.75,.3,1)}
+@container (max-width:539px){
+  .k-m .ql-r{grid-template-columns:minmax(0,1fr) 52px;grid-template-areas:"n n" "t1 t2";column-gap:10px}
+  .k-m .ql-b>.ql-r{border-bottom:1px solid var(--line-soft)}
+  .k-m .ql-b>.ql-r>.ql-n{padding-bottom:0}
+}
+/* важность признаков: общая колонка названий, две оси */
+.k-imp .ql-r{grid-template-columns:minmax(170px,250px) minmax(0,1fr) minmax(0,1.3fr);grid-template-areas:"n t1 t2"}
+@container (max-width:759px){
+  .k-imp .ql-r{grid-template-columns:54px minmax(0,1fr);grid-template-areas:"n n" "g1 t1" "g2 t2";column-gap:8px}
+  .k-imp .ql-tag{display:block}
+  .k-imp .ql-h .ql-tag,.k-imp .ql-f .ql-tag{align-self:end;padding-bottom:4px}
+  .k-imp .ql-f .ql-tag{align-self:start;padding:4px 0 0}
+  .k-imp .ql-b>.ql-r{border-bottom:1px solid var(--line-soft);padding-bottom:3px}
+  .k-imp .ql-b>.ql-r>.ql-n{padding:8px 0 0}
+  .k-imp .ql-v .v1,.k-imp .ql-v .v2{display:block}
+  .k-imp .ql-v.mut .v1,.k-imp .ql-v.mut .v2{display:inline}
+  .k-imp .ql-tr{min-height:34px}
+  .k-imp .ql-h .ql-c2,.k-imp .ql-f .ql-c2{margin-top:8px}
+  .k-imp .ql-f .ql-n{display:none}
+}
+/* слои */
+.k-l .ql-r{grid-template-columns:minmax(170px,260px) minmax(0,1fr);grid-template-areas:"n t1"}
+@container (max-width:479px){
+  .k-l .ql-r{grid-template-columns:minmax(0,1fr);grid-template-areas:"n" "t1"}
+  .k-l .ql-b>.ql-r>.ql-n{padding-bottom:0}
+  .k-l .ql-f .ql-n{display:none}
+}
+/* ранговая корреляция по годам */
+.k-r .ql-r{grid-template-columns:minmax(170px,260px) minmax(0,1fr) 56px 56px;grid-template-areas:"n t1 y1 y2"}
+@container (max-width:559px){
+  .k-r .ql-r{grid-template-columns:minmax(0,1fr) 48px 48px;grid-template-areas:"n n n" "t1 y1 y2";column-gap:8px}
+  .k-r .ql-b>.ql-r{border-bottom:1px solid var(--line-soft)}
+  .k-r .ql-b>.ql-r>.ql-n{padding-bottom:0}
+  .k-r .ql-f .ql-n{display:none}
+}
+
+/* без анимации при пересчёте раскладки (resize) и при reduced motion */
+.ql-still .ql-dot.main{transition:none!important}
+@media (prefers-reduced-motion:reduce){.k-m .ql-dot.main{transition:none}}
+
+/* ---------- таблицы ---------- */
+.ql-det{margin-top:12px}
+.ql-det>summary{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;color:var(--ink);min-height:32px;padding:2px 8px 2px 4px;border-radius:var(--r-ctl)}
+.ql-det>summary:hover{background:var(--surface-2)}
+.ql-det[open]>summary{margin-bottom:8px}
+.ql-det .tbox{max-height:none}
+.tbox.ql-narrow{max-width:520px}
+.ql-mtab table{min-width:900px}
+.ql-mtab th small,.ql-mtab td small{display:block;font:400 11.5px var(--f-mono);color:var(--muted);margin-top:1px}
+.ql-mtab thead th small{font-family:var(--f-body)}
+.ql-mtab tbody th{position:sticky;left:0;z-index:1;background:var(--surface);font-weight:500;color:var(--ink);font-size:13px;min-width:190px}
+.ql-mtab thead th:first-child{left:0;z-index:3}
+.ql-mtab tbody tr:hover>th{background:var(--surface-2)}
+.ql-mtab td.best{font-weight:700;color:var(--ink)}
+.ql-mtab .on{background:color-mix(in srgb,var(--accent) 9%,var(--surface))}
+.ql-mtab thead th.on{color:var(--ink)}
+.ql-mtab tr.fin>*{background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.ql-mtab tr.fin>th{box-shadow:inset 3px 0 0 var(--pearl-edge)}
+.ql-mtab .ql-fin{margin:0 0 0 6px}
+#qual tbody th{font-weight:500;color:var(--ink)}
+@media (max-width:560px){.ql-mtab tbody th{min-width:128px;max-width:150px}}
+
+/* квартальная согласованность (ECharts) */
+.ql-qari{height:250px;width:100%}
+@media (max-width:560px){.ql-qari{height:230px}}
+
+/* ограничения */
+.ql-limits{columns:2 420px;column-gap:48px;margin:0;padding-left:18px;font-size:14px;color:var(--ink2);line-height:1.6}
+.ql-limits li{break-inside:avoid;margin-bottom:8px}

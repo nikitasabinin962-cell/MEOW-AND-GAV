@@ -1,0 +1,27 @@
+{
+  "checked_at": "2026-10-09",
+  "HTML_original_SHA256": "20515ab2b27dca5e75583c5fb0fe35a1cfc5452b90a5e189b55bd9f0d5e14e43",
+  "HTML_copy_matches": true,
+  "baseline_D_SHA1": "d849169e16d7d2c42c1f210426b1490b6832b76a",
+  "database_integrity": "ok",
+  "database_SHA256": "9a4758254578d007e536c8520a4b0965aba4433ceeee6ce5c4b2ca306eab1a5e",
+  "source_hashes_verified": 18,
+  "database_checks": {
+    "PASS": 6,
+    "FAIL": 0
+  },
+  "project_checks": {
+    "PASS": 5,
+    "FAIL": 7
+  },
+  "full_pipeline_run": false,
+  "dependency_versions": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scipy": "1.17.0",
+    "scikit-learn": "1.8.0",
+    "PyYAML": "6.0.3",
+    "pypdf": "6.10.0",
+    "openpyxl": "3.1.5"
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "checked_at": "2026-10-09",
+  "source_archive": "econtypes_code (4).zip",
+  "checks": [
+    {
+      "test": "baseline_dimensions_and_finite",
+      "status": "PASS",
+      "detail": {
+        "N": 63,
+        "features": 32,
+        "K": 7,
+        "clustering_fused_edges": 1065,
+        "display_fused_edges": 310
+      },
+      "seconds": 0.0003
+    },
+    {
+      "test": "reproduce_exported_ICVI_with_rounded_edges",
+      "status": "PASS",
+      "detail": {
+        "SW": 6.245004513516506e-17,
+        "CH": 4.440892098500626e-15,
+        "DB": 1.3322676295501878e-15,
+        "S_Dbw": 3.3306690738754696e-16,
+        "MQ": 2.48487239784545e-07,
+        "AVI": 3.800497432315808e-07,
+        "AVU": 2.932274235645238e-07
+      },
+      "seconds": 0.0013
+    },
+    {
+      "test": "AVU_formula_and_optimization_direction",
+      "status": "FAIL",
+      "detail": "{'implemented': 0.8017049075869529, 'literature': 0.5358312305082136}",
+      "seconds": 0.0
+    },
+    {
+      "test": "AVU_disconnected_three_cliques",
+      "status": "FAIL",
+      "detail": "{'implemented_AVU': 1.0, 'reference_AVU': 0.0, 'AVI': 1.0}",
+      "seconds": 0.0002
+    },
+    {
+      "test": "finite_permutation_pvalues_are_positive",
+      "status": "FAIL",
+      "detail": "{'2025': {'accuracy': 0.30158730158730157, 'p_value': 0.0016, 'feature_rank_corr': {'proc_pc': 0.591, 'proc_local_sh': 0.629, 'proc_ufa_sh': 0.372, 'proc_out_sh': 0.507, 'proc_single_sh': 0.551, 'okpd_construction_sh': 0.392, 'okpd_health_sh': 0.609, 'okpd_food_sh': 0.757, 'okpd_utilities_sh': 0.537, 'okpd_fuel_transport_sh': 0.586, 'okpd_it_office_sh': 0.379}}, '2026': {'accuracy': 0.3492063492063492, 'p_value': 0.0, 'feature_rank_corr': {'proc_pc': 0.301, 'proc_local_sh': 0.617, 'proc_ufa_sh': 0.28, 'proc_out_sh': 0.379, 'proc_single_sh': 0.438, 'okpd_construction_sh': 0.349, 'okpd_health_sh': 0.734, 'okpd_food_sh': 0.568, 'okpd_utilities_sh': 0.481, 'okpd_fuel_transport_sh': 0.355, 'okpd_it_office_sh': 0.285}}}",
+      "seconds": 0.0002
+    },
+    {
+      "test": "DTW_all_constant_series",
+      "status": "FAIL",
+      "detail": "Constant series: sigma=0 produces NaN",
+      "seconds": 0.0013
+    },
+    {
+      "test": "zero_monthly_expenditure",
+      "status": "FAIL",
+      "detail": "Zero expenditure produces non-finite log residuals",
+      "seconds": 0.0007
+    },
+    {
+      "test": "kNN_k_above_N",
+      "status": "FAIL",
+      "detail": "Expected descriptive ValueError; got IndexError",
+      "seconds": 0.0
+    },
+    {
+      "test": "historical_layers_do_not_reuse_full_horizon",
+      "status": "FAIL",
+      "detail": "Historical windows reuse comovement/lead_lag/DTW built on full 2023-2024; detected in code, not a executed future-perturbation test",
+      "seconds": 0.0001
+    },
+    {
+      "test": "actual_kNN_stress_N_2016",
+      "status": "PASS",
+      "detail": {
+        "N": 2016,
+        "k": 8,
+        "seconds": 0.17,
+        "dense_matrix_bytes": 32514048,
+        "edges": 9654
+      },
+      "seconds": 0.1991
+    },
+    {
+      "test": "label_permutation_invariance",
+      "status": "PASS",
+      "detail": "Hungarian alignment preserves unchanged membership after label renaming",
+      "seconds": 0.0004
+    },
+    {
+      "test": "ICVI_K_equals_N_rejected",
+      "status": "PASS",
+      "detail": "sklearn rejects K=N; caller must expose reason, not show fabricated metric",
+      "seconds": 0.0007
+    }
+  ],
+  "recomputed": {
+    "SW": 0.051032376005480336,
+    "CH": 5.851582522160643,
+    "DB": 2.0749474629704743,
+    "S_Dbw": 0.7181470393221749,
+    "MQ": 0.24413833452756928,
+    "AVI": 0.3720891681970672,
+    "AVU": 0.8017049075869529,
+    "AVU_literature": 0.5358312305082136,
+    "AVI_literature": 0.3720891681970672,
+    "note": "Reconstructed X from exported features; full fusion rebuilt from all exported kNN layers (four-decimal weights). The separately exported fused graph is sparsified again for display and is NOT the graph used for original quality scores. Not a full raw-source rerun."
+  },
+  "peak_rss_kib": 288560,
+  "scope": "Read-only function checks and static leakage check. Full project test suite and raw ingest were not run: core raw parquet files and dependencies are absent."
+}

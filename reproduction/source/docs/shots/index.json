@@ -1,0 +1,308 @@
+[
+ {
+  "id": "o1-out-dark",
+  "file": "o1-out-dark.jpg",
+  "title": "1. Выводы и рекомендации — обзор, тёмная тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o1-out-light",
+  "file": "o1-out-light.jpg",
+  "title": "1. Выводы и рекомендации — обзор, светлая тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o2-map-dark",
+  "file": "o2-map-dark.jpg",
+  "title": "2. Карта и сеть — обзор, тёмная тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o2-map-light",
+  "file": "o2-map-light.jpg",
+  "title": "2. Карта и сеть — обзор, светлая тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o3-cmp-dark",
+  "file": "o3-cmp-dark.jpg",
+  "title": "3. Сравнение районов — обзор, тёмная тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o3-cmp-light",
+  "file": "o3-cmp-light.jpg",
+  "title": "3. Сравнение районов — обзор, светлая тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o4-corr-dark",
+  "file": "o4-corr-dark.jpg",
+  "title": "4. Корреляции — обзор, тёмная тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o4-corr-light",
+  "file": "o4-corr-light.jpg",
+  "title": "4. Корреляции — обзор, светлая тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o5-types-dark",
+  "file": "o5-types-dark.jpg",
+  "title": "5. Типы МО — обзор, тёмная тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o5-types-light",
+  "file": "o5-types-light.jpg",
+  "title": "5. Типы МО — обзор, светлая тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o6-quality-dark",
+  "file": "o6-quality-dark.jpg",
+  "title": "6. Качество модели — обзор, тёмная тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o6-quality-light",
+  "file": "o6-quality-light.jpg",
+  "title": "6. Качество модели — обзор, светлая тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o7-how-dark",
+  "file": "o7-how-dark.jpg",
+  "title": "7. Как это работает — обзор, тёмная тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "o7-how-light",
+  "file": "o7-how-light.jpg",
+  "title": "7. Как это работает — обзор, светлая тема",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s01-split-region",
+  "file": "s01-split-region.jpg",
+  "title": "Скрин 1: сопоставление «Сеть и миграция», общая камера",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s02-split-zoom-seams",
+  "file": "s02-split-zoom-seams.jpg",
+  "title": "Скрин 2: приближение ×9 в сопоставлении",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s03-dark-split-nokey",
+  "file": "s03-dark-split-nokey.jpg",
+  "title": "Скрин 3: тёмная тема, выбор одинаков в обеих сценах",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s04-migration-map",
+  "file": "s04-migration-map.jpg",
+  "title": "Скрин 4: миграция на карте (вид сверху), выбран Иглинский",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s04-migration-rank",
+  "file": "s04-migration-rank.jpg",
+  "title": "Скрин 4: связанный рейтинг с нулевой осью",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s05-bubble-pop",
+  "file": "s05-bubble-pop.jpg",
+  "title": "Скрин 5: Bubble по умолчанию — площадь ∝ населению",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s05-distribution",
+  "file": "s05-distribution.jpg",
+  "title": "Распределение по типам: точки МО, медиана и IQR",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s05-medians",
+  "file": "s05-medians.jpg",
+  "title": "Переход МО → медианы по типам (итог), длинные названия типов",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s06-lag",
+  "file": "s06-lag.jpg",
+  "title": "Скрин 6: профиль семи лагов с карточкой",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s07-importance",
+  "file": "s07-importance.jpg",
+  "title": "Скрин 7: важность признаков — две выровненные dot/interval-диаграммы",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s08-tree-all",
+  "file": "s08-tree-all.jpg",
+  "title": "Скрин 8: дерево, всё раскрыто, подписи не пересекаются",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s09-light-3d-focus",
+  "file": "s09-light-3d-focus.jpg",
+  "title": "Скрин 9: светлая 3D, связь г. Уфа → Ишимбайский",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s10-start-backbone",
+  "file": "s10-start-backbone.jpg",
+  "title": "Скрин 10: стартовое состояние «Каркас сети»",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "s11-leadlag-light",
+  "file": "s11-leadlag-light.jpg",
+  "title": "Скрин 11: опережение трат, выбранная связь — оба конца в кадре",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-cmp-missing",
+  "file": "x-cmp-missing.jpg",
+  "title": "Сравнение: Межгорье и Куюргазинский — пропуски «н/д», ряд не соединяется через пропуски",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-cmp-mobile",
+  "file": "x-cmp-mobile.jpg",
+  "title": "Сравнение на 390 px: три района и начало профиля",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-cmp-seasonality",
+  "file": "x-cmp-seasonality.jpg",
+  "title": "Сравнение → «Сезонность 2 × 12» (ТЗ 12.4): Кумертау, Куюргазинский (пропуски), Межгорье (ряда нет), Салават; выбран март 2024",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-cmp-seasonality-dark",
+  "file": "x-cmp-seasonality-dark.jpg",
+  "title": "Сезонность 2 × 12 в тёмной теме",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-cmp-ties",
+  "file": "x-cmp-ties.jpg",
+  "title": "Сравнение: Кумертау, Салават, Бакалинский, Бирский, Благовещенский — совпавшие процентили разведены дорожками",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-edge-table",
+  "file": "x-edge-table.jpg",
+  "title": "Таблица всех записей слоя для выбранного МО",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-fallback-2d",
+  "file": "x-fallback-2d.jpg",
+  "title": "Честный 2D-резерв на Leaflet: та же геометрия, выбор и связи",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-group15-dark",
+  "file": "x-group15-dark.jpg",
+  "title": "Группа из 15 МО без тяжёлых рамок (dark)",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-group15-light",
+  "file": "x-group15-light.jpg",
+  "title": "Группа из 15 МО без тяжёлых рамок (light)",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-map-mobile",
+  "file": "x-map-mobile.jpg",
+  "title": "Карта, 390 px: сцена с выбранной Уфой",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-map-mobile-card",
+  "file": "x-map-mobile-card.jpg",
+  "title": "Карточка МО под картой, 390 px",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-map-typechord",
+  "file": "x-map-typechord.jpg",
+  "title": "Хорд-диаграмма сумм госзаказа между типами; выбрана пара 5 → 7",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-matrix-flow",
+  "file": "x-matrix-flow.jpg",
+  "title": "Матрица связей: потоки госзаказа (строки — поставщики, столбцы — заказчики)",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-sel-agidel-dark",
+  "file": "x-sel-agidel-dark.jpg",
+  "title": "Выбор Агидель (dark)",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-sel-agidel-light",
+  "file": "x-sel-agidel-light.jpg",
+  "title": "Выбор Агидель (light)",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-sel-long-dark",
+  "file": "x-sel-long-dark.jpg",
+  "title": "Выбор: самое длинное имя — Кармаскалинский (dark)",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-sel-long-light",
+  "file": "x-sel-long-light.jpg",
+  "title": "Выбор: самое длинное имя — Кармаскалинский (light)",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-sel-mezh-dark",
+  "file": "x-sel-mezh-dark.jpg",
+  "title": "Выбор Межгорье (dark)",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-sel-mezh-light",
+  "file": "x-sel-mezh-light.jpg",
+  "title": "Выбор Межгорье (light)",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-sel-ufa-dark",
+  "file": "x-sel-ufa-dark.jpg",
+  "title": "Выбор Уфа (dark)",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-sel-ufa-light",
+  "file": "x-sel-ufa-light.jpg",
+  "title": "Выбор Уфа (light)",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-tree-dark",
+  "file": "x-tree-dark.jpg",
+  "title": "Дерево в тёмной теме, одна ветвь в фокусе",
+  "build": "0bbf9cd2e8bc"
+ },
+ {
+  "id": "x-types-flows",
+  "file": "x-types-flows.jpg",
+  "title": "Типы МО: переходы между типами по кварталам (ТЗ 12.3), выбран Куюргазинский",
+  "build": "0bbf9cd2e8bc"
+ }
+]

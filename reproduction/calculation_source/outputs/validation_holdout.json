@@ -1,0 +1,40 @@
+{
+ "accuracy_in_sample": 0.5873015873015873,
+ "chance_mean": 0.15427619047619046,
+ "holdout": {
+  "2025": {
+   "accuracy": 0.30158730158730157,
+   "p_value": 0.0016,
+   "feature_rank_corr": {
+    "proc_pc": 0.591,
+    "proc_local_sh": 0.629,
+    "proc_ufa_sh": 0.372,
+    "proc_out_sh": 0.507,
+    "proc_single_sh": 0.551,
+    "okpd_construction_sh": 0.392,
+    "okpd_health_sh": 0.609,
+    "okpd_food_sh": 0.757,
+    "okpd_utilities_sh": 0.537,
+    "okpd_fuel_transport_sh": 0.586,
+    "okpd_it_office_sh": 0.379
+   }
+  },
+  "2026": {
+   "accuracy": 0.3492063492063492,
+   "p_value": 0.0,
+   "feature_rank_corr": {
+    "proc_pc": 0.301,
+    "proc_local_sh": 0.617,
+    "proc_ufa_sh": 0.28,
+    "proc_out_sh": 0.379,
+    "proc_single_sh": 0.438,
+    "okpd_construction_sh": 0.349,
+    "okpd_health_sh": 0.734,
+    "okpd_food_sh": 0.568,
+    "okpd_utilities_sh": 0.481,
+    "okpd_fuel_transport_sh": 0.355,
+    "okpd_it_office_sh": 0.285
+   }
+  }
+ }
+}

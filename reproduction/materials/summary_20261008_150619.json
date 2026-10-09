@@ -1,0 +1,11 @@
+﻿{
+    "source_page":  "https://02.rosstat.gov.ru/folder/25491",
+    "discovery":  "live_page_checked",
+    "snapshot_links":  85,
+    "planned":  85,
+    "verified_files":  85,
+    "failed_files":  0,
+    "report":  "D:\\Users\\mardanova.er\\Documents\\КОНКУРСЫ 2026\\3. сбер\\ДОПОЛНИТЕЛЬНЫЕ ДАННЫЕ ИЗ РОСТАТА К ЕР\\_ROSSTAT_NASELENIE\\download_report_20261008_150619.csv",
+    "destination":  "D:\\Users\\mardanova.er\\Documents\\КОНКУРСЫ 2026\\3. сбер\\ДОПОЛНИТЕЛЬНЫЕ ДАННЫЕ ИЗ РОСТАТА К ЕР",
+    "finished_at":  "2026-10-08T10:06:19.6785997Z"
+}

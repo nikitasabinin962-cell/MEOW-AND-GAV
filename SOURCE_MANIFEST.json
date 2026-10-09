@@ -1,0 +1,200 @@
+[
+  {
+    "source_id": "dashboard_baseline",
+    "relative_path": "source/src/data/D.json",
+    "original_name": "D.json",
+    "sha256": "fb3aee2d49f6d753448f1f220f6e12c41d9d5ae9951d9baab245517eeb8a3778",
+    "size_bytes": 549107,
+    "source_url": "user attachment econtypes-v4-src.zip",
+    "observation_period": "2023-01/2024-12",
+    "role": "archived_results",
+    "limitations": "Derived dashboard data, not original SberIndex microdata; one municipality imputed. Clusters need recomputation after AVU/leakage fixes."
+  },
+  {
+    "source_id": "rosstat_population_2022",
+    "relative_path": "materials/CHislennost-naseleniya-po-municipalnym-rajonam-i-gorodskim-okrugam-Respubliki- Bashkortostan-na-1-yanvarya-2022-g-s-uchetom-VPN-2020.pdf",
+    "original_name": "CHislennost-naseleniya-po-municipalnym-rajonam-i-gorodskim-okrugam-Respubliki- Bashkortostan-na-1-yanvarya-2022-g-s-uchetom-VPN-2020.pdf",
+    "sha256": "2a4687bf810b2c307d4ecd893688f7bec314f90f167d2c196cf22d37c5185a68",
+    "size_bytes": 212924,
+    "source_url": "https://02.rosstat.gov.ru/storage/mediabank/CHislennost-naseleniya-po-municipalnym-rajonam-i-gorodskim-okrugam-Respubliki-%20Bashkortostan-na-1-yanvarya-2022-g-s-uchetom-VPN-2020.pdf",
+    "observation_period": "2022-01-01",
+    "role": "official_population",
+    "limitations": "Download date 2026-10-09 is not observation year."
+  },
+  {
+    "source_id": "rosstat_population_2023",
+    "relative_path": "materials/CHislennost-naseleniya-po-municipalnym- rajonam-i-gorodskim-okrugam-Respubliki-Bashkortostan-na-1-yanvarya-2023-goda.pdf",
+    "original_name": "CHislennost-naseleniya-po-municipalnym- rajonam-i-gorodskim-okrugam-Respubliki-Bashkortostan-na-1-yanvarya-2023-goda.pdf",
+    "sha256": "a91cc81ca889f4ba614f83e62aee501f2c4e746f7705bba1418c64838b204243",
+    "size_bytes": 211297,
+    "source_url": "https://02.rosstat.gov.ru/storage/mediabank/CHislennost-naseleniya-po-municipalnym-%20rajonam-i-gorodskim-okrugam-Respubliki-Bashkortostan-na-1-yanvarya-2023-goda.pdf",
+    "observation_period": "2023-01-01",
+    "role": "official_population",
+    "limitations": "Download date 2026-10-09 is not observation year."
+  },
+  {
+    "source_id": "rosstat_population_2024",
+    "relative_path": "materials/CHislennost-naseleniya-po-municipalnym-rajonam-i-gorodskim-okrugam-Respubliki-Bashkortostan-na-1-yanvarya-2024-goda.pdf",
+    "original_name": "CHislennost-naseleniya-po-municipalnym-rajonam-i-gorodskim-okrugam-Respubliki-Bashkortostan-na-1-yanvarya-2024-goda.pdf",
+    "sha256": "3adcab82858240b7b9fcbc13a4a76f39f0ad4296c8774848dd7e9d5910b353c1",
+    "size_bytes": 211093,
+    "source_url": "https://02.rosstat.gov.ru/storage/mediabank/CHislennost-naseleniya-po-municipalnym-rajonam-i-gorodskim-okrugam-Respubliki-Bashkortostan-na-1-yanvarya-2024-goda.pdf",
+    "observation_period": "2024-01-01",
+    "role": "official_population",
+    "limitations": "Download date 2026-10-09 is not observation year."
+  },
+  {
+    "source_id": "rosstat_population_2025",
+    "relative_path": "materials/CHislennost-naseleniya-po-municipalnym-rajonam-i-gorodskim-okrugam-Respubliki-Bashkortostan-na-1-yanvarya-2025-goda.pdf",
+    "original_name": "CHislennost-naseleniya-po-municipalnym-rajonam-i-gorodskim-okrugam-Respubliki-Bashkortostan-na-1-yanvarya-2025-goda.pdf",
+    "sha256": "e8f2f80e64eedfa0585eed00e927c61809bb5a5d432836be7b6864fa66ac74b3",
+    "size_bytes": 350183,
+    "source_url": "https://02.rosstat.gov.ru/storage/mediabank/CHislennost-naseleniya-po-municipalnym-rajonam-i-gorodskim-okrugam-Respubliki-Bashkortostan-na-1-yanvarya-2025-goda.pdf",
+    "observation_period": "2025-01-01",
+    "role": "official_population",
+    "limitations": "Download date 2026-10-09 is not observation year."
+  },
+  {
+    "source_id": "fns_msp_20260910",
+    "relative_path": "materials/msp_bashkortostan_20260910.csv",
+    "original_name": "msp_bashkortostan_20260910.csv",
+    "sha256": "4a3a059f666a28e71f7f001309c1a1d44df92d5eca2d85f54ceccd71429c88e5",
+    "size_bytes": 29294760,
+    "source_url": "https://www.nalog.gov.ru/opendata/7707329152-rsmp/",
+    "observation_period": "2026-09-10",
+    "role": "processed_official_snapshot",
+    "limitations": "Supplied processed CSV, not independent XML rerun. Address strings are candidate geography, not verified OKTMO. Historical membership cannot be inferred from this snapshot."
+  },
+  {
+    "source_id": "fns_msp_relevant_suppliers_20260910",
+    "relative_path": "materials/msp_index_relevant_entities.csv",
+    "original_name": "msp_index_relevant_entities.csv",
+    "sha256": "e78c0710a02d0ca7f560c49e9b644a7b2c9721a3e9c89680ad373bed1081d39e",
+    "size_bytes": 11333707,
+    "source_url": "https://drive.google.com/file/d/1tldH7Q_sDe-9U1qzSSPBiNpGY7JFllqh/view",
+    "observation_period": "2026-09-10",
+    "role": "processed_national_MSP_index",
+    "limitations": "Subset selected by upstream processing for Bashkortostan/relevant suppliers; not complete national population of enterprises. Needed for suppliers outside region 02."
+  },
+  {
+    "source_id": "atmo_223",
+    "relative_path": "materials/atmo_223.json",
+    "original_name": "atmo_223.json",
+    "sha256": "71fde1e988d63fece4c9da9cfe1bf7dea1b15b74aeee7cf6a5361a361de159f8",
+    "size_bytes": 3325086,
+    "source_url": "https://drive.google.com/file/d/1nCsFJRW-S8ZnLMoYloiHb7nTpIOOfsTI/view",
+    "observation_period": "exported 2026-10-08",
+    "role": "API_contract_observations",
+    "limitations": "223: supplied single collected export; 44: ONLY 135-record sample. No E-signature verification. INN missing. Not full national/regional totals."
+  },
+  {
+    "source_id": "atmo_44_sample",
+    "relative_path": "materials/ATMO_API_44_20261008131737_umgsvm_2024-12_p01508-01516_part00319.json",
+    "original_name": "ATMO_API_44_20261008131737_umgsvm_2024-12_p01508-01516_part00319.json",
+    "sha256": "1710f89e56fc73d5b4d2e354494e484759f4cdd6bbd9840bcfe2be559a40d660",
+    "size_bytes": 341707,
+    "source_url": "https://drive.google.com/file/d/1eZJeT_p5xrTiYujH6Tc7woH4Eey3lFTz/view",
+    "observation_period": "exported 2026-10-08",
+    "role": "API_contract_observations",
+    "limitations": "223: supplied single collected export; 44: ONLY 135-record sample. No E-signature verification. INN missing. Not full national/regional totals."
+  },
+  {
+    "source_id": "processed_contracts_part_001",
+    "relative_path": "materials/contracts_unique_eis_atmo_001.csv",
+    "original_name": "contracts_unique_eis_atmo_001.csv",
+    "sha256": "a426fc42462eec7fb5d9f071497d0dac2a3428c2c7de2490af491f90d7a3933c",
+    "size_bytes": 44667309,
+    "source_url": "https://drive.google.com/file/d/1hzZmRPW-6RLUbYHdOpznM26EZW3CIYfj/view?usp=drivesdk",
+    "observation_period": "2023-01/2026-10; event dates retained",
+    "role": "processed_contract_exports",
+    "limitations": "Reuse supplied upstream canonical identity and source references; original 1381 XLSX files not independently reprocessed in this run. Some registry identities remain unconfirmed."
+  },
+  {
+    "source_id": "processed_contracts_part_002",
+    "relative_path": "materials/contracts_unique_eis_atmo_002.csv",
+    "original_name": "contracts_unique_eis_atmo_002.csv",
+    "sha256": "9e2b671e101a97847305e21224e9fcdb860f1f03aef2d4a33af14f84c1a4c6ab",
+    "size_bytes": 48141515,
+    "source_url": "https://drive.google.com/file/d/1zvxrgaPj0nwmfuamW2geF76-nEzSoyjz/view?usp=drivesdk",
+    "observation_period": "2023-01/2026-10; event dates retained",
+    "role": "processed_contract_exports",
+    "limitations": "Reuse supplied upstream canonical identity and source references; original 1381 XLSX files not independently reprocessed in this run. Some registry identities remain unconfirmed."
+  },
+  {
+    "source_id": "processed_contracts_part_003",
+    "relative_path": "materials/contracts_unique_eis_atmo_003.csv",
+    "original_name": "contracts_unique_eis_atmo_003.csv",
+    "sha256": "1da24e2c2ce44e1951f9a838b35da2562383c4acb928a1c12af2450c0aa6ba0b",
+    "size_bytes": 45422955,
+    "source_url": "https://drive.google.com/file/d/17ObC6sDUNaiR5NTVlcwxPfgNrAnt_Vnp/view?usp=drivesdk",
+    "observation_period": "2023-01/2026-10; event dates retained",
+    "role": "processed_contract_exports",
+    "limitations": "Reuse supplied upstream canonical identity and source references; original 1381 XLSX files not independently reprocessed in this run. Some registry identities remain unconfirmed."
+  },
+  {
+    "source_id": "processed_contracts_part_004",
+    "relative_path": "materials/contracts_unique_eis_atmo_004.csv",
+    "original_name": "contracts_unique_eis_atmo_004.csv",
+    "sha256": "800eac6b5f5b59d8c739e4f4545d72e66357931ad16da235e190bd706454906e",
+    "size_bytes": 47185658,
+    "source_url": "https://drive.google.com/file/d/1WxvfvZP98TqM5o7cHAXILJ-G-zSk6rha/view?usp=drivesdk",
+    "observation_period": "2023-01/2026-10; event dates retained",
+    "role": "processed_contract_exports",
+    "limitations": "Reuse supplied upstream canonical identity and source references; original 1381 XLSX files not independently reprocessed in this run. Some registry identities remain unconfirmed."
+  },
+  {
+    "source_id": "processed_contracts_part_005",
+    "relative_path": "materials/contracts_unique_eis_atmo_005.csv",
+    "original_name": "contracts_unique_eis_atmo_005.csv",
+    "sha256": "b49a05a49e4a3b36eaf02e35e7e13a520f865d75bba56f757d9a3a38345032a2",
+    "size_bytes": 45991260,
+    "source_url": "https://drive.google.com/file/d/1QEnGfo55DxkcdnIooTR5oLJXXKe9Vt7r/view?usp=drivesdk",
+    "observation_period": "2023-01/2026-10; event dates retained",
+    "role": "processed_contract_exports",
+    "limitations": "Reuse supplied upstream canonical identity and source references; original 1381 XLSX files not independently reprocessed in this run. Some registry identities remain unconfirmed."
+  },
+  {
+    "source_id": "processed_contracts_part_006",
+    "relative_path": "materials/contracts_unique_eis_atmo_006.csv",
+    "original_name": "contracts_unique_eis_atmo_006.csv",
+    "sha256": "e7e0974a57bc5b0bd35f06367e0b8ce23c4737a547bb801874691abe5c3cc5e6",
+    "size_bytes": 49210404,
+    "source_url": "https://drive.google.com/file/d/1yabpX9FlYB9XOFWZYw0CufHCXEMKzBNo/view?usp=drivesdk",
+    "observation_period": "2023-01/2026-10; event dates retained",
+    "role": "processed_contract_exports",
+    "limitations": "Reuse supplied upstream canonical identity and source references; original 1381 XLSX files not independently reprocessed in this run. Some registry identities remain unconfirmed."
+  },
+  {
+    "source_id": "processed_contracts_part_007",
+    "relative_path": "materials/contracts_unique_eis_atmo_007.csv",
+    "original_name": "contracts_unique_eis_atmo_007.csv",
+    "sha256": "3dfecbd456c242b175186215d9fff7d68d0c55eb58ed7abd287e08a685e86bff",
+    "size_bytes": 45836491,
+    "source_url": "https://drive.google.com/file/d/1U3igX1T-bBbm2rInz0hTH0eRvJv_DSwD/view?usp=drivesdk",
+    "observation_period": "2023-01/2026-10; event dates retained",
+    "role": "processed_contract_exports",
+    "limitations": "Reuse supplied upstream canonical identity and source references; original 1381 XLSX files not independently reprocessed in this run. Some registry identities remain unconfirmed."
+  },
+  {
+    "source_id": "processed_contracts_part_008",
+    "relative_path": "materials/contracts_unique_eis_atmo_008.csv",
+    "original_name": "contracts_unique_eis_atmo_008.csv",
+    "sha256": "e3bd804c19a33717fdee9e7981ae198ed8a34810744a2620075195109eab69cf",
+    "size_bytes": 8884703,
+    "source_url": "https://drive.google.com/file/d/1sY8RthT5dD26kVh_x4SnsmFQ4If7jhCV/view?usp=drivesdk",
+    "observation_period": "2023-01/2026-10; event dates retained",
+    "role": "processed_contract_exports",
+    "limitations": "Reuse supplied upstream canonical identity and source references; original 1381 XLSX files not independently reprocessed in this run. Some registry identities remain unconfirmed."
+  },
+  {
+    "source_id": "trade_xlsx",
+    "relative_path": "materials/Торги (1)(1).xlsx",
+    "original_name": "Торги (1)(1).xlsx",
+    "sha256": "2a34d7f950627ebf65083b3575f50a42847d0e29b6de61af620798c88e9e3e60",
+    "size_bytes": 2805638,
+    "source_url": "supplied stored export Торги (1)(1).xlsx",
+    "observation_period": "read metadata/data dates in workbook",
+    "role": "procurement_notice_export",
+    "limitations": "Announcements/lots, not contract table. Never add notice amounts to signed contract amounts."
+  }
+]
