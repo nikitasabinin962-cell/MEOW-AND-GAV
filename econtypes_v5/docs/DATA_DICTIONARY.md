@@ -1,6 +1,6 @@
 # DATA_DICTIONARY — база econtypes v5 и выходные файлы
 
-База: `data/econtypes_v5.sqlite` (строится `python -m econtypes5.ingest`, ~40 с; в git не хранится, размер ~150 МБ). Экспорт для аналитики: `outputs/db_parquet/*.parquet` (zstd). Деньги — целые копейки (`amount_kopecks`), валюта — отдельным полем; суммы складываются только внутри одной валюты и `financial_status='known'`.
+База: `data/econtypes_v5.sqlite` (строится `python -m econtypes5.ingest`, около 50 с; распакованная около 330 МБ). Готовый снимок для скачивания: `data/econtypes_v5.sqlite.gz`, его размер, SHA-256, число строк в каждой таблице и run_id записаны в `data/DB_MANIFEST.json`. Экспорт для аналитики: `outputs/db_parquet/*.parquet` (zstd). Деньги — целые копейки (`amount_kopecks`), валюта — отдельным полем; суммы складываются только внутри одной валюты и `financial_status='known'`.
 
 ## L0 — источники
 
@@ -36,6 +36,8 @@
 | **run_coassign** | (`run_id`, `scheme`, `i`, `j`) → `p`, `n_joint` |
 | **data_quality_checks** | `check_name`, `status` (PASS/FAIL/INFO/NOT_RUN), `details_json`, `checked_at` |
 
+Служебная таблица **schema_migrations**: `version`, `applied_at`, `description` — применённые миграции схемы; `max(version)` = `schema_version` в DB_MANIFEST.
+
 Представления: `v_contract_customer_mo` (контракт + МО заказчика + качество привязки), `v_population_growth`.
 
 ## Выходные файлы прогона (`outputs/run_<run_id>/`, копия — `outputs/latest/`)
@@ -62,3 +64,12 @@
 | `MSP_SECTION_COMPLEXITY.csv`, `MSP_RELATEDNESS_DENSITY.csv` | PCI/повсеместность секций; плотность связанности МО × секция |
 | `MEZHGORYE_STATUS.json` | Отдельный статус ЗАТО Межгорье |
 | `RUN_MANIFEST.json` | run_id, хеши, итог, тайминги, пиковая память, N/T/E, захваченные предупреждения |
+
+## Как скачать и проверить полную базу
+
+1. Скачайте `econtypes_v5.sqlite.gz` по ссылке `url` из `data/DB_MANIFEST.json` (или кнопкой «Скачать всю базу» во вкладке v5 дашборда). Вход в GitHub не нужен.
+2. Сверьте SHA-256 архива с полем `sha256`: `sha256sum econtypes_v5.sqlite.gz` (Windows: `certutil -hashfile econtypes_v5.sqlite.gz SHA256`).
+3. Распакуйте: `gunzip -k econtypes_v5.sqlite.gz` (Windows: 7-Zip). SHA-256 распакованного файла — поле `sqlite_sha256`.
+4. Проверьте: `sqlite3 econtypes_v5.sqlite "PRAGMA integrity_check; PRAGMA foreign_key_check;"` и сравните `SELECT count(*)` по таблицам с `table_counts`.
+
+Снимок содержит все таблицы, представления и индексы базы. Чего в нём нет и почему: поле `not_included` и `docs/DATA_GAPS.md`.

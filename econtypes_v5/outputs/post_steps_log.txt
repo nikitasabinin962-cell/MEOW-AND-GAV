@@ -1,0 +1,26 @@
+== audit_v5
+{"checked_at": "2026-10-09", "package": "econtypes5", "pass_": 13, "fail": 0, "warnings_captured": [], "peak_rss_kib": 423224} [('baseline_dimensions_and_finite_v5', 'PASS'), ('v4_matrix_reproduces_auditor_AVU_MQ_SDbw', 'PASS'), ('v4_labels_rescored_on_v5_C1_matrix_independent', 'PASS'), ('AVU_formula_and_optimization_direction', 'PASS'), ('AVU_disconnected_three_cliques', 'PASS'), ('finite_permutation_pvalues_are_positive', 'PASS'), ('DTW_all_constant_series', 'PASS'), ('zero_monthly_expenditure', 'PASS'), ('kNN_k_above_N', 'PASS'), ('historical_layers_do_not_use_future_EXECUTED', 'PASS'), ('actual_self_tuning_kNN_N_2016', 'PASS'), ('label_permutation_invariance', 'PASS'), ('ICVI_K_equals_N_rejected_with_status', 'PASS')]
+{"cmd": ".venv/bin/python scripts/audit_v5.py", "returncode": 0, "wall_seconds": 3.42, "peak_rss_mib": 413.3, "cpu_user_s": 3.0, "host": {"cpus": 4, "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39", "python": "3.13.16"}}
+rc=0
+== idempotency_check
+PASS {'source_registry': True, 'mo': True, 'fact_mo': True, 'fact_region_control': True, 'contract': True, 'tax_office_map': True, 'org_geo_resolved': True, 'org_geo_evidence': True, 'msp_firm': True, 'msp_index_firm': True}
+{"cmd": ".venv/bin/python scripts/idempotency_check.py", "returncode": 0, "wall_seconds": 153.45, "peak_rss_mib": 1399.3, "cpu_user_s": 102.5, "host": {"cpus": 4, "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39", "python": "3.13.16"}}
+rc=0
+== make_matrices
+ok v5-20261009T142841Z-d833d0 39 37
+{"cmd": ".venv/bin/python scripts/make_matrices.py", "returncode": 0, "wall_seconds": 0.04, "peak_rss_mib": 11.4, "cpu_user_s": 0.0, "host": {"cpus": 4, "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39", "python": "3.13.16"}}
+rc=0
+== package_db
+{"run_id": "v5-20261009T142841Z-d833d0", "bytes": 63549429, "sha256": "3bb713b60e4e0bb6054a937a52eebd60f55790c762bbdf015802f213f0580049", "tables": 19, "rows_total": 775535, "integrity_check": "ok"}
+{"cmd": ".venv/bin/python scripts/package_db.py", "returncode": 0, "wall_seconds": 42.97, "peak_rss_mib": 24.1, "cpu_user_s": 33.0, "host": {"cpus": 4, "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39", "python": "3.13.16"}}
+rc=0
+== make_report
+{"run_id": "v5-20261009T142841Z-d833d0", "source_registry_rows": 31, "stress": {"PASS": 56, "NOT_RUN": 7, "INFO": 5, "FAIL": 1}, "report_md": "docs/REPORT_v5.md", "report_docx": "docs/REPORT_v5.docx", "report_pdf": "docs/REPORT_v5.pdf"}
+{"cmd": ".venv/bin/python scripts/make_report.py", "returncode": 0, "wall_seconds": 6.66, "peak_rss_mib": 214.3, "cpu_user_s": 5.0, "host": {"cpus": 4, "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39", "python": "3.13.16"}}
+rc=0
+== scale_benchmark
+{'N': 63, 'p': 18, 'K': 7, 'graph_s': 0.001, 'edges': 297, 'dense_bytes': 31752, 'spectral_s': 0.005, 'leiden_s': 0.503, 'leiden_k': 6, 'icvi_s': 0.01, 'AVU': 0.5619, 'S_Dbw_status': 'ok_with_zero_density_terms', 'dtw_per_pair_ms': 0.2481, 'dtw_all_pairs_est_s': 0.5, 'dtw_knn_candidates_est_s': 0.5, 'peak_rss_mib': 217.1}
+{'N': 500, 'p': 18, 'K': 7, 'graph_s': 0.033, 'edges': 2940, 'dense_bytes': 2000000, 'spectral_s': 0.086, 'leiden_s': 0.033, 'leiden_k': 7, 'icvi_s': 0.066, 'AVU': 0.2857, 'S_Dbw_status': 'ok_with_zero_density_terms', 'dtw_per_pair_ms': 0.2109, 'dtw_all_pairs_est_s': 26.3, 'dtw_knn_candidates_est_s': 3.2, 'peak_rss_mib': 232.5}
+{'N': 2016, 'p': 18, 'K': 7, 'graph_s': 1.277, 'edges': 12538, 'dense_bytes': 32514048, 'spectral_s': 0.927, 'leiden_s': 0.167, 'leiden_k': 7, 'icvi_s': 0.304, 'AVU': 0.2857, 'S_Dbw_status': 'ok_with_zero_density_terms', 'dtw_per_pair_ms': 0.231, 'dtw_all_pairs_est_s': 469.2, 'dtw_knn_candidates_est_s': 14.0, 'peak_rss_mib': 420.1}
+{"cmd": ".venv/bin/python scripts/scale_benchmark.py", "returncode": 0, "wall_seconds": 14.72, "peak_rss_mib": 420.1, "cpu_user_s": 16.2, "host": {"cpus": 4, "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39", "python": "3.13.16"}}
+rc=0

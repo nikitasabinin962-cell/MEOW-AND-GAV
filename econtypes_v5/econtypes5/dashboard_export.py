@@ -29,7 +29,7 @@ def r(x, nd=4):
     return x
 
 
-def build(latest: Path, db: Path) -> dict:
+def build(latest: Path, db: Path, manifest: Path | None = None) -> dict:
     man = json.loads((latest / "RUN_MANIFEST.json").read_text())
     rd = lambda n: pd.read_csv(latest / f"{n}.csv")
     con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
@@ -120,7 +120,15 @@ def build(latest: Path, db: Path) -> dict:
                     for row in rd("EXTERNAL_VALIDATION").to_dict("records")],
         sources=[{k: r(v, 4) for k, v in row.items()} for row in src.to_dict("records")],
         checks=chk.to_dict("records"), coverage=cov, mo_ids=[int(x) for x in mo.mo_id],
+        holdout=[{k: r(v, 4) for k, v in row.items() if k != "run_id"} for row in rd("HOLDOUT_VALIDATION").to_dict("records")],
     )
+    # ссылка на полную базу: берём из DB_MANIFEST.json того же прогона, в UI ничего не пересчитываем
+    if manifest is not None and manifest.exists():
+        m = json.loads(manifest.read_text("utf-8"))
+        if m.get("run_id") != D5["run_id"]:
+            raise SystemExit(f"DB_MANIFEST.json от другого прогона: {m.get('run_id')} ≠ {D5['run_id']}")
+        D5["download"] = {k: m.get(k) for k in ("file", "bytes", "sha256", "sqlite_bytes", "sqlite_sha256", "url", "local_path",
+                                                 "dictionary_url", "schema_version", "tables", "rows_total", "created_at")}
     return D5
 
 
@@ -129,8 +137,9 @@ def main():
     ap.add_argument("--latest", default=str(ROOT / "outputs" / "latest"))
     ap.add_argument("--db", default=str(ROOT / "data" / "econtypes_v5.sqlite"))
     ap.add_argument("--out", required=True)
+    ap.add_argument("--manifest", default=str(ROOT / "data" / "DB_MANIFEST.json"))
     a = ap.parse_args()
-    D5 = build(Path(a.latest), Path(a.db))
+    D5 = build(Path(a.latest), Path(a.db), Path(a.manifest))
     txt = json.dumps(D5, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
     p = Path(a.out)
     p.parent.mkdir(parents=True, exist_ok=True)

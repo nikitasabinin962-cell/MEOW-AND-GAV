@@ -9,11 +9,11 @@
     "N": 62,
     "features": 18,
     "nonfinite_cells": 0,
-    "exact_edges": 1082,
+    "exact_edges": 1079,
     "components": 1,
     "K": 3
    },
-   "seconds": 0.094
+   "seconds": 0.2563
   },
   {
    "test": "v4_matrix_reproduces_auditor_AVU_MQ_SDbw",
@@ -29,7 +29,7 @@
     "Scat": 0.7181470393223294,
     "zero_density_terms": 42
    },
-   "seconds": 0.1061
+   "seconds": 0.1444
   },
   {
    "test": "v4_labels_rescored_on_v5_C1_matrix_independent",
@@ -41,7 +41,7 @@
     "MQ_C1space": 0.2403399197158515,
     "SW_C1space": 0.0499303371424873
    },
-   "seconds": 0.0254
+   "seconds": 0.0259
   },
   {
    "test": "AVU_formula_and_optimization_direction",
@@ -51,7 +51,7 @@
     "reference": 0.5692456315848,
     "direction": "min"
    },
-   "seconds": 0.0008
+   "seconds": 0.0011
   },
   {
    "test": "AVU_disconnected_three_cliques",
@@ -70,19 +70,19 @@
     "mc_p(0,999)": 0.001,
     "holdout_min_p": 0.0001
    },
-   "seconds": 0.0014
+   "seconds": 0.0021
   },
   {
    "test": "DTW_all_constant_series",
    "status": "PASS",
    "detail": "degenerate_no_positive_distance",
-   "seconds": 0.002
+   "seconds": 0.0024
   },
   {
    "test": "zero_monthly_expenditure",
    "status": "PASS",
    "detail": "log(0) не вычисляется: NaN + статус 'nonpositive_values'",
-   "seconds": 0.0016
+   "seconds": 0.0037
   },
   {
    "test": "kNN_k_above_N",
@@ -107,23 +107,23 @@
     "status": "PASS",
     "retrospective_changes_detected": true
    },
-   "seconds": 0.0001
+   "seconds": 0.0002
   },
   {
    "test": "actual_self_tuning_kNN_N_2016",
    "status": "PASS",
    "detail": {
     "N": 2016,
-    "seconds": 0.921,
+    "seconds": 1.257,
     "edges": 12918
    },
-   "seconds": 0.9337
+   "seconds": 1.2708
   },
   {
    "test": "label_permutation_invariance",
    "status": "PASS",
    "detail": "ok",
-   "seconds": 0.0049
+   "seconds": 0.0062
   },
   {
    "test": "ICVI_K_equals_N_rejected_with_status",
@@ -140,11 +140,11 @@
     "MQ_mancoridis": "ok",
     "intra_inter_density_ratio": "authorial_v4_metric"
    },
-   "seconds": 0.0014
+   "seconds": 0.0021
   }
  ],
  "pass_": 13,
  "fail": 0,
  "warnings_captured": [],
- "peak_rss_kib": 467632
+ "peak_rss_kib": 423224
 }

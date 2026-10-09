@@ -1,15 +1,17 @@
-run_id v5-20261009T121014Z-d833d0
-[    5.7s] load
-[   20.5s] panel
-[   24.6s] graphs
-[  313.6s] sweeps
-[  314.2s] comparison
-[  317.8s] ablation
-[  446.4s] uncertainty
-[  484.3s] dynamics
-[  509.7s] leakage_test
-[  646.9s] passports_validation
-[  721.5s] correlations
-[  727.8s] holdout
-[  731.1s] store
-{"run_id": "v5-20261009T121014Z-d833d0", "final": {"config": "C4_v5features_v5graph", "method": "leiden", "k": 3}, "leakage": "PASS", "seconds": {"load": 5.7, "panel": 20.5, "graphs": 24.6, "sweeps": 313.6, "comparison": 314.2, "ablation": 317.8, "uncertainty": 446.4, "dynamics": 484.3, "leakage_test": 509.7, "passports_validation": 646.9, "correlations": 721.5, "holdout": 727.8, "store": 731.1}}
+run_id v5-20261009T142841Z-d833d0
+[    7.2s] load
+[   26.2s] panel
+[   28.2s] graphs
+[  447.5s] sweeps
+[  448.3s] comparison
+[  449.7s] ablation
+[  651.8s] uncertainty
+[  707.3s] dynamics
+[  746.2s] leakage_test
+[  907.3s] passports_validation
+[ 1004.6s] correlations
+[ 1011.0s] holdout
+[ 1015.2s] store
+{"run_id": "v5-20261009T142841Z-d833d0", "final": {"config": "C4_v5features_v5graph", "method": "spectral", "k": 3}, "leakage": "PASS", "seconds": {"load": 7.2, "panel": 26.2, "graphs": 28.2, "sweeps": 447.5, "comparison": 448.3, "ablation": 449.7, "uncertainty": 651.8, "dynamics": 707.3, "leakage_test": 746.2, "passports_validation": 907.3, "correlations": 1004.6, "holdout": 1011.0, "store": 1015.2}}
+{"cmd": ".venv/bin/python -m econtypes5.pipeline", "returncode": 0, "wall_seconds": 1017.74, "peak_rss_mib": 752.1, "cpu_user_s": 1738.6, "host": {"cpus": 4, "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39", "python": "3.13.16"}}
+DONE 0

@@ -1,9 +1,9 @@
 {
  "cmd": ".venv/bin/python -m econtypes5.ingest --research ../econtypes_research_20261009.sqlite",
  "returncode": 0,
- "wall_seconds": 46.75,
- "peak_rss_mib": 1333.0,
- "cpu_user_s": 33.5,
+ "wall_seconds": 176.09,
+ "peak_rss_mib": 1293.8,
+ "cpu_user_s": 50.6,
  "host": {
   "cpus": 4,
   "platform": "Linux-6.18.44-fc-v80-x86_64-with-glibc2.39",

@@ -26,6 +26,8 @@ echo "== 6/9 идемпотентность ingest (два прохода во �
 $P scripts/idempotency_check.py
 echo "== 7/9 матрицы требований и формул"
 $P scripts/make_matrices.py
+echo "== 7b/9 полный снимок базы для скачивания (data/econtypes_v5.sqlite.gz + DB_MANIFEST.json, проверка восстановления)"
+$P scripts/package_db.py
 echo "== 8/9 экспорт D5 и сборка дашборда v5"
 if [ -d "$FRONT" ]; then
   $P -m econtypes5.dashboard_export --out "$FRONT/src/v5/D5.json"

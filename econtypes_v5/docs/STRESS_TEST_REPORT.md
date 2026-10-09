@@ -1,8 +1,8 @@
 # STRESS_TEST_REPORT — econtypes v5
 
-Прогон: `v5-20261009T121014Z-d833d0` (config `d833d01329f4019a`, code `510ac7874ec53d3e`, data `24f5b250a5cc5492`, seed 20261009). Отчёт собирается автоматически `scripts/make_report.py` из файлов проверок; статус берётся из файла, а не вписывается.
+Прогон: `v5-20261009T142841Z-d833d0` (config `d833d01329f4019a`, code `eb402d7943388054`, data `24f5b250a5cc5492`, seed 20261009). Отчёт собирается автоматически `scripts/make_report.py` из файлов проверок; статус берётся из файла, а не вписывается.
 
-Итого: **INFO** 5, **NOT_RUN** 7, **PASS** 57.
+Итого: **FAIL** 1, **INFO** 5, **NOT_RUN** 7, **PASS** 56.
 
 Статусы: PASS — проверка исполнена и прошла; FAIL — исполнена и не прошла; INFO — измерение без порога; NOT_RUN — не исполнялась (причина указана).
 
@@ -10,7 +10,7 @@
 
 | проверка | статус | основание | детали |
 |---|---|---|---|
-| pytest (модульные и краевые тесты) | **PASS** | outputs/pytest_log.txt | 109 passed, 0 failed |
+| pytest (модульные и краевые тесты) | **PASS** | outputs/pytest_log.txt | 114 passed, 0 failed |
 
 ## данные
 
@@ -35,7 +35,7 @@
 
 | проверка | статус | основание | детали |
 |---|---|---|---|
-| baseline_dimensions_and_finite_v5 | **PASS** | outputs/PROJECT_CHECKS_v5.json | {'N': 62, 'features': 18, 'nonfinite_cells': 0, 'exact_edges': 1082, 'components': 1, 'K': 3} |
+| baseline_dimensions_and_finite_v5 | **PASS** | outputs/PROJECT_CHECKS_v5.json | {'N': 62, 'features': 18, 'nonfinite_cells': 0, 'exact_edges': 1079, 'components': 1, 'K': 3} |
 | v4_matrix_reproduces_auditor_AVU_MQ_SDbw | **PASS** | outputs/PROJECT_CHECKS_v5.json | {'edges': 1065, 'AVU_published': 0.5358312305082137, 'AVI': 0.3720891681970672, 'old_v4_metric': 0.8017049075869529, 'MQ_newman_W': 0.24413833452756928, 'MQ_newman_display_310': 0. |
 | v4_labels_rescored_on_v5_C1_matrix_independent | **PASS** | outputs/PROJECT_CHECKS_v5.json | {'AVU_published_independent': 0.5357349869378856, 'AVU_pipeline': 0.5357349869378856, 'old_v4_metric_intra_inter': 0.798992456449919, 'MQ_C1space': 0.2403399197158515, 'SW_C1space' |
 | AVU_formula_and_optimization_direction | **PASS** | outputs/PROJECT_CHECKS_v5.json | {'v5': 0.5692456315848, 'reference': 0.5692456315848, 'direction': 'min'} |
@@ -45,7 +45,7 @@
 | zero_monthly_expenditure | **PASS** | outputs/PROJECT_CHECKS_v5.json | log(0) не вычисляется: NaN + статус 'nonpositive_values' |
 | kNN_k_above_N | **PASS** | outputs/PROJECT_CHECKS_v5.json | k = 6 больше N−1 = 4: у узла нет столько соседей (N = 5) |
 | historical_layers_do_not_use_future_EXECUTED | **PASS** | outputs/PROJECT_CHECKS_v5.json | {'monitoring': {'features_identical': True, 'W_identical': True, 'labels_identical': True}, 'retrospective': {'features_identical': False, 'W_identical': False, 'labels_identical': |
-| actual_self_tuning_kNN_N_2016 | **PASS** | outputs/PROJECT_CHECKS_v5.json | {'N': 2016, 'seconds': 0.921, 'edges': 12918} |
+| actual_self_tuning_kNN_N_2016 | **PASS** | outputs/PROJECT_CHECKS_v5.json | {'N': 2016, 'seconds': 1.257, 'edges': 12918} |
 | label_permutation_invariance | **PASS** | outputs/PROJECT_CHECKS_v5.json | ok |
 | ICVI_K_equals_N_rejected_with_status | **PASS** | outputs/PROJECT_CHECKS_v5.json | {'SW': 'undefined_K_ge_N', 'CH': 'undefined_K_ge_N', 'DB': 'undefined_K_ge_N', 'S_Dbw': 'ok', 'S_Dbw_floor1': 'ok', 'AVI': 'ok', 'AVU': 'ok', 'MQ_newman': 'ok', 'MQ_mancoridis': 'o |
 
@@ -53,16 +53,16 @@
 
 | проверка | статус | основание | детали |
 |---|---|---|---|
-| полный конвейер завершён | **PASS** | outputs/latest/RUN_MANIFEST.json | run_id v5-20261009T121014Z-d833d0; пик RSS 813 МиБ |
+| полный конвейер завершён | **PASS** | outputs/latest/RUN_MANIFEST.json | run_id v5-20261009T142841Z-d833d0; пик RSS 752 МиБ |
 | предупреждения численных библиотек перехвачены и записаны | **PASS** | RUN_MANIFEST.json → diagnostics_warnings | 0 предупреждений |
 | утечка будущего: искажение данных после 2023Q4 (исполненный тест) | **PASS** | outputs/latest/LEAKAGE_TEST.json | мониторинг: признаки/W/метки идентичны = {'features_identical': True, 'W_identical': True, 'labels_identical': True}; реконструкция меняется = True |
 | запись результатов в базу (integrity, FK) | **PASS** | RUN_MANIFEST.json → store | {"integrity": "ok", "foreign_key_violations": 0, "fk_sample": []} |
-| вне периода: macro, закупки 2023–2024 (в выборке) | **INFO** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,63 против нуля 0,35 (q95 0,45), p = 0,0001, B = 9999 |
-| вне периода: macro, закупки 2025 | **PASS** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,66 против нуля 0,40 (q95 0,48), p = 0,0001, B = 9999 |
-| вне периода: macro, закупки 2026 | **PASS** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,66 против нуля 0,39 (q95 0,48), p = 0,0001, B = 9999 |
-| вне периода: detailed, закупки 2023–2024 (в выборке) | **INFO** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,39 против нуля 0,12 (q95 0,19), p = 0,0001, B = 9999 |
-| вне периода: detailed, закупки 2025 | **PASS** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,29 против нуля 0,11 (q95 0,16), p = 0,0001, B = 9999 |
-| вне периода: detailed, закупки 2026 | **PASS** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,24 против нуля 0,10 (q95 0,16), p = 0,0005, B = 9999 |
+| вне периода: macro, закупки 2023–2024 (в выборке) | **INFO** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,61 против нуля 0,34 (q95 0,44), p = 0,0001, B = 9999 |
+| вне периода: macro, закупки 2025 | **PASS** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,65 против нуля 0,39 (q95 0,48), p = 0,0001, B = 9999 |
+| вне периода: macro, закупки 2026 | **PASS** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,68 против нуля 0,39 (q95 0,47), p = 0,0001, B = 9999 |
+| вне периода: detailed, закупки 2023–2024 (в выборке) | **INFO** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,65 против нуля 0,20 (q95 0,29), p = 0,0001, B = 9999 |
+| вне периода: detailed, закупки 2025 | **PASS** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,40 против нуля 0,19 (q95 0,27), p = 0,0001, B = 9999 |
+| вне периода: detailed, закупки 2026 | **PASS** | outputs/latest/HOLDOUT_VALIDATION.csv | точность 0,40 против нуля 0,21 (q95 0,29), p = 0,0001, B = 9999 |
 
 ## нагрузка
 
@@ -97,7 +97,7 @@
 | v5.load-ms<8000 | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"loadMs": 1163} |
 | v5.mobile-no-horizontal-scroll | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | {"overflow": 0} |
 | v5.no-console-errors | **PASS** | -/docs/v5-checks.json (Playwright, Chromium) | [] |
-| дашборд собран из этого же прогона (run_id в шапке) | **PASS** | -/docs/v5-checks.json | v5-20261009T121014Z-d833d0 |
+| дашборд собран из этого же прогона (run_id в шапке) | **FAIL** | -/docs/v5-checks.json | v5-20261009T142841Z-d833d0 |
 
 ## не выполнено
 
